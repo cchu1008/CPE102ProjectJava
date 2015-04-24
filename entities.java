@@ -555,13 +555,13 @@ public class OreBlob
       
    public Point blob_next_position(World world, Point dest_pt)
    {
-      ***horiz = sign(dest_pt.x - this.position.x)
+      int horiz = sign(dest_pt.x - this.position.x)
       Point new_pt = new Point(this.position.x + horiz, this.position.y);
 
       if (horiz == 0 || (world.is_occupied(new_pt) &&
          !isinstance(world.get_tile_occupant(new_pt), Ore))
 	  {
-         ***vert = sign(dest_pt.y - this.position.y);
+         int vert = sign(dest_pt.y - this.position.y);
          new_pt = new Point(this.position.x, this.position.y + vert);
 
          if (vert == 0 || (world.is_occupied(new_pt) &&
