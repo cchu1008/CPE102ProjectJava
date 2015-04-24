@@ -1,7 +1,7 @@
 import point
 import actions
 
-public class Background(this, name, imgs)
+public class Background
 {
    private int current_img;
    private String name;
@@ -29,7 +29,7 @@ public class Background(this, name, imgs)
       return this.imgs[this.current_img];
    }
       
-   public int next_image()
+   public void next_image()
    {
       this.current_img = (this.current_img + 1) % len(this.imgs);
    }
@@ -40,7 +40,7 @@ public class Background(this, name, imgs)
    }
 }
       
-public class Entity(object)
+public class Entity
 {
 	private String name;
 	private Point position;
@@ -55,163 +55,297 @@ public class Entity(object)
       this.current_img = 0;
    }
       
-   def get_name(this):
-      return this.name
+   public String get_name()
+   {
+      return this.name;
+   }
       
-   def set_position(this, point):
-      this.position = point
+   public void set_position(this, Point point)
+   {
+      this.position = point;
+   }
 
-   def get_position(this):
-      return this.position
+   public Point get_position()
+   {
+      return this.position;
+   }
       
-   def get_images(this):
-      return this.imgs
+   public int[] get_images()
+   {
+      return this.imgs;
+   }
 
-   def get_image(this):
-      return this.imgs[this.current_img]
+   public int get_image()
+   {
+      return this.imgs[this.current_img];
+   }
       
-   def next_image(this):
-      this.current_img = (this.current_img + 1) % len(this.imgs)
+   public void next_image()
+   {
+      this.current_img = (this.current_img + 1) % len(this.imgs);
+   }
+}
       
-public class Pending_Actions(Entity):
-   def __init__(this, name, position, imgs):
-      super(Pending_Actions, this).__init__(name, position, imgs)
-      this.pending_actions = []
+public class Pending_Actions
+   extends Entity
+{
+	private String name;
+	private Point position;
+	private int[] imgs;
+	private int current_img;
+	private Actions[] pending_actions;
+	
+   public Pending_Actions(this, String name, Point position, int[] imgs)
+   {
+      super(name, position, imgs);
+      this.pending_actions = new Actions[];
+   }
       
-   def remove_pending_action(this, action):
-      this.pending_actions.remove(action)
+   public void remove_pending_action(Actions action)
+   {
+      this.pending_actions.remove(action);
+   }
 
-   def add_pending_action(this, action):
-      this.pending_actions.append(action)
+   public void add_pending_action(Actions action)
+   {
+      this.pending_actions.append(action);
+   }
 
+   public Actions[] get_pending_actions()
+   {
+      return this.pending_actions;
+   }
 
-   def get_pending_actions(this):
-      return this.pending_actions
+   public void clear_entity_pending_actions()
+   {
+      this.pending_actions = new Actions[];
+   }
 
-   def clear_entity_pending_actions(this):
-      this.pending_actions = []
-
-   def clear_pending_actions(this, world):
-      for action in this.get_pending_actions():
-         world.unschedule_action(action)
-      this.clear_entity_pending_actions()
+   public void clear_pending_actions(World world)
+   {
+      for action in this.get_pending_actions()
+	  {
+         world.unschedule_action(action);
+	  }
+      this.clear_entity_pending_actions();
+   }
+}
       
 
-public class Miner(Pending_Actions):
-   def __init__(this, name, resource_limit, position, rate, imgs, animation_rate):
-      super(Miner, this).__init__(name, position, imgs)
-      this.resource_limit = resource_limit
-      this.rate = rate
-      this.animation_rate = animation_rate
+public class Miner
+   extends Pending_Actions
+{
+	private String name;
+	private int resource_limit;
+	private Point position;
+	private double rate;
+	private int[] imgs;
+	private double animation_rate;
+	private int current_img;
+	private int resource_count;
+	
+   public Miner(this, String name, int resource_limit, Point position, double rate, int[] imgs, double animation_rate)
+   {
+      super(name, position, imgs);
+      this.resource_limit = resource_limit;
+      this.rate = rate;
+      this.animation_rate = animation_rate;
+   }
       
-   def get_rate(this):
-      return this.rate
+   public double get_rate()
+   {
+      return this.rate;
+   }
       
-   def get_animation_rate(this):
-      return this.animation_rate
+   public double get_animation_rate()
+   {
+      return this.animation_rate;
+   }
       
-   def get_resource_count(this):
-      return this.resource_count
+   public int get_resource_count()
+   {
+      return this.resource_count;
+   }
 
-   def set_resource_count(this, n):
-      this.resource_count = n
+   public void set_resource_count(int n)
+   {
+      this.resource_count = n;
+   }
       
-   def get_resource_limit(this):
-      return this.resource_limit
+   public int get_resource_limit()
+   {
+      return this.resource_limit;
+   }
+}
       
 
-public class MinerNotFull(Miner):
-   def __init__(this, name, resource_limit, position, rate, imgs,
-      animation_rate):
-      super(MinerNotFull, this).__init__(name, resource_limit, position, rate, imgs, animation_rate)
-      this.resource_count = 0
+public class MinerNotFull
+   extends Miner
+{
+	private String name;
+	private int resource_limit;
+	private Point position;
+	private double rate;
+	private int[] imgs;
+	private double animation_rate;
+	private int current_img;
+	private int resource_count;
+	
+   public MinerNotFull(this, String name, int resource_limit, Point position, 
+      double rate, int[] imgs, double animation_rate)
+   {
+      super(name, resource_limit, position, rate, imgs, animation_rate);
+      this.resource_count = 0;
+   }
       
-   def entity_string(this):
+   public String entity_string()
+   {
       return ' '.join(['miner', this.name, str(this.position.x),
          str(this.position.y), str(this.resource_limit),
-         str(this.rate), str(this.animation_rate)])
+         str(this.rate), str(this.animation_rate)]);
+   }
          
-   def miner_to_ore(this, world, ore):
-      entity_pt = this.position
-      if not ore:
-         return ([entity_pt], False)
-      ore_pt = ore.get_position()
-      if adjacent(entity_pt, ore_pt):
-         this.set_resource_count(1 + this.resource_count)
-         actions.remove_entity(world, ore)
-         return ([ore_pt], True)
-      else:
-         new_pt = next_position(world, entity_pt, ore_pt)
-         return (world.move_entity(this, new_pt), False)
+***public boolean miner_to_ore(World world, Entity ore)
+   {
+      Point entity_pt = this.position
+      if(not ore)
+	  {
+         return ([entity_pt], False);
+	  }
+      Point ore_pt = ore.get_position()
+      if (adjacent(entity_pt, ore_pt))
+	  {
+         this.set_resource_count(1 + this.resource_count);
+         actions.remove_entity(world, ore);
+         return ([ore_pt], True);
+	  }
+      else
+	  {
+         Point new_pt = next_position(world, entity_pt, ore_pt);
+         return (world.move_entity(this, new_pt), False);
+	  }
+   }
          
-   def create_miner_not_full_action(this, world, i_store):
-      def action(current_ticks):
-         this.remove_pending_action(action)
+   public Actions create_miner_not_full_action(World world, ***int[] i_store)
+   {
+	   private int current_ticks;
+	   private Entity ore;
+	   private Entity new_entity;
+	   private Point entity_pt;
+	   
+      private int action(int current_ticks)
+	  {
+         this.remove_pending_action(action);
 
-         entity_pt = this.position
-         ore = world.find_nearest(entity_pt, Ore)
-         (tiles, found) = this.miner_to_ore(world, ore)
+         entity_pt = this.position;
+         ore = world.find_nearest(entity_pt, Ore);
+         (tiles, found) = this.miner_to_ore(world, ore);
 
-         new_entity = this
-         if found:
+         new_entity = this;
+         if (found)
+		 {
             new_entity = try_transform_miner(world, this,
-               try_transform_miner_not_full)
+               try_transform_miner_not_full);
+		 }
 
          actions.schedule_action(world, new_entity,
             new_entity.create_miner_action(world, i_store),
-            current_ticks + new_entity.get_rate())
-         return tiles
-      return action
+            current_ticks + new_entity.get_rate());
+         return tiles;
+	  }
+      return action;
+   }
       
-   def create_miner_action(this, world, image_store):
-      return this.create_miner_not_full_action(world, image_store)
+   public Actions create_miner_action(World world, ***int[] image_store)
+   {
+      return this.create_miner_not_full_action(world, image_store);
+   }
+}
 
       
-public class MinerFull(Miner):
-   def __init__(this, name, resource_limit, position, rate, imgs,
-      animation_rate):
-      super(MinerFull, this).__init__(name, resource_limit, position, rate, imgs, animation_rate)
-      this.resource_count = 2
+public class MinerFull
+   extends Miner
+{
+	private String name;
+	private int resource_limit;
+	private Point position;
+	private double rate;
+	private int[] imgs;
+	private int current_img;
+	private double animation_rate;
+	private int resource_count;
+	
+   public MinerFull(this, String name, int resource_limit, Point position, 
+      double rate, int[] imgs, double animation_rate)
+   {
+      super(name, resource_limit, position, rate, imgs, animation_rate);
+      this.resource_count = 2;
+   }
       
-   def entity_string(this):
-      return 'unknown'
+   public String entity_string()
+   {
+      return 'unknown';
+   }
       
-   def miner_to_smith(this, world, smith):
-      entity_pt = this.position
-      if not smith:
-         return ([entity_pt], False)
-      smith_pt = smith.get_position()
-      if adjacent(entity_pt, smith_pt):
+***public boolean miner_to_smith(World world, Entity smith)
+   {
+      Point entity_pt = this.position;
+      if (not smith)
+	  {
+         return ([entity_pt], False);
+	  }
+      Point smith_pt = smith.get_position();
+	  
+      if (adjacent(entity_pt, smith_pt))
+	  {
          smith.set_resource_count( 
             smith.get_resource_count() +
-            this.resource_count)
-         this.resource_count = 0
-         return ([], True)
-      else:
-         new_pt = next_position(world, entity_pt, smith_pt)
-         return (world.move_entity(this, new_pt), False)
+            this.resource_count);
+         this.resource_count = 0;
+         return ([], True);
+	  }
+      else
+	  {
+         Point new_pt = next_position(world, entity_pt, smith_pt);
+         return (world.move_entity(this, new_pt), False);
+	  }
+   }
          
-   def create_miner_full_action(this, world, i_store):
-      def action(current_ticks):
-         this.remove_pending_action(action)
+   public Actions create_miner_full_action(World world, ***int[] i_store)
+   {
+	   private int current_ticks;
+	   private Point entity_pt;
+	   private Entity smith;
+	   private Entity new_entity;
+	   
+      private int action(int current_ticks)
+	  {
+         this.remove_pending_action(action);
 
-         entity_pt = this.position
-         smith = world.find_nearest(entity_pt, Blacksmith)
-         (tiles, found) = this.miner_to_smith(world, smith)
+         entity_pt = this.position;
+         smith = world.find_nearest(entity_pt, Blacksmith);
+         (tiles, found) = this.miner_to_smith(world, smith);
 
-         new_entity = this
-         if found:
+         new_entity = this;
+         if (found)
+		 {
             new_entity = try_transform_miner(world, this,
-               try_transform_miner_full)
+               try_transform_miner_full);
+		 }
 
          actions.schedule_action(world, new_entity,
             new_entity.create_miner_action(world, i_store),
-            current_ticks + new_entity.get_rate())
-         return tiles
-      return action
+            current_ticks + new_entity.get_rate());
+         return tiles;
+	  }
+      return action;
+   }
       
-   def create_miner_action(this, world, image_store):
-      return this.create_miner_full_action(world, image_store)
+   public Actions create_miner_action(World world, ***int[] image_store))
+   {
+      return this.create_miner_full_action(world, image_store);
+   }
+}
 
 
 public class Vein(Pending_Actions):
