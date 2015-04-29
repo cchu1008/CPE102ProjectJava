@@ -96,37 +96,58 @@ public class WorldModel
    def unschedule_action(this, action):
       this.action_queue.remove(action)
       
-   def update_on_time(this, ticks):
-      tiles = []
+   public Point[] update_on_time(int ticks)
+   {
+      ***Point[] tiles = new Point[];
 
-      next = this.action_queue.head()
-      while next && next.ord < ticks:
-         this.action_queue.pop()
-         tiles.extend(next.item(ticks))  # invoke action function
-         next = this.action_queue.head()
+      ***next = this.action_queue.head();
+      while (next && next.ord < ticks)
+	  {
+         this.action_queue.pop();
+         tiles.extend(next.item(ticks));  # invoke action function
+         ***next = this.action_queue.head();
+	  }
 
-      return tiles
+      return tiles;
+   }
       
-   def get_background_image(this, pt):
-      if this.within_bounds(pt):
-         return this.background.get_cell(pt).get_image()
+   public Image get_background_image(Point pt)
+   {
+      if (this.within_bounds(pt))
+	  {
+         return this.background.get_cell(pt).get_image();
+	  }
+   }
       
-   def get_background(this, pt):
-      if this.within_bounds(pt):
-         return this.background.get_cell(pt)
+   public *** get_background(Point pt)
+   {
+      if (this.within_bounds(pt))
+	  {
+         return this.background.get_cell(pt);
+	  }
+   }
          
-   def set_background(this, pt, bgnd):
-      if this.within_bounds(pt):
-         this.background.set_cell(pt, bgnd)
+   public void set_background(Point pt, ***bgnd)
+   {
+      if (this.within_bounds(pt))
+	  {
+         this.background.set_cell(pt, ***bgnd);
+	  }
+   }
          
-   def get_tile_occupant(this, pt):
-      if this.within_bounds(pt):
-         return this.occupancy.get_cell(pt)
+   public Entity get_tile_occupant(Point pt)
+   {
+      if (this.within_bounds(pt))
+	  {
+         return this.occupancy.get_cell(pt);
+	  }
+   }
          
-   def get_entities(this):
-      return this.entities
-         
-         
+   public Entity[] get_entities()
+   {
+      return this.entities;
+   }
+}   
       
 def nearest_entity(entity_dists):
    if len(entity_dists) > 0:
