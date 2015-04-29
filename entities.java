@@ -44,15 +44,12 @@ public class Entity
 {
 	private String name;
 	private Point position;
-	private int[] imgs;
 	private int current_img;
 	
-   public Entity(this, String name, Point position, int[] imgs)
+   public Entity(this, String name, Point position)
    {
       this.name = name;
       this.position = position;
-      this.imgs = imgs;
-      this.current_img = 0;
    }
       
    public String get_name()
@@ -69,21 +66,6 @@ public class Entity
    {
       return this.position;
    }
-      
-   public int[] get_images()
-   {
-      return this.imgs;
-   }
-
-   public int get_image()
-   {
-      return this.imgs[this.current_img];
-   }
-      
-   public void next_image()
-   {
-      this.current_img = (this.current_img + 1) % len(this.imgs);
-   }
 }
       
 public class Pending_Actions
@@ -91,13 +73,11 @@ public class Pending_Actions
 {
 	private String name;
 	private Point position;
-	private int[] imgs;
-	private int current_img;
 	private Actions[] pending_actions;
 	
-   public Pending_Actions(this, String name, Point position, int[] imgs)
+   public Pending_Actions(this, String name, Point position)
    {
-      super(name, position, imgs);
+      super(name, position);
       this.pending_actions = new Actions[];
    }
       
@@ -139,14 +119,12 @@ public class Miner
 	private int resource_limit;
 	private Point position;
 	private int rate;
-	private int[] imgs;
 	private double animation_rate;
-	private int current_img;
 	private int resource_count;
 	
-   public Miner(this, String name, int resource_limit, Point position, int rate, int[] imgs, double animation_rate)
+   public Miner(this, String name, int resource_limit, Point position, int rate, double animation_rate)
    {
-      super(name, position, imgs);
+      super(name, position);
       this.resource_limit = resource_limit;
       this.rate = rate;
       this.animation_rate = animation_rate;
@@ -186,15 +164,13 @@ public class MinerNotFull
 	private int resource_limit;
 	private Point position;
 	private int rate;
-	private int[] imgs;
 	private double animation_rate;
-	private int current_img;
 	private int resource_count;
 	
    public MinerNotFull(this, String name, int resource_limit, Point position, 
-      int rate, int[] imgs, double animation_rate)
+      int rate, double animation_rate)
    {
-      super(name, resource_limit, position, rate, imgs, animation_rate);
+      super(name, resource_limit, position, rate, animation_rate);
       this.resource_count = 0;
    }
       
@@ -270,15 +246,13 @@ public class MinerFull
 	private int resource_limit;
 	private Point position;
 	private int rate;
-	private int[] imgs;
-	private int current_img;
 	private double animation_rate;
 	private int resource_count;
 	
    public MinerFull(this, String name, int resource_limit, Point position, 
-      int rate, int[] imgs, double animation_rate)
+      int rate, double animation_rate)
    {
-      super(name, resource_limit, position, rate, imgs, animation_rate);
+      super(name, resource_limit, position, rate, animation_rate);
       this.resource_count = 2;
    }
       
@@ -354,14 +328,12 @@ public class Vein
 	private String name;
 	private int rate;
 	private Point position;
-	private int[] imgs;
-	private int current_img;
 	private int resource_distance;
 	
-   public Vein(this, String name, int rate, Point position, int[] imgs, 
+   public Vein(this, String name, int rate, Point position, 
       int resource_distance=1)
    {
-      super(name, position, imgs;
+      super(name, position);
       this.rate = rate;
       this.resource_distance = resource_distance;
    }
@@ -423,13 +395,11 @@ public class Ore
 {
 	private String name;
 	private Point position;
-	private int[] imgs;
-	private int current_img;
 	private int rate;
 	
-   public Ore(this, String name, Point position, int[] imgs, int rate=5000)
+   public Ore(this, String name, Point position, int rate=5000)
    {
-      super(name, position, imgs);
+      super(name, position);
       this.rate = rate;
    }
 
@@ -450,17 +420,15 @@ public class Blacksmith
 {
 	private String name;
 	private Point position;
-	private int[] imgs;
-	private int current_img;
 	private int resource_limit;
 	private int rate;
 	private resource_distance;
 	private int resource_count;
 	
-   public Blacksmith(this, String name, Point position, int[] imgs, 
+   public Blacksmith(this, String name, Point position,
       int resource_limit, int rate, int resource_distance=1)
    {
-      super(name, position, imgs);
+      super(name, position);
       this.resource_limit = resource_limit;
       this.resource_count = 0;
       this.rate = rate;
@@ -505,12 +473,10 @@ public class Obstacle
 {
 	private String name;
 	private Point position;
-	private int[] imgs;
-	private int current_img;
 	
-   public Obstacle(this, String name, Point position, int[] imgs)
+   public Obstacle(this, String name, Point position)
    {
-      super(name, position, imgs);
+      super(name, position);
    }
 
    public String entity_string()
@@ -526,14 +492,12 @@ public class OreBlob
 	private String name;
 	private Point position;
 	private int rate;
-	private int[] imgs;
-	private int current_img;
 	private double animation_rate;
 	
-   public OreBlob(this, String name, Point position, int rate, int[] imgs, 
+   public OreBlob(this, String name, Point position, int rate, 
       double animation_rate)
    {
-      super(name, position, imgs);
+      super(name, position);
       this.rate = rate;
       this.animation_rate = animation_rate;
    }
@@ -639,13 +603,11 @@ public class Quake
 {
 	private String name;
 	private Point position;
-	private int[] imgs;
-	private int current_img;
 	private double animation_rate;
 	
-   public Quake(this, String name, Point position, int[] imgs, double animation_rate)
+   public Quake(this, String name, Point position, double animation_rate)
    {
-      super(name, position, imgs);
+      super(name, position);
       this.animation_rate = animation_rate;
    }
 
