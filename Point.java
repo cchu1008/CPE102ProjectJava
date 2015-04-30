@@ -1,8 +1,21 @@
-public interface Point
+public class Point
 {
-   double xCoordinate();
-   double yCoordinate();
-   double radius();
-   double angle();
-   Point rotate90();
+   private final int xCoord;
+   private final int yCoord;
+   
+   public Point(int x, int y)
+   {
+      this.xCoord = x;
+      this.yCoord = y;
+   }
+   
+   public int getXCoord()
+   {
+      return this.xCoord;
+   }
+   
+   public int getYCoord()
+   {
+      return this.yCoord;
+   }
 }
