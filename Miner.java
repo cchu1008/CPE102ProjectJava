@@ -40,7 +40,7 @@ public class Miner extends Entity
 		notUseName = this.isFull();
 		if(!notUseName)
 		{
-			return String.format("miner %s %f %f %f %f", this.getName(), this.getPosition().getXCoord(), this.getPosition().getYCoord(), this.getResourceLimit(), this.getRate());
+			return String.format("miner %s %f %f %f", this.getName(), this.getPosition().getXCoord(), this.getPosition().getYCoord(), this.getResourceLimit());
 		}
 		else
 		{
