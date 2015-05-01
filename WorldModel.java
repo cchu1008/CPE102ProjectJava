@@ -101,7 +101,7 @@ public class WorldModel
 		{
 			this.setCell(pos, null);
 			this.entities.remove(old);
-			old.setPosition(Point.NegativePoint);
+			old.setPosition(new Point(-1, -1));
 		}
 	}
 	
@@ -109,13 +109,13 @@ public class WorldModel
 	public Entity findNearest(Point pos, Class type)
 	{
 		if (this.entities.size() == 0)
+		{
 			return null;
-			
+		}
 		Entity closestEntity = this.entities.get(0);
 		double closestDistance = this.distance(closestEntity.getPosition(), pos);
-		for (int i = 1; i < this.entities.size(); i++)
+		for (Entity ent : this.entities.subList(1, this.entities.size()))
 		{
-			Entity ent = this.entities.get(i);
 			if (type.isAssignableFrom(ent.getClass()))
 			{
 				double dist = this.distance(ent.getPosition(), pos);
