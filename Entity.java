@@ -13,7 +13,7 @@ public abstract class Entity
 	
 	public String getName()
 	{
-		return this.name;
+		return this.name + "_" + this.position.getXCoord() + "_" + this.position.getYCoord();
 	}
 	
 	public Point getPosition()
