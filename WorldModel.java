@@ -112,8 +112,16 @@ public class WorldModel
 		{
 			return null;
 		}
+		
 		Entity closestEntity = this.entities.get(0);
+		
+		if (this.entities.size() == 1)
+		{
+			return closestEntity;
+		}
+		
 		double closestDistance = this.distance(closestEntity.getPosition(), pos);
+		
 		for (Entity ent : this.entities.subList(1, this.entities.size()))
 		{
 			if (type.isAssignableFrom(ent.getClass()))
@@ -126,6 +134,7 @@ public class WorldModel
 				}
 			}
 		}
+		
 		return closestEntity;
 	}
 	
