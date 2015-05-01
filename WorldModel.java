@@ -10,13 +10,22 @@ public class WorldModel
 	private int height;
 	private Entity[][] occupancies;
 	private List<Entity> entities;
+	private Background[][] backgrounds;
 	
-	public WorldModel(int width, int height)
+	public WorldModel(int width, int height, Background back)
 	{
 		this.width = width;
 		this.height = height;
 		this.occupancies = new Entity[width][height];
 		this.entities = new ArrayList<Entity>();
+		this.backgrounds = new Background[width][height];
+		for (int x = 0; x < width; x++)
+		{
+			for (int y = 0; y < height; y++)
+			{
+				this.backgrounds[x][y] = back;
+			}
+		}
 	}
 	
 	public int getWidth()
