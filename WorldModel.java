@@ -110,7 +110,6 @@ public class WorldModel
 		{
 			this.setCell(pos, null);
 			this.entities.remove(old);
-			old.setPosition(new Point(-1, -1));
 		}
 	}
 	
@@ -124,22 +123,20 @@ public class WorldModel
 		
 		Entity closestEntity = this.entities.get(0);
 		
-		if (this.entities.size() == 1)
+		if (this.entities.size() > 1)
 		{
-			return closestEntity;
-		}
-		
-		double closestDistance = this.distance(closestEntity.getPosition(), pos);
-		
-		for (Entity ent : this.entities.subList(1, this.entities.size()))
-		{
-			if (type.isAssignableFrom(ent.getClass()))
+			double closestDistance = this.distance(closestEntity.getPosition(), pos);
+			
+			for (Entity ent : this.entities.subList(1, this.entities.size()))
 			{
-				double dist = this.distance(ent.getPosition(), pos);
-				if (dist < closestDistance)
+				if (type.isInstance(ent))
 				{
-					closestEntity = ent;
-					closestDistance = dist;
+					double dist = this.distance(ent.getPosition(), pos);
+					if (dist < closestDistance)
+					{
+						closestEntity = ent;
+						closestDistance = dist;
+					}
 				}
 			}
 		}

@@ -1,9 +1,9 @@
 public class Background
 {
-	private String name;
+	private String name = "background";
 	
-	public Background(String name)
+	public String getName()
 	{
-		this.name = name;
+		return this.name;
 	}
 }

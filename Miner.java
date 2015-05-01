@@ -20,6 +20,16 @@ public class Miner extends Entity
 		return this.resourceCount;
 	}
 	
+	public void incrementResourceCount()
+	{
+		this.resourceCount += 1;
+	}
+	
+	public void setResourceCount(int num)
+	{
+		this.resourceCount = num;
+	}
+	
 	public boolean isFull()
 	{
 		return this.resourceCount >= this.resourceLimit;
