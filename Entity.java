@@ -37,6 +37,8 @@ public abstract class Entity
 		if (x == 0) return 0;
 		return (x > 0) ? 1 : -1;
 	}
+	
+	protected abstract String entityString(boolean notUseName);
 }
 
 /*import point

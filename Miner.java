@@ -24,4 +24,17 @@ public class Miner extends Entity
 	{
 		return this.resourceCount >= this.resourceLimit;
 	}
+	
+	protected String entityString(boolean notUseName)
+	{
+		notUseName = this.isFull();
+		if(!notUseName)
+		{
+			return String.format("%s %s %f %f %f %f", 'miner', this.getName(), this.getPosition().getXCoord(), this.getPosition().getYCoord(), this.getResourceLimit(), this.getRate());
+		}
+		else
+		{
+			return 'unknown';
+		}
+	}
 }
