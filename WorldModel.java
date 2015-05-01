@@ -3,17 +3,34 @@ import java.util.ArrayList;
 
 public class WorldModel
 {
-	private int numRows;
-	private int numCols;
+	private int width;
+	private int height;
 	private Entity[][] occupancy;
 	private List<Entity> entities;
 	
-	public WorldModel(int rows, int cols)
+	public WorldModel(int width, int height)
 	{
-		this.numRows = rows;
-		this.numCols = cols;
-		this.occupancy = new Entity[cols][rows];
+		this.width = width;
+		this.height = height;
+		this.occupancy = new Entity[width][height];
 		this.entities = new ArrayList<Entity>();
+	}
+	
+	public int getWidth()
+	{
+		return this.width;
+	}
+	
+	public int getHeight()
+	{
+		return this.height;
+	}
+	
+	public boolean withinBounds(Point position)
+	{
+		int x = position.getXCoord();
+		int y = position.getYCoord();
+		return x >= 0 && x < this.width && y >= 0 && y < this.height;
 	}
 }
 
