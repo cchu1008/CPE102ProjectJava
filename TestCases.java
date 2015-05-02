@@ -65,8 +65,8 @@ public class TestCases
 		assertEquals(0, Courtney.getResourceCount());
 		assertFalse(Courtney.isFull());
 		
-		//assertEquals("unknown", Harrison.entityString());
-		//assertEquals("miner miner_10_8 10 8 2", Courtney.entityString());
+		assertEquals("miner 1 11 2 2", Harrison.entityString());
+		assertEquals("miner 10 8 2 0", Courtney.entityString());
 	}
 	
 	@Test
@@ -92,6 +92,8 @@ public class TestCases
 		smithy.setResourceCount(7);
 		assertFalse(smithy.isFull());
 		assertEquals(7, smithy.getResourceCount());
+		
+		assertEquals("blacksmith 3 8 10 7 1", smithy.entityString());
 	}
 	
 	@Test
@@ -101,6 +103,8 @@ public class TestCases
 		
 		assertEquals(4, obby.getPosition().getXCoord());
 		assertEquals(4, obby.getPosition().getYCoord());
+		
+		assertEquals("obstacle 4 4", obby.entityString());
 	}
 	
 	@Test
@@ -110,6 +114,8 @@ public class TestCases
 		
 		assertEquals(9, blobby.getPosition().getXCoord());
 		assertEquals(6, blobby.getPosition().getYCoord());
+		
+		assertEquals("oreblob 9 6", blobby.entityString());
 	}
 	
 	@Test
@@ -119,6 +125,8 @@ public class TestCases
 		
 		assertEquals(13, oreby.getPosition().getXCoord());
 		assertEquals(31, oreby.getPosition().getYCoord());
+		
+		assertEquals("ore 13 31", oreby.entityString());
 	}
 	
 	@Test
@@ -130,6 +138,8 @@ public class TestCases
 		assertEquals(13, veiny.getPosition().getYCoord());
 		
 		assertEquals(3, veiny.getResourceDistance());
+		
+		assertEquals("vein 4 13 3", veiny.entityString());
 	}
 	
 	@Test
