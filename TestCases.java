@@ -22,15 +22,17 @@ public class TestCases
 	
 	private static final OreBlob blobby = new OreBlob(new Point(9, 6));
 	
-	private static final Ore oreby;
+	private static final Ore oreby = new Ore(new Point(13, 31));
 	
-	private static final Vein veiny;
+	private static final Vein veiny = new Vein(new Point(4, 13), 3);
 	
-	@test
+	private static final WorldModel
+	
+	@Test
 	public void testPoint()
 	{
-		assertEqual(10, pointy.getXCoord());
-		assertEqual(16, pointy.getYCoord());
+		assertEquals(10, pointy.getXCoord());
+		assertEquals(16, pointy.getYCoord());
 	}
 	
 	@Test
@@ -99,7 +101,6 @@ public class TestCases
 		
 		assertEquals(4, obby.getPosition().getXCoord());
 		assertEquals(4, obby.getPosition().getYCoord());
-		
 	}
 	
 	@Test
@@ -114,6 +115,20 @@ public class TestCases
 	@Test
 	public void testOre()
 	{
+		assertEquals("ore", oreby.getName());
 		
+		assertEquals(13, oreby.getPosition().getXCoord());
+		assertEquals(31, oreby.getPosition().getYCoord());
+	}
+	
+	@Test
+	public void testVein()
+	{
+		assertEquals("vein", veiny.getName());
+		
+		assertEquals(4, veiny.getPosition().getXCoord());
+		assertEquals(13, veiny.getPosition().getYCoord());
+		
+		assertEquals(3, veiny.getResourceDistance());
 	}
 }
