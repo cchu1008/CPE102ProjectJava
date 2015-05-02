@@ -20,7 +20,7 @@ public class TestCases
 	
 	private static final Obstacle obby = new Obstacle(new Point(4, 4));
 	
-	private static final OreBlob blobby;
+	private static final OreBlob blobby = new OreBlob(new Point(9, 6));
 	
 	private static final Ore oreby;
 	
@@ -96,5 +96,24 @@ public class TestCases
 	public void testObstacle()
 	{
 		assertEquals("obstacle", obby.getName());
+		
+		assertEquals(4, obby.getPosition().getXCoord());
+		assertEquals(4, obby.getPosition().getYCoord());
+		
+	}
+	
+	@Test
+	public void testOreBlob()
+	{
+		assertEquals("oreblob", blobby.getName());
+		
+		assertEquals(9, blobby.getPosition().getXCoord());
+		assertEquals(6, blobby.getPosition().getYCoord());
+	}
+	
+	@Test
+	public void testOre()
+	{
+		
 	}
 }
