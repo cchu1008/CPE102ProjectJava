@@ -13,7 +13,7 @@ public abstract class Entity
 	
 	public String getName()
 	{
-		return this.name + "_" + this.position.getXCoord() + "_" + this.position.getYCoord();
+		return this.name;
 	}
 	
 	public Point getPosition()
@@ -38,7 +38,10 @@ public abstract class Entity
 		return (x > 0) ? 1 : -1;
 	}
 	
-	//protected abstract String entityString();
+	public String entityString()
+	{
+		return String.format("%s %d %d", this.getName(), this.getPosition().getXCoord(), this.getPosition().getYCoord());
+	}
 }
 
 /*import point

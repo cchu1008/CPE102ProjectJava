@@ -35,8 +35,9 @@ public class Miner extends Entity
 		return this.resourceCount >= this.resourceLimit;
 	}
 	
-	protected String entityString()
+	public String entityString()
 	{
-		return String.format("miner %s %f %f %f", this.getName(), this.getPosition().getXCoord(), this.getPosition().getYCoord(), this.getResourceLimit());
+		String initial = super.entityString();
+		return String.format("%s %d %d", initial, this.getResourceLimit(), this.getResourceCount());
 	}
 }
