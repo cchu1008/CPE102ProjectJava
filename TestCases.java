@@ -26,8 +26,6 @@ public class TestCases
 	
 	private static final Vein veiny = new Vein(new Point(4, 13), 3);
 	
-	private static final WorldModel
-	
 	@Test
 	public void testPoint()
 	{
@@ -130,5 +128,45 @@ public class TestCases
 		assertEquals(13, veiny.getPosition().getYCoord());
 		
 		assertEquals(3, veiny.getResourceDistance());
+	}
+	
+	@Test
+	public void testBackground()
+	{
+		assertEquals("background", back.getName());
+	}
+	
+	@Test
+	public void testWorldModel()
+	{
+		assertEquals(16, theWorld.getWidth());
+		assertEquals(16, theWorld.getHeight());
+		
+		assertEquals(0, theWorld.getEntities().size());
+		
+		assertEquals(false, theWorld.isOccupied(new Point(5, 5)));
+		
+		assertEquals(null, theWorld.getCell(new Point(5, 5)));
+		
+		assertEquals(true, theWorld.withinBounds(new Point(6, 10)));
+		
+		theWorld.addEntity(Harrison);
+		assertEquals(Harrison, theWorld.getCell(new Point(1, 11)));
+		
+		theWorld.moveEntity(Harrison, new Point(14, 7));
+		assertEquals(Harrison, theWorld.getCell(new Point(14, 7)));
+		
+		theWorld.removeEntity(Harrison);
+		assertEquals(null, theWorld.getCell(new Point(14, 7)));
+		
+		theWorld.addEntity(Harrison);
+		assertEquals(Harrison, theWorld.getCell(new Point(1, 11)));
+		theWorld.removeEntityAt(new Point(1, 11));
+		assertEquals(null, theWorld.getCell(new Point(1, 11)));
+		
+		theWorld.addEntity(Harrison);
+		assertEquals(Harrison, theWorld.findNearest(new Point(4, 10), Miner.class));
+		
+		assertEquals(5, theWorld.distance(Harrison.getPosition(), new Point(4, 7)));
 	}
 }

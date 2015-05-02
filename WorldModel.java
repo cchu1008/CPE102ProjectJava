@@ -48,7 +48,7 @@ public class WorldModel
 		return this.withinBounds(position) && (this.getCell(position) != null);
 	}
 	
-	private Entity getCell(Point p)
+	public Entity getCell(Point p)
 	{
 		if (this.withinBounds(p))
 		{
@@ -57,7 +57,7 @@ public class WorldModel
 		return null;
 	}
 	
-	private void setCell(Point p, Entity ent)
+	public void setCell(Point p, Entity ent)
 	{
 		if (this.withinBounds(p))
 		{
@@ -144,7 +144,7 @@ public class WorldModel
 		return closestEntity;
 	}
 	
-	private static double distance(Point pos1, Point pos2)
+	public static double distance(Point pos1, Point pos2)
 	{
 		int dx = pos1.getXCoord() - pos2.getXCoord();
 		int dy = pos1.getYCoord() - pos2.getYCoord();
