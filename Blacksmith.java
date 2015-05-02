@@ -42,7 +42,7 @@ public class Blacksmith extends Entity
 		return this.resourceDistance;
 	}
 	
-	protected String entityString()
+	public String entityString()
 	{
 		String initial = super.entityString();
 		return String.format("%s %d %d %d", initial, this.getResourceLimit(), this.getResourceCount(), this.getResourceDistance());

@@ -13,7 +13,7 @@ public class Vein extends Entity
 		return this.resourceDistance;
 	}
 	
-	protected String entityString()
+	public String entityString()
 	{
 		String initial = super.entityString();
 		return String.format("%s %d", initial, this.getResourceDistance());
