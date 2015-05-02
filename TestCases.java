@@ -7,6 +7,8 @@ import org.junit.Before;
 
 public class TestCases
 {
+	private static final double DELTA = 0.00001;
+	
 	private static final Point pointy = new Point(10, 16);
 	
 	private static final Miner Harrison = new Miner(new Point(1, 11), 2, 0);
@@ -159,6 +161,7 @@ public class TestCases
 		theWorld.removeEntity(Harrison);
 		assertEquals(null, theWorld.getCell(new Point(14, 7)));
 		
+		Harrison.setPosition(new Point(1, 11));
 		theWorld.addEntity(Harrison);
 		assertEquals(Harrison, theWorld.getCell(new Point(1, 11)));
 		theWorld.removeEntityAt(new Point(1, 11));
@@ -167,6 +170,6 @@ public class TestCases
 		theWorld.addEntity(Harrison);
 		assertEquals(Harrison, theWorld.findNearest(new Point(4, 10), Miner.class));
 		
-		assertEquals(5, theWorld.distance(Harrison.getPosition(), new Point(4, 7)));
+		assertEquals(5.0D, theWorld.distance(Harrison.getPosition(), new Point(4, 7)), DELTA);
 	}
 }
