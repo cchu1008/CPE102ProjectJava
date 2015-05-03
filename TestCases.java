@@ -139,7 +139,7 @@ public class TestCases
 		
 		assertEquals(3, veiny.getResourceDistance());
 		
-		assertEquals("vein 4 13 3", veiny.entityString());
+		assertEquals("vein 9 6 3", veiny.entityString());
 	}
 	
 	@Test
@@ -180,6 +180,9 @@ public class TestCases
 		assertEquals(null, theWorld.findNearest(new Point(4, 10), OreBlob.class));
 		
 		theWorld.addEntity(blobby);
+		assertEquals(2, theWorld.getEntities().size());
+		
+		theWorld.addEntity(oreby);
 		assertEquals(2, theWorld.getEntities().size());
 		
 		assertEquals(blobby, theWorld.findNearest(new Point(4, 10), OreBlob.class));
