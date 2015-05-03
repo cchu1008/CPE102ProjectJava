@@ -26,7 +26,7 @@ public class TestCases
 	
 	private static final Ore oreby = new Ore(new Point(13, 31));
 	
-	private static final Vein veiny = new Vein(new Point(4, 13), 3);
+	private static final Vein veiny = new Vein(new Point(9, 6), 3);
 	
 	@Test
 	public void testPoint()
@@ -134,8 +134,8 @@ public class TestCases
 	{
 		assertEquals("vein", veiny.getName());
 		
-		assertEquals(4, veiny.getPosition().getXCoord());
-		assertEquals(13, veiny.getPosition().getYCoord());
+		assertEquals(9, veiny.getPosition().getXCoord());
+		assertEquals(6, veiny.getPosition().getYCoord());
 		
 		assertEquals(3, veiny.getResourceDistance());
 		
@@ -165,6 +165,8 @@ public class TestCases
 		theWorld.addEntity(Harrison);
 		assertEquals(Harrison, theWorld.getCell(new Point(1, 11)));
 		
+		assertEquals(1, theWorld.getEntities().size());
+		
 		theWorld.moveEntity(Harrison, new Point(14, 7));
 		assertEquals(Harrison, theWorld.getCell(new Point(14, 7)));
 		
@@ -174,10 +176,14 @@ public class TestCases
 		Harrison.setPosition(new Point(1, 11));
 		theWorld.addEntity(Harrison);
 		assertEquals(Harrison, theWorld.getCell(new Point(1, 11)));
-		theWorld.removeEntityAt(new Point(1, 11));
-		assertEquals(null, theWorld.getCell(new Point(1, 11)));
 		
-		theWorld.addEntity(Harrison);
+		assertEquals(null, theWorld.findNearest(new Point(4, 10), OreBlob.class));
+		
+		theWorld.addEntity(blobby);
+		assertEquals(2, theWorld.getEntities().size());
+		
+		assertEquals(blobby, theWorld.findNearest(new Point(4, 10), OreBlob.class));
+		
 		assertEquals(Harrison, theWorld.findNearest(new Point(4, 10), Miner.class));
 		
 		assertEquals(5.0D, theWorld.distance(Harrison.getPosition(), new Point(4, 7)), DELTA);
