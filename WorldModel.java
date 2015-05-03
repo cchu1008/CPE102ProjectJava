@@ -116,23 +116,18 @@ public class WorldModel
 	@SuppressWarnings("unchecked")
 	public Entity findNearest(Point pos, Class type)
 	{
-		if (this.entities.size() == 0)
-		{
-			return null;
-		}
+		Entity closestEntity = null;
 		
-		Entity closestEntity = this.entities.get(0);
-		
-		if (this.entities.size() > 1)
+		if (this.entities.size() >= 1)
 		{
-			double closestDistance = this.distance(closestEntity.getPosition(), pos);
+			double closestDistance = -1.0D;
 			
-			for (Entity ent : this.entities.subList(1, this.entities.size()))
+			for (Entity ent : this.entities)
 			{
 				if (type.isInstance(ent))
 				{
 					double dist = this.distance(ent.getPosition(), pos);
-					if (dist < closestDistance)
+					if (dist < closestDistance || closestDistance < 0)
 					{
 						closestEntity = ent;
 						closestDistance = dist;
