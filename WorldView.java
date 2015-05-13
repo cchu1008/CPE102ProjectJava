@@ -1,3 +1,55 @@
+
+
+public class WorldView
+{
+	private int viewCols;
+	private int viewRows;
+	private WorldModel world;
+	private int tileWidth;
+	private int tileHeight;
+	private Rectangle viewport;
+	
+	public WorldView(int viewCols, int viewRows, ***screen, WorldModel world, int tileWidth, int tileHeight, **mouseImg)
+	{
+		this.viewCols = viewCols;
+		this.viewRows = viewRows;
+		this.world = world;
+		this.tileWidth = tileWidth;
+		this.tileHeight = tileHeight;
+		this.viewport = new Rectangle(0, 0, viewCols, viewRows);
+	}
+	
+	public void drawBackground()
+	{
+		for (int y = 0; y < viewport.height; y++)
+		{
+			for (int x = 0; x < viewport.width; x++)
+			{
+				Point wPt = viewportToWorld(new Point(x, y));
+				img = this.world.getBackgroundImage(wPt);
+				image(img, (x * tileWidth), (y * tileHeight));
+			}
+		}
+	}
+	
+	public void drawEntities()
+	{
+		for (Entity entity: world.entities)
+		{
+			if (viewport.collidepoint(entity.getXCoord(), entity.getYCoord()))
+			{
+				Point vPt = worldToViewport(new Point(entity.getXCoord(), entity.getYCoord()));
+				image(entity.getImage(), vPt.getXCoord(), vPt.getYCoord());
+			}
+		}
+	}
+	
+	
+	
+}
+				
+
+/*
 import pygame
 import worldmodel
 import entities
@@ -136,3 +188,4 @@ class WorldView:
 
 def clamp(v, low, high):
    return min(high, max(v, low))
+   */
