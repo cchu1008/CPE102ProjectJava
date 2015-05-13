@@ -8,6 +8,9 @@ public class WorldView
 	private int tileWidth;
 	private int tileHeight;
 	private Rectangle viewport;
+	private int numRows;
+	private int numCols;
+	private Point mousePt;
 	
 	public WorldView(int viewCols, int viewRows, ***screen, WorldModel world, int tileWidth, int tileHeight, **mouseImg)
 	{
@@ -17,6 +20,9 @@ public class WorldView
 		this.tileWidth = tileWidth;
 		this.tileHeight = tileHeight;
 		this.viewport = new Rectangle(0, 0, viewCols, viewRows);
+		this.numRows = ***world.getWidth();
+		this.numCols = ***world.getHeight();
+		this.mousePt = new Point(0, 0);
 	}
 	
 	public void drawBackground()
@@ -44,7 +50,20 @@ public class WorldView
 		}
 	}
 	
+	public void drawViewport()
+	{
+		drawBackground();
+		drawEntities();
+	}
 	
+	public void updateView(int[] viewDelta=[0, 0], ***int[] mouseImg=None)
+	{
+		this.viewport = createShiftedViewport(viewDelta, numRows, numCols);
+		this.mouseImg = mouseImg;
+		drawViewport();
+		***update();
+		mouseMove(mousePt);
+	}
 	
 }
 				
