@@ -18,4 +18,14 @@ public class Point
    {
       return this.yCoord;
    }
+   
+   public boolean equals(Object other)
+   {
+	   if (other instanceof Point)
+	   {
+		   Point o = (Point)other;
+		   return (this.getXCoord() == o.getXCoord() && this.getYCoord() == o.getYCoord());
+	   }
+	   return false;
+   }
 }
