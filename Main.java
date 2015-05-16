@@ -44,7 +44,7 @@ public class Main
 		
 		WorldModel world = new WorldModel(numRows, numCols, defaultBackground);
 		//View uses floor divide instead of regular /
-		WorldView view = new WorldView(SCREEN_WIDTH / TILE_WIDTH, SCREEN_HEIGHT / TILE_HEIGHT, screen, world, TILE_WIDTH, TILE_HEIGHT);
+		WorldView view = new WorldView(SCREEN_WIDTH / TILE_WIDTH, SCREEN_HEIGHT / TILE_HEIGHT, world, TILE_WIDTH, TILE_HEIGHT);
 		loadWorld(world, iStore, TILE_WIDTH, TILE_HEIGHT);
 		
 		view.updateView();

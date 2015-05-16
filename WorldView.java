@@ -12,7 +12,7 @@ public class WorldView extends PApplet
 	private int numCols;
 	private Point mousePt;
 	
-	public WorldView(int viewCols, int viewRows, ***screen, WorldModel world, int tileWidth, int tileHeight)
+	public WorldView(int viewCols, int viewRows, WorldModel world, int tileWidth, int tileHeight)
 	{
 		this.viewCols = viewCols;
 		this.viewRows = viewRows;
