@@ -1,6 +1,6 @@
 
 
-public class loadWorld
+public class saveLoad
 {
 	private static final int PROPERTY_KEY = 0;
 	
@@ -178,7 +178,7 @@ public class loadWorld
 	
 	public static void scheduleEntity(WorldModel world, Entity entity, Map<String, String> iStore)
 	{
-		if (entity instanceof Miner && entity.getResourceCount() == 0) //Change this later!
+		if (entity instanceof Miner && entity.getResourceCount() == 0) //Change below later!
 			actions.scheduleMiner(world, entity, 0, iStore);
 		else if (entity instanceof Vein)
 			actions.scheduleVein(world, entity, 0, iStore);

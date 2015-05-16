@@ -28,7 +28,10 @@ public class Main extends PApplet
 	
 	private void loadWorld(WorldModel world, Map<String, String> iStore, String filename)
 	{
-		//Scan filename!!!!
+		Scanner in = new Scanner(new FileInputStream(filename));
+		
+		while (in.hasNextLine())
+			loadWorld(world, iStore, file, RUN_AFTER_LOAD);
 	}
 	
 	public void setup()
