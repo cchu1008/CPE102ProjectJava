@@ -1,6 +1,6 @@
+import processing.core.*;
 
-
-public class WorldView
+public class WorldView extends PApplet
 {
 	private int viewCols;
 	private int viewRows;
