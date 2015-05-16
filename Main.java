@@ -7,7 +7,7 @@ public class Main extends PApplet
 	
 	private WorldModel theWorld;
 	private WorldView view;
-	private Map<String, String> iStore; //initialize later!
+	private Map<String, List<PImage>> iStore; //initialize later!
 	
 	private static final boolean RUN_AFTER_LOAD = true;
 	private static final String IMAGE_LIST_FILE_NAME = 'imagelist';
@@ -26,7 +26,7 @@ public class Main extends PApplet
 		return new Background(***imageStore.DEFAULT_IMAGE_NAME, img);
 	}
 	
-	private void loadWorld(WorldModel world, Map<String, String> iStore, String filename)
+	private void loadWorld(WorldModel world, Map<String, List<PImage>> iStore, String filename)
 	{
 		Scanner in = new Scanner(new FileInputStream(filename));
 		
@@ -36,19 +36,17 @@ public class Main extends PApplet
 	
 	public void setup()
 	{
-		//Lots to do with images. Will have to change later. Should it be of type Background?
-		rand = new Random();
+		this.rand = new Random();
 		
 		PImage defaultBackground = createDefaultBackground(getImages(iStore, image_store.DEFAULT_IMAGE_NAME));
 		
-		world = new WorldModel(SCREEN_ROWS * WORLD_HEIGHT_SCALE, SCREEN_COLS * WORLD_WIDTH_SCALE, defaultBackground);
+		this.world = new WorldModel(SCREEN_ROWS * WORLD_HEIGHT_SCALE, SCREEN_COLS * WORLD_WIDTH_SCALE, defaultBackground);
 		
-		//View uses floor divide instead of regular /
-		view = new WorldView(SCREEN_COLS, SCREEN_ROWS, world, TILE_WIDTH, TILE_HEIGHT);
+		this.view = new WorldView(SCREEN_COLS, SCREEN_ROWS, world, TILE_WIDTH, TILE_HEIGHT);
 		
-		Map<String, String> iStore = loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
+		this.iStore = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
 		
-		loadWorld(world, iStore, TILE_WIDTH, TILE_HEIGHT);
+		this.loadWorld(world, iStore, TILE_WIDTH, TILE_HEIGHT);
 		
 	}
 	
