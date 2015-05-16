@@ -7,6 +7,7 @@ public class Main
 	
 	private WorldModel theWorld;
 	private WorldView view;
+	private Map<String, String> iStore; //initialize later!
 	
 	private static final boolean RUN_AFTER_LOAD = true;
 	private static final String IMAGE_LIST_FILE_NAME = 'imagelist';
@@ -25,7 +26,7 @@ public class Main
 		return new Background(***imageStore.DEFAULT_IMAGE_NAME, img);
 	}
 	
-	private void loadWorld(WorldModel world, ***iStore, String filename)
+	private void loadWorld(WorldModel world, Map<String, String> iStore, String filename)
 	{
 		
 	}
@@ -40,7 +41,7 @@ public class Main
 		//View uses floor divide instead of regular /
 		view = new WorldView(SCREEN_COLS, SCREEN_ROWS, world, TILE_WIDTH, TILE_HEIGHT);
 		
-		***iStore = loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
+		HashMap<String, String> iStore = loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
 		
 		loadWorld(world, iStore, TILE_WIDTH, TILE_HEIGHT);
 		
