@@ -64,7 +64,7 @@ public class loadWorld
 		}
 	}*/
 	
-	public void loadWorld(WorldModel world, ***images, String file, boolean run=false)
+	public static void loadWorld(WorldModel world, ***images, String file, boolean run=false)
 	{
 		//reading a file...
 		Scanner in = new Scanner(new FileInputStream(file));

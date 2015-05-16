@@ -1,7 +1,7 @@
 import java.util.Random;
 import processing.core.*;
 
-public class Main
+public class Main extends PApplet
 {
 	private final Random rand;
 	
@@ -28,12 +28,14 @@ public class Main
 	
 	private void loadWorld(WorldModel world, Map<String, String> iStore, String filename)
 	{
-		
+		//Scan filename!!!!
 	}
 	
-	public static void main(String args[])
+	public void setup()
 	{
 		//Lots to do with images. Will have to change later. Should it be of type Background?
+		rand = new Random();
+		
 		PImage defaultBackground = createDefaultBackground(getImages(iStore, image_store.DEFAULT_IMAGE_NAME));
 		
 		world = new WorldModel(SCREEN_ROWS * WORLD_HEIGHT_SCALE, SCREEN_COLS * WORLD_WIDTH_SCALE, defaultBackground);
@@ -41,15 +43,22 @@ public class Main
 		//View uses floor divide instead of regular /
 		view = new WorldView(SCREEN_COLS, SCREEN_ROWS, world, TILE_WIDTH, TILE_HEIGHT);
 		
-		HashMap<String, String> iStore = loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
+		Map<String, String> iStore = loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
 		
 		loadWorld(world, iStore, TILE_WIDTH, TILE_HEIGHT);
 		
+	}
+	
+	public void draw()
+	{
 		view.updateView();
-		
-		rand = new Random();
 		
 		//From controller
 		activityLoop(view, world);
+	}
+	
+	public static void main(String args[])
+	{
+		PApplet.main("Main");
 	}
 }

@@ -139,6 +139,23 @@ public class WorldModel
 		return closestEntity;
 	}
 	
+	public List<Rectangle> updateOnTime(int ticks)
+	{
+		List<Rectangle> tiles = new ArrayList<Rectangle>();
+		
+		//Assuming we make an action class.
+		Action next = actionQueue.head();
+		//What is next.ord???
+		while (next != null || next != None && next.ord < ticks)
+		{
+			actionQueue.pop();
+			tiles.add(next.item(ticks));
+			next = actionQueue.head();
+		}
+		
+		return tiles;
+	}
+	
 	public static double distance(Point pos1, Point pos2)
 	{
 		int dx = pos1.getXCoord() - pos2.getXCoord();
