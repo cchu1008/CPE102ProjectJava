@@ -5,6 +5,9 @@ public class Main
 {
 	private final Random rand;
 	
+	private WorldModel theWorld;
+	private WorldView view;
+	
 	private static final boolean RUN_AFTER_LOAD = true;
 	private static final String IMAGE_LIST_FILE_NAME = 'imagelist';
 	private static final String WORLD_FILE = 'gaia.sav';
@@ -12,8 +15,8 @@ public class Main
 	private static final int WORLD_WIDTH_SCALE = 2;
 	private static final int WORLD_HEIGHT_SCALE = 2;
 	
-	private static final int SCREEN_WIDTH = 640;
-	private static final int SCREEN_HEIGHT = 480;
+	private static final int SCREEN_COLS = 20;
+	private static final int SCREEN_ROWS = 15;
 	private static final int TILE_WIDTH = 32;
 	private static final int TILE_HEIGHT = 32;
 	
@@ -29,25 +32,22 @@ public class Main
 	
 	public static void main(String args[])
 	{
-		//translate from pygame!
-		rand = new Random();//***random.seed()
-		//***pygame.init()
-		***screen = pygame.display.setMode((SCREEN_WIDTH, SCREEN_HEIGHT));
-		***iStore = loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
-		
-		//The below use a floor divide instead of a regular /
-		int numCols = SCREEN_WIDTH / TILE_WIDTH * WORLD_WIDTH_SCALE;
-		int numRows = SCREEN_HEIGHT / TILE_HEIGHT * WORLD_HEIGHT_SCALE;
-		
 		//Lots to do with images. Will have to change later. Should it be of type Background?
 		PImage defaultBackground = createDefaultBackground(getImages(iStore, image_store.DEFAULT_IMAGE_NAME));
 		
-		WorldModel world = new WorldModel(numRows, numCols, defaultBackground);
+		world = new WorldModel(SCREEN_ROWS * WORLD_HEIGHT_SCALE, SCREEN_COLS * WORLD_WIDTH_SCALE, defaultBackground);
+		
 		//View uses floor divide instead of regular /
-		WorldView view = new WorldView(SCREEN_WIDTH / TILE_WIDTH, SCREEN_HEIGHT / TILE_HEIGHT, world, TILE_WIDTH, TILE_HEIGHT);
+		view = new WorldView(SCREEN_COLS, SCREEN_ROWS, world, TILE_WIDTH, TILE_HEIGHT);
+		
+		***iStore = loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
+		
 		loadWorld(world, iStore, TILE_WIDTH, TILE_HEIGHT);
 		
 		view.updateView();
+		
+		rand = new Random();
+		
 		//From controller
 		activityLoop(view, world);
 	}
