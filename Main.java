@@ -26,14 +26,6 @@ public class Main extends PApplet
 		return new Background(***imageStore.DEFAULT_IMAGE_NAME, img);
 	}
 	
-	private void loadWorld(WorldModel world, Map<String, List<PImage>> iStore, String filename)
-	{
-		Scanner in = new Scanner(new FileInputStream(filename));
-		
-		while (in.hasNextLine())
-			loadWorld(world, iStore, file, RUN_AFTER_LOAD);
-	}
-	
 	public void setup()
 	{
 		this.rand = new Random();
@@ -46,7 +38,7 @@ public class Main extends PApplet
 		
 		this.iStore = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
 		
-		this.loadWorld(world, iStore, TILE_WIDTH, TILE_HEIGHT);
+		SaveLoad.loadWorld(world, iStore, WORLD_FILE, true);
 		
 	}
 	

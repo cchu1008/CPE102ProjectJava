@@ -1,6 +1,4 @@
-
-
-public class saveLoad
+public class SaveLoad
 {
 	private static final int PROPERTY_KEY = 0;
 	
@@ -64,7 +62,7 @@ public class saveLoad
 		}
 	}*/
 	
-	public static void loadWorld(WorldModel world, ***images, String file, boolean run=false)
+	public static void loadWorld(WorldModel world, Map<String, List<PImage>> images, String file, boolean run)
 	{
 		//reading a file...
 		Scanner in = new Scanner(new FileInputStream(file));
@@ -75,9 +73,15 @@ public class saveLoad
 			{
 				if (properties[PROPERTY_KEY] == BGND_KEY)
 					addBackground(world, properties, images);
-				else addEntity(world, properties, images, run);
+				else
+					addEntity(world, properties, images, run);
 			}
 		}
+	}
+	
+	public static void loadWorld(WorldModel world, Map<String, List<PImage>> images, String file)
+	{
+		loacWorld(world, images, file, false);
 	}
 	
 	public void addBackground(WorldModel world, String[] properties, Map<String, String> iStore)
@@ -86,11 +90,11 @@ public class saveLoad
 		{
 			Point pt = new Point((int)properties[BGND_COL], (int)properties[BGND_ROW]);
 			String name = properties[BGND_NAME];
-			world.setBackground(pt, new Background(name, ***image_store.getImages(iStore, name)));
+			world.setBackground(pt, new Background(name, ImageStore.getImages(iStore, name)));
 		}
 	}
 	
-	public void addEntity(WorldModel world, String[] properties, Map<String, String> iStore, boolean run)
+	public void addEntity(WorldModel world, String[] properties, Map<String, List<PImage>> iStore, boolean run)
 	{
 		Entity newEntity = createFromProperties(properties, iStore);
 		//following if statement could use work...
@@ -98,11 +102,11 @@ public class saveLoad
 		{
 			world.addEntity(newEntity);
 			if (run)
-				scheduleEntity(world, newEntity, Map<String, String> iStore);
+				scheduleEntity(world, newEntity, iStore);
 		}
 	}
 	
-	public Entity createFromProperties(String[] properties, Map<String, String> iStore)
+	public Entity createFromProperties(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		int key = properties[PROPERTY_KEY];
 		if (properties.length > 0)
