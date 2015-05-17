@@ -68,7 +68,7 @@ public class Controller
 			for (Event event : pygame.event.get())
 			{
 				if (event.type == pygame.QUIT)
-					exit(1);
+					return;
 				else if (event.type == pygame.USEREVENT)
 					handleTimerEvent(world, view);
 				else if (event.type == pygame.MOUSEMOTION)
