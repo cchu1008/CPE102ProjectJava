@@ -9,37 +9,14 @@ import processing.core.*;
 public class ImageStore
 {
 	private static final String DEFAULT_IMAGE_NAME = "background_default";
-	private static PApplet TEMP = new PApplet();
-	
-	public static PImage createDefaultImage(int width, int height)
-	{
-		PImage def = new PImage(width, height);
-		def.loadPixels();
-		for (int i = 0; i < def.pixels.length; i++)
-		{
-			def.pixels[i] = TEMP.color(127, 0);
-		}
-		def.updatePixels();
-		return def;
-	}
+	private static final PApplet TEMP = new PApplet();
 	
 	public static Map<String, List<PImage>> loadImages(String filename, int tileWidth, int tileHeight)
 	{
 		Map<String, List<PImage>> images = new HashMap<String, List<PImage>>();
 		try (Scanner imgList = new Scanner(new FileInputStream(filename)))
 		{
-			while (imgList.hasNextLine())
-			{
-				String[] line = imgList.nextLine().split("\\s");
-				if (line.length >= 2)
-				{
-					if (!images.containsKey(line[0]))
-					{
-						images.put(line[0], new LinkedList<PImage>());
-					}
-					images.get(line[0]).add(TEMP.loadImage(line[1]));
-				}
-			}
+			processFile(imgList, images);
 		}
 		catch (Exception e)
 		{
@@ -48,10 +25,80 @@ public class ImageStore
 		
 		if (!images.containsKey(DEFAULT_IMAGE_NAME))
 		{
-			images.put(DEFAULT_IMAGE_NAME, new LinkedList<PImage>());
-			images.get(DEFAULT_IMAGE_NAME).add(createDefaultImage(tileWidth, tileHeight));
+			addDefault(images);
 		}
 		
 		return images;
+	}
+	
+	private static void processFile(Scanner imgList, Map<String, List<PImage>> images)
+	{
+		while (imgList.hasNextLine())
+		{
+			String[] line = imgList.nextLine().split("\\s");
+			if (line.length >= 2)
+			{
+				if (!images.containsKey(line[0]))
+				{
+					images.put(line[0], new LinkedList<PImage>());
+				}
+				
+				PImage sprite = TEMP.loadImage(line[1]);
+				
+				if (line.length >= 5)
+				{
+					setKey(sprite, line);
+				}
+				
+				images.get(line[0]).add(sprite);
+			}
+		}
+	}
+	
+	private static void setKey(PImage sprite, String[] line)
+	{
+		sprite.loadPixels();
+		
+		int red = Integer.parseInt(line[2]);
+		int green = Integer.parseInt(line[3]);
+		int blue = Integer.parseInt(line[4]);
+		int key = TEMP.color(red, green, blue);
+		
+		for (int i = 0; i < sprite.pixels.length; i++)
+		{
+			if (sprite.pixels[i] == key)
+			{
+				sprite.pixels[i] = color(0, 0, 0, 0);
+			}
+		}
+		
+		sprite.updatePixels();
+	}
+	
+	private static void addDefault(Map<String, List<PImage>> images)
+	{
+		PImage def = new PImage(tileWidth, tileHeight);
+		def.loadPixels();
+		for (int i = 0; i < def.pixels.length; i++)
+			def.pixels[i] = TEMP.color(127, 0);
+		def.updatePixels();
+		images.put(DEFAULT_IMAGE_NAME, new LinkedList<PImage>());
+		images.get(DEFAULT_IMAGE_NAME).add(def);
+	}
+	
+	public static void main(String[] args)
+	{
+		Map<String, List<PImage>> test = loadImages("imagelist", 32, 32);
+		for (Map.Entry<String, List<PImage>> entry : test.entrySet())
+		{
+			System.out.print(entry.getKey());
+			System.out.print(": ");
+			System.out.println(entry.getValue().size());
+			for (PImage img : entry.getValue())
+			{
+				System.out.print("\t");
+				System.out.println(img);
+			}
+		}
 	}
 }
