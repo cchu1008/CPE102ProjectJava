@@ -15,7 +15,7 @@ public class WorldModel
 	private List<Entity> entities;
 	private Background[][] backgrounds;
 	
-	private static Set<E> actionQueue;
+	//private static Set<E> actionQueue;
 	
 	public WorldModel(int width, int height, Background back)
 	{
@@ -24,7 +24,7 @@ public class WorldModel
 		this.occupancies = new Entity[width][height];
 		this.entities = new ArrayList<Entity>();
 		this.backgrounds = new Background[width][height];
-		this.actionQueue = new TreeSet<E>();
+		//this.actionQueue = new TreeSet<E>();
 		
 		for (int x = 0; x < width; x++)
 		{
@@ -52,10 +52,10 @@ public class WorldModel
 	
 	public boolean isOccupied(Point position)
 	{
-		return this.withinBounds(position) && (this.getCell(position) != null);
+		return this.withinBounds(position) && (this.getTileOccupant(position) != null);
 	}
 	
-	public Entity getCell(Point p)
+	public Entity getTileOccupant(Point p)
 	{
 		if (this.withinBounds(p))
 		{
@@ -64,7 +64,7 @@ public class WorldModel
 		return null;
 	}
 	
-	public void setCell(Point p, Entity ent)
+	public void setTileOccupant(Point p, Entity ent)
 	{
 		if (this.withinBounds(p))
 		{
@@ -118,12 +118,12 @@ public class WorldModel
 		Point pos = ent.getPosition();
 		if (this.withinBounds(pos))
 		{
-			Entity old = this.getCell(pos);
+			Entity old = this.getTileOccupant(pos);
 			if (old != null)
 			{
 				this.entities.remove(old);
 			}
-			this.setCell(pos, ent);
+			this.setTileOccupant(pos, ent);
 			this.entities.add(ent);
 		}
 	}
@@ -131,10 +131,10 @@ public class WorldModel
 	public void moveEntity(Entity ent, Point newPoint)
 	{
 		Point pos = ent.getPosition();
-		if (this.withinBounds(newPoint) && this.getCell(pos) == ent)
+		if (this.withinBounds(newPoint) && this.getTileOccupant(pos) == ent)
 		{
-			this.setCell(pos, null);
-			this.setCell(newPoint, ent);
+			this.setTileOccupant(pos, null);
+			this.setTileOccupant(newPoint, ent);
 			ent.setPosition(newPoint);
 		}
 	}
@@ -146,17 +146,17 @@ public class WorldModel
 	
 	public void removeEntityAt(Point pos)
 	{
-		Entity old = this.getCell(pos);
+		Entity old = this.getTileOccupant(pos);
 		if (this.withinBounds(pos) && old != null)
 		{
-			this.setCell(pos, null);
+			this.setTileOccupant(pos, null);
 			this.entities.remove(old);
 		}
 	}
 	
 	public static void scheduleAction(List<Point> action, int time)
 	{
-		actionQueue.add(action, time);
+		//actionQueue.add(action, time);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -185,7 +185,7 @@ public class WorldModel
 		return closestEntity;
 	}
 	
-	public List<Rectangle> updateOnTime(int ticks)
+	/*public List<Rectangle> updateOnTime(int ticks)
 	{
 		List<Rectangle> tiles = new ArrayList<Rectangle>();
 		
@@ -199,7 +199,7 @@ public class WorldModel
 		}
 		
 		return tiles;
-	}
+	}*/
 	
 	public static double distance(Point pos1, Point pos2)
 	{

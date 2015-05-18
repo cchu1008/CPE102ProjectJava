@@ -10,7 +10,7 @@ public class WorldView extends PApplet
 	private Rectangle viewport;
 	private int numRows;
 	private int numCols;
-	private Point mousePt;
+	//private Point mousePt;
 	
 	public WorldView(int viewCols, int viewRows, WorldModel world, int tileWidth, int tileHeight)
 	{
@@ -22,7 +22,7 @@ public class WorldView extends PApplet
 		this.viewport = new Rectangle(0, 0, viewCols, viewRows);
 		this.numRows = world.getWidth();
 		this.numCols = world.getHeight();
-		this.mousePt = new Point(0, 0);
+		//this.mousePt = new Point(0, 0);
 	}
 	
 	public void drawBackground()
@@ -33,7 +33,7 @@ public class WorldView extends PApplet
 			{
 				Point wPt = viewportToWorld(new Point(x, y));
 				PImage img = this.world.getBackgroundImage(wPt);
-				image(img, (x * tileWidth), (y * tileHeight));
+				this.image(img, x * this.tileWidth, y * this.tileHeight);
 			}
 		}
 	}
@@ -42,10 +42,10 @@ public class WorldView extends PApplet
 	{
 		for (Entity entity: world.getEntities())
 		{
-			Point position = entity.getPosition()
+			Point position = entity.getPosition();
 			if (viewport.collidepoint(position.getXCoord(), position.getYCoord()))
 			{
-				Point vPt = worldToViewport(new Point(entity.getXCoord(), entity.getYCoord()));
+				Point vPt = worldToViewport(position);
 				image(entity.getImage(), vPt.getXCoord(), vPt.getYCoord());
 			}
 		}
@@ -60,7 +60,7 @@ public class WorldView extends PApplet
 	public void updateView(int[] viewDelta)
 	{
 		this.viewport = createShiftedViewport(viewDelta, numRows, numCols);
-		this.mouseImg = mouseImg;
+		//this.mouseImg = mouseImg;
 		drawViewport();
 	}
 	
@@ -84,16 +84,16 @@ public class WorldView extends PApplet
 	{
 		Point pt = viewportToWorld(viewTilePt);
 		PImage bgnd = world.getBackgroundImage(pt);
-		boolean occupant = world.getTileOccupant(pt);
+		Entity occupant = world.getTileOccupant(pt);
 		
-		if (occupant)
-		{
+		if (occupant != null)
+		{/*
 			PImage img = createImage(this.tileWidth, this.tileHeight);
 			image(bgnd, 0, 0);
 			image(occupant.getImage(), 0, 0);
-			return img;
+			return img;*/
 		}
-		else return bgnd;
+		else {} return bgnd;
 	}
 	/* Don't need this part yet!
 	public PImage createMouseSurface(booean occupied)
@@ -149,5 +149,5 @@ public class WorldView extends PApplet
 	{
 		return Math.min(high, Math.max(v, low));
 	}
-	
+
 }

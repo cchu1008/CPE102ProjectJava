@@ -26,7 +26,7 @@ public class Main extends PApplet
 	
 	public void setup()
 	{
-		size(SCREEN_COLS, SCREEN_ROWS);
+		//size(SCREEN_COLS, SCREEN_ROWS);
 		
 		this.imageList = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TILE_HEIGHT);
 		
@@ -38,11 +38,11 @@ public class Main extends PApplet
 		
 		SaveLoad.loadWorld(world, imageList, WORLD_FILE, true);
 		
-		view.updateView();
+		//view.updateView();
 	}
 	
 	public void keyPressed()
-	{
+	{/*
 		int xDelta = 0;
 		int yDelta = 0;
 		int[] diff = new int[2];
@@ -55,7 +55,7 @@ public class Main extends PApplet
 		diff[0] = xDelta;
 		diff[1] = yDelta;
 		
-		view.updateView(diff);
+		view.updateView(diff);*/
 	}
 	
 	public void draw()

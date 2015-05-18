@@ -1,22 +1,30 @@
 import java.util.Map;
 import java.util.List;
+import java.util.Scanner;
+import java.io.FileInputStream;
 import processing.core.*;
 
 public class SaveLoad
 {
 	public static void loadWorld(WorldModel world, Map<String, List<PImage>> images, String file, boolean run)
 	{
-		Scanner in = new Scanner(new FileInputStream(file));
-		while(in.hasNextLine())
+		try (Scanner in = new Scanner(new FileInputStream(file)))
 		{
-			String[] properties = in.nextLine().split("\\s");
-			if (properties.length > 0)
+			while(in.hasNextLine())
 			{
-				if (properties[0] == "background")
-					addBackground(world, properties, images);
-				else
-					addEntity(world, properties, images, run);
+				String[] properties = in.nextLine().split("\\s");
+				if (properties.length > 0)
+				{
+					if (properties[0] == "background")
+						addBackground(world, properties, images);
+					else
+						addEntity(world, properties, images, run);
+				}
 			}
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -26,7 +34,7 @@ public class SaveLoad
 		loadWorld(world, images, file, false);
 	}
 	
-	public void addBackground(WorldModel world, String[] properties, Map<String, String> iStore)
+	public static void addBackground(WorldModel world, String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length >= 4)
 		{
@@ -37,7 +45,7 @@ public class SaveLoad
 		}
 	}
 	
-	public void addEntity(WorldModel world, String[] properties, Map<String, List<PImage>> iStore, boolean run)
+	public static void addEntity(WorldModel world, String[] properties, Map<String, List<PImage>> iStore, boolean run)
 	{
 		Entity newEntity = createFromProperties(properties, iStore);
 		if (newEntity != null)
@@ -48,9 +56,9 @@ public class SaveLoad
 		}
 	}
 	
-	public Entity createFromProperties(String[] properties, Map<String, List<PImage>> iStore)
+	public static Entity createFromProperties(String[] properties, Map<String, List<PImage>> iStore)
 	{
-		int key = properties[PROPERTY_KEY];
+		String key = properties[0];
 		if (properties.length > 0)
 		{
 			if (key.equals(Miner.ID_KEY))
@@ -74,7 +82,7 @@ public class SaveLoad
 		return new Point(x, y);
 	}
 	
-	public Miner createMiner(String[] properties, Map<String, List<PImage>> iStore)
+	public static Miner createMiner(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length == 7)
 		{
@@ -88,55 +96,55 @@ public class SaveLoad
 		return null;
 	}
 	
-	public Vein createVein(String[] properties, Map<String, List<PImage>> iStore)
+	public static Vein createVein(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length == 5)
 		{
 			Point p = getEntityPoint(properties);
 			int actRate = Integer.parseInt(properties[3]);
 			int rDist = Integer.parseInt(properties[4]);
-			return new Vein(p, actRate, rDist);
+			return new Vein(p, iStore.get(Vein.ID_KEY).get(0), actRate, rDist);
 		}
 		return null;
 	}
 	
-	public Ore createOre(String[] properties, Map<String, List<PImage>> iStore)
+	public static Ore createOre(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length == 4)
 		{
 			Point p = getEntityPoint(properties);
 			int actRate = Integer.parseInt(properties[3]);
-			return new Ore(p, actRate);
+			return new Ore(p, iStore.get(Ore.ID_KEY).get(0), actRate);
 		}
 		return null;
 	}
 	
-	public Blacksmith createBlacksmith(String[] properties, Map<String, List<PImage>> iStore)
+	public static Blacksmith createBlacksmith(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length == 3)
 		{
-			return new Blacksmith(getEntityPoint(properties));
+			return new Blacksmith(getEntityPoint(properties), iStore.get(Blacksmith.ID_KEY).get(0));
 		}
 		return null;
 	}
 	
-	public Obstacle createObstacle(String[] properties, Map<String, List<PImage>> iStore)
+	public static Obstacle createObstacle(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length == 3)
 		{
-			return new Obstacle(getEntityPoint(properties));
+			return new Obstacle(getEntityPoint(properties), iStore.get(Obstacle.ID_KEY).get(0));
 		}
 		return null;
 	}
 	
 	public static void scheduleEntity(WorldModel world, Entity entity, Map<String, List<PImage>> iStore)
-	{
+	{/*
 		if (entity instanceof Miner) //Change below later!
 			Actions.scheduleMiner(world, entity, 0, iStore);
 		else if (entity instanceof Vein)
 			Actions.scheduleVein(world, entity, 0, iStore);
 		else if (entity instanceof Ore)
-			Actions.scheduleOre(world, entity, 0, iStore);
+			Actions.scheduleOre(world, entity, 0, iStore);*/
 	}
 	
 }
