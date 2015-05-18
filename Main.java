@@ -7,7 +7,7 @@ public class Main extends PApplet
 	
 	private WorldModel theWorld;
 	private WorldView view;
-	private Map<String, List<PImage>> iStore; //initialize later!
+	private Map<String, List<PImage>> imageList; //initialize later!
 	
 	private static final boolean RUN_AFTER_LOAD = true;
 	private static final String IMAGE_LIST_FILE_NAME = 'imagelist';
@@ -21,33 +21,26 @@ public class Main extends PApplet
 	private static final int TILE_WIDTH = 32;
 	private static final int TILE_HEIGHT = 32;
 	
-	private Background createDefaultBackground(***Image img)
-	{
-		return new Background(***imageStore.DEFAULT_IMAGE_NAME, img);
-	}
-	
 	public void setup()
 	{
-		this.rand = new Random();
+		this.imageList = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
 		
-		Background defaultBackground = createDefaultBackground(getImages(iStore, image_store.DEFAULT_IMAGE_NAME));
+		Background defaultBackground = new Background("default", ImageStore.getDefaultImage());
 		
 		this.world = new WorldModel(SCREEN_ROWS * WORLD_HEIGHT_SCALE, SCREEN_COLS * WORLD_WIDTH_SCALE, defaultBackground);
 		
 		this.view = new WorldView(SCREEN_COLS, SCREEN_ROWS, world, TILE_WIDTH, TILE_HEIGHT);
 		
-		this.iStore = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
+		SaveLoad.loadWorld(world, imageList, WORLD_FILE, true);
 		
-		SaveLoad.loadWorld(world, iStore, WORLD_FILE, true);
+		this.rand = new Random();
 		
+		view.updateView();
 	}
 	
 	public void draw()
 	{
-		view.updateView();
 		
-		//From controller
-		activityLoop(view, world);
 	}
 	
 	public static void main(String args[])

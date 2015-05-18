@@ -25,7 +25,9 @@ public class ImageStore
 		
 		if (!images.containsKey(DEFAULT_IMAGE_NAME))
 		{
-			addDefault(images);
+			PImage def = getDefault();
+			images.put(DEFAULT_IMAGE_NAME, new LinkedList<PImage>());
+			images.get(DEFAULT_IMAGE_NAME).add(def);
 		}
 		
 		return images;
@@ -75,15 +77,14 @@ public class ImageStore
 		sprite.updatePixels();
 	}
 	
-	private static void addDefault(Map<String, List<PImage>> images)
+	public static PImage getDefaultImage()
 	{
 		PImage def = new PImage(tileWidth, tileHeight);
 		def.loadPixels();
 		for (int i = 0; i < def.pixels.length; i++)
 			def.pixels[i] = TEMP.color(127, 0);
 		def.updatePixels();
-		images.put(DEFAULT_IMAGE_NAME, new LinkedList<PImage>());
-		images.get(DEFAULT_IMAGE_NAME).add(def);
+		return def;
 	}
 	
 	public static void main(String[] args)

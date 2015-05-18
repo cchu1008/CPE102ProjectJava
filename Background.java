@@ -20,4 +20,9 @@ public class Background
 	{
 		return this.image;
 	}
+	
+	public void setImage(PImage img)
+	{
+		this.image = img;
+	}
 }
