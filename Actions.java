@@ -83,4 +83,66 @@ public class Actions
 		
 		return blob;
 	}
+	
+	public void scheduleBlob(WorldModel world, Entity blob, int ticks, Map<String, List<PImage>> iStore)
+	{
+		scheduleAction(world, blob, blob.createOreBlobAction(world, iStore), ticks + blob.getRate());
+		scheduleAnimation(world, blob);
+	}
+	
+	public void scheduleMiner(WorldModel world, Entity miner, int ticks, Map<String, List<PImage>> iStore)
+	{
+		scheduleAction(world, miner, miner.createMinerAction(world, iStore), ticks + miner.getRate());
+		scheduleAnimation(world, miner);
+	}
+	
+	public Ore createOre(WorldModel world, String name, Point pt, int ticks, Map<String, List<PImage>> iStore)
+	{
+		Entity Ore = new Ore(name, pt, ImageStore.getImages(iStore, 'ore'), (random.nextInt(ORE_CORRUPT_MAX - ORE_CORRUPT_MIN) + ORE_CORRUPT_MIN));
+		scheduleOre(world, ore, ticks, iStore);
+		
+		return ore;
+	}
+	
+	public void scheduleOre(WorldModel world, Entity ore, int ticks, Map<String, List<PImage>> iStore)
+	{
+		scheduleAction(world, ore, createOreTransformAction(world, ore, iStore), ticks + ore.getRate());
+	}
+	
+	public Quake createQuake(WorldModel world, Point pt, int ticks, Map<String, List<PImage>> iStore)
+	{
+		Entity quake = new Quake('quake', pt, ImageStore.getImages(iStore, 'quake'), QUAKE_ANIMATION_RATE);
+		sheduleQuake(world, quake, ticks);
+		
+		return quake;
+	}
+	
+	public void scheduleQuake(WorldModel world, Entity quake, int ticks)
+	{
+		scheduleAnimation(world, quake, QUAKE_STEPS);
+		scheduleAction(world, quake, createEntityDeathAction(world, quake), ticks + QUAKE_DURATION);
+	}
+	
+	public Vein createVein(WorldModel world, String name, Point pt, int ticks, Map<String, List<PImage>> iStore)
+	{
+		Entity vein = new Vein('vein' + name, (random.nextInt(VEIN_RATE_MAX - VEIN_RATE_MIN) + VEIN_RATE_MIN), pt, ImageStore.getImages(iStore, 'vein'));
+		
+		return vein;
+	}
+	
+	public void scheduleVein(WorldModel world, Entity vein, int ticks, Map<String, List<PImage>> iStore)
+	{
+		scheduleAction(world, vein, vein.createVeinAction(world, iStore), ticks + vein.getRate());
+	}
+	
+	public void scheduleAction(WorldModel world, Entity entity, Point[] action, int time)
+	{
+		entity.addPendingAction(action);
+		world.scheduleAction(action, time);
+	}
+	
+	public void scheduleAnimation(WorldModel world, Entity entity, int repeatCount=0)
+	{
+		scheduleAction(world, entity, createAnimationAction(world, entity, repeatCount), entity.getAnimationRate());
+	}
 }
