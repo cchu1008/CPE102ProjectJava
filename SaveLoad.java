@@ -1,51 +1,5 @@
 public class SaveLoad
 {
-	private static final int PROPERTY_KEY = 0;
-	
-	private static final String BGND_KEY = 'background';
-	private static final int BGND_NUM_PROPERTIES = 4;
-	private static final int BGND_NAME = 1;
-	private static final int BGND_COL = 2;
-	private static final int BGND_ROW = 3;
-	
-	private static final String MINER_KEY = 'miner';
-	private static final int MINER_NUM_PROPERTIES = 7;
-	private static final int MINER_NAME = 1;
-	private static final int MINER_LIMIT = 4;
-	private static final int MOINER_COL = 2;
-	private static final int MINER_RATE = 5;
-	private static final int MINER_ANIMATION_RATE = 6;
-	
-	private static final String OBSTACLE_KEY = 'obstacle';
-	private static final int OBSTACLE_NUM_PROPERTIES = 4;
-	private static final int OBSTACLE_NAME = 1;
-	private static final int OBSTACLE_COL = 2;
-	private static final int OBSTACLE_ROW = 3;
-	
-	private static final String ORE_KEY = 'ore';
-	private static final int ORE_NUM_PROPERTIES = 5;
-	private static final int ORE_NAME = 1;
-	private static final int ORE_COL = 2;
-	private static final int ORE_ROW = 3;
-	private static final int ORE_RATE = 4;
-	
-	private static final String SMITH_KEY = 'blacksmith';
-	private static final int SMITH_NUM_PROPERTIES = 7;
-	private static final int SMITH_NAME = 1;
-	private static final int SMITH_COL = 2;
-	private static final int SMITH_ROW = 3;
-	private static final int SMITH_LIMIT = 4;
-	private static final int SMITH_RATE = 5;
-	private static final int SMITH_REACH = 6;
-	
-	private static final String VEIN_KEY = 'vein';
-	private static final int VEIN_NUM_PROPERTIES = 6;
-	private static final int VEING_NAME = 1;
-	private static final int VEIN_RATE = 4;
-	private static final int VEIN_COL = 2;
-	private static final int VEIN_ROW = 3;
-	private static final int VEIN_REACH = 5;
-	
 	public static void loadWorld(WorldModel world, Map<String, List<PImage>> images, String file, boolean run)
 	{
 		Scanner in = new Scanner(new FileInputStream(file));
@@ -54,7 +8,7 @@ public class SaveLoad
 			String[] properties = in.nextLine().split("\\s");
 			if (properties.length > 0)
 			{
-				if (properties[PROPERTY_KEY] == BGND_KEY)
+				if (properties[0] == "background")
 					addBackground(world, properties, images);
 				else
 					addEntity(world, properties, images, run);
@@ -62,26 +16,26 @@ public class SaveLoad
 		}
 	}
 	
-	/** loadWorld with a default value for `run` */
+	/** loadWorld with a default value of false for `run` */
 	public static void loadWorld(WorldModel world, Map<String, List<PImage>> images, String file)
 	{
-		loacWorld(world, images, file, false);
+		loadWorld(world, images, file, false);
 	}
 	
 	public void addBackground(WorldModel world, String[] properties, Map<String, String> iStore)
 	{
-		if (properties.length >= BGND_NUM_PROPERTIES)
+		if (properties.length >= 4)
 		{
-			Point pt = new Point((int)properties[BGND_COL], (int)properties[BGND_ROW]);
-			String name = properties[BGND_NAME];
-			world.setBackground(pt, new Background(name, ImageStore.getImages(iStore, name)));
+			int x = Integer.parseInt(properties[2]);
+			int y = Integer.parseInt(properties[3]);
+			String name = properties[1];
+			world.setBackground(new Point(x, y), new Background(name, iStore.get(name).get(0)));
 		}
 	}
 	
 	public void addEntity(WorldModel world, String[] properties, Map<String, List<PImage>> iStore, boolean run)
 	{
 		Entity newEntity = createFromProperties(properties, iStore);
-		//following if statement could use work...
 		if (newEntity != null)
 		{
 			world.addEntity(newEntity);
@@ -95,32 +49,40 @@ public class SaveLoad
 		int key = properties[PROPERTY_KEY];
 		if (properties.length > 0)
 		{
-			if (key == MINER_KEY)
+			if (key.equals(Miner.ID_KEY))
 				return createMiner(properties, iStore);
-			else if (key == VEIN_KEY)
+			else if (key.equals(Vein.ID_KEY))
 				return createVein(properties, iStore);
-			else if (key == ORE_KEY)
+			else if (key.equals(Ore.ID_KEY))
 				return createOre(properties, iStore);
-			else if (key == SMITH_KEY)
+			else if (key.equals(Blacksmith.ID_KEY))
 				return createBlacksmith(properties, iStore);
-			else if (key == OBSTACLE_KEY)
+			else if (key.equals(Obstacle.ID_KEY))
 				return createObstacle(properties, iStore);
 		}
-		return None;
+		return null;
 	}
 	
-	public Entity createMiner(String[] properties, Map<String, String> iStore)
+	private static Point getEntityPoint(String[] properties)
 	{
-		if (properties.length == MINER_NUM_PROPERTIES)
+		int x = Integer.parseInt(properties[1]);
+		int y = Integer.parseInt(properties[2]);
+		return new Point(x, y);
+	}
+	
+	public Entity createMiner(String[] properties, Map<String, List<PImage>> iStore)
+	{
+		if (properties.length == 7)
 		{
-			Entity miner = new Miner(new Point((int)properties[MINER_COL], (int)properties[MINER_ROW]), (int)properties[MINER_LIMIT], 0);
+			Point p = getEntityPoint(properties);
+			Entity miner = new Miner(p, (int)properties[MINER_LIMIT], 0);
 			
 			return miner;
 		}
 		return None;
 	}
 	
-	public Entity createVein(String[] properties, Map<String, String> iStore)
+	public Entity createVein(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length == VEIN_NUM_PROPERTIES)
 		{
@@ -131,7 +93,7 @@ public class SaveLoad
 		return None;
 	}
 	
-	public Entity createOre(String[] properties, Map<String, String> iStore)
+	public Entity createOre(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length == ORE_NUM_PROPERTIES)
 		{
@@ -142,7 +104,7 @@ public class SaveLoad
 		return None;
 	}
 	
-	public Entity createBlacksmith(String[] properties, Map<String, String> iStore)
+	public Entity createBlacksmith(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length == SMITH_NUM_PROPERTIES)
 		{
@@ -150,10 +112,10 @@ public class SaveLoad
 		
 			return smith;
 		}
-		return None;
+		return null;
 	}
 	
-	public Entity createObstacle(String[] properties, Map<String, String> iStore)
+	public Entity createObstacle(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length == OBSTACLE_NUM_PROPERTIES)
 		{
@@ -161,12 +123,12 @@ public class SaveLoad
 			
 			return obs;
 		}
-		return None;			
+		return null;
 	}
 	
-	public static void scheduleEntity(WorldModel world, Entity entity, Map<String, String> iStore)
+	public static void scheduleEntity(WorldModel world, Entity entity, Map<String, List<PImage>> iStore)
 	{
-		if (entity instanceof Miner && entity.getResourceCount() == 0) //Change below later!
+		if (entity instanceof Miner) //Change below later!
 			scheduleMiner(world, entity, 0, iStore);
 		else if (entity instanceof Vein)
 			scheduleVein(world, entity, 0, iStore);
