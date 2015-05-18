@@ -2,17 +2,22 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
+import java.util.List;
+import java.util.ArrayList;
 import org.junit.Test;
 import org.junit.Before;
+import processing.core.*;
 
 public class TestCases
 {
 	private static final double DELTA = 0.00001;
 	
+	private static List<PImage> minerImgs = new ArrayList<PImage>();
+	
 	private static final Point pointy = new Point(10, 16);
 	
-	private static final Miner Harrison = new Miner(new Point(1, 11), 2, 0);
-	private static final Miner Courtney = new Miner(new Point(10, 8), 2, 2);
+	private static final Miner Harrison = new Miner(new Point(1, 11), minerImgs, 2, 0, 1, 1);
+	private static final Miner Courtney = new Miner(new Point(10, 8), minerImgs, 2, 2, 1, 1);
 	
 	private static final Background back = new Background();
 	
