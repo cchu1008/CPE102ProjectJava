@@ -63,25 +63,6 @@ public class WorldView extends PApplet
 		drawViewport();
 	}
 	
-	public void updateViewTiles(List<Rectangle> tiles)
-	{
-		List<Rectangle> rects = new ArrayList<Point>();
-		
-		for (Point tile : tiles)
-		{
-			if (viewport.collidepoint(tile.getXCoord(), tile.getYCoord()))
-			{
-				Point vPt = worldToViewport(tile);
-				PImage img = getTileImage(vPt);
-				rects.add(updateTile(vPt, img));
-				if (mousePt.equals(vPt))
-				{
-					rects.add(updateMouseCursor());
-				}
-			}
-		}
-	}
-	
 	public Rectangle updateTile(Point viewTilePt, ***surface (image))
 	{
 		int absX = viewTilePt.getXCoord() * tileWidth;

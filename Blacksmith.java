@@ -6,3 +6,4 @@ public class Blacksmith extends Entity
 	{
 		super("blacksmith", pos, img);
 	}
+}

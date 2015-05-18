@@ -36,6 +36,23 @@ public class Main extends PApplet
 		view.updateView();
 	}
 	
+	public void keyPressed()
+	{
+		int xDelta = 0;
+		int yDelta = 0;
+		int[] diff = new int[2];
+		
+		if (key == UP) yDelta -= 1;
+		if (key == DOWN) yDelta += 1;
+		if (key == LEFT) xDelta -= 1;
+		if (key == RIGHT) xDelta += 1;
+		
+		diff[0] = xDelta;
+		diff[1] = yDelta;
+		
+		view.updateView(diff);
+	}
+	
 	public void draw()
 	{
 		
