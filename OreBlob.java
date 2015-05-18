@@ -7,6 +7,6 @@ public class OreBlob extends Animated
 	
 	public OreBlob(Point position, List<PImage> images)
 	{
-		super(ID_KEY, position, images, 0);
+		super(ID_KEY, position, images, 0, 0);
 	}
 }

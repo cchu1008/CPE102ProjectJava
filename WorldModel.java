@@ -3,6 +3,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 import processing.core.*;
 
 public class WorldModel
@@ -13,6 +15,8 @@ public class WorldModel
 	private List<Entity> entities;
 	private Background[][] backgrounds;
 	
+	private static Set<E> actionQueue;
+	
 	public WorldModel(int width, int height, Background back)
 	{
 		this.width = width;
@@ -20,6 +24,8 @@ public class WorldModel
 		this.occupancies = new Entity[width][height];
 		this.entities = new ArrayList<Entity>();
 		this.backgrounds = new Background[width][height];
+		this.actionQueue = new TreeSet<E>();
+		
 		for (int x = 0; x < width; x++)
 		{
 			for (int y = 0; y < height; y++)
@@ -183,8 +189,7 @@ public class WorldModel
 	{
 		List<Rectangle> tiles = new ArrayList<Rectangle>();
 		
-		//Assuming we make an actions class.
-		List<Point> next = actionQueue.head();
+		IntConsumer next = actionQueue.first();
 		//What is next.ord???
 		while (next != null && next.ord < ticks)
 		{
