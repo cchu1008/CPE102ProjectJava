@@ -93,38 +93,34 @@ public class SaveLoad
 			int rDist = Integer.parseInt(properties[4]);
 			return new Vein(p, actRate, rDist);
 		}
-		return None;
+		return null;
 	}
 	
-	public Entity createOre(String[] properties, Map<String, List<PImage>> iStore)
+	public Ore createOre(String[] properties, Map<String, List<PImage>> iStore)
 	{
-		if (properties.length == ORE_NUM_PROPERTIES)
+		if (properties.length == 4)
 		{
-			Entity ore = new Ore(new Point((int)properties[ORE_COL], (int)properties[ORE_ROW]));
-			
-			return ore;
-		}
-		return None;
-	}
-	
-	public Entity createBlacksmith(String[] properties, Map<String, List<PImage>> iStore)
-	{
-		if (properties.length == SMITH_NUM_PROPERTIES)
-		{
-			Entity smith = new Blacksmith(new Point((int)properties[SMITH_COL], (int)properties[SMITH_ROW]), (int)properties[SMITH_LIMIT], 0, (int)properties[SMITH_REACH]);
-		
-			return smith;
+			Point p = getEntityPoint(properties);
+			int actRate = Integer.parseInt(properties[3]);
+			return new Ore(p, actRate);
 		}
 		return null;
 	}
 	
-	public Entity createObstacle(String[] properties, Map<String, List<PImage>> iStore)
+	public Blacksmith createBlacksmith(String[] properties, Map<String, List<PImage>> iStore)
 	{
-		if (properties.length == OBSTACLE_NUM_PROPERTIES)
+		if (properties.length == 3)
 		{
-			Entity obs = new Obstacle(new Point((int)properties[OBSTACLE_COL], (int)properties[OBSTACLE_ROW]));
-			
-			return obs;
+			return new Blacksmith(getEntityPoint(properties));
+		}
+		return null;
+	}
+	
+	public Obstacle createObstacle(String[] properties, Map<String, List<PImage>> iStore)
+	{
+		if (properties.length == 3)
+		{
+			return new Obstacle(getEntityPoint(properties));
 		}
 		return null;
 	}
