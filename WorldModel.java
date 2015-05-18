@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Comparator;
+import processing.core.*;
 
 public class WorldModel
 {
@@ -62,6 +63,40 @@ public class WorldModel
 		if (this.withinBounds(p))
 		{
 			this.occupancies[p.getXCoord()][p.getYCoord()] = ent;
+		}
+	}
+	
+	public Background getBackground(Point p)
+	{
+		if (this.withinBounds(p))
+		{
+			return this.backgrounds[p.getXCoord()][p.getYCoord()];
+		}
+		return null;
+	}
+	
+	public PImage getBackgroundImage(Point p)
+	{
+		if (this.withinBounds(p))
+		{
+			return this.backgrounds[p.getXCoord()][p.getYCoord()].getImage();
+		}
+		return null;
+	}
+	
+	public void setBackground(Point p, Background b)
+	{
+		if (this.withinBounds(p))
+		{
+			this.backgrounds[p.getXCoord()][p.getYCoord()] = b;
+		}
+	}
+	
+	public void setBackgroundImage(Point p, PImage i)
+	{
+		if (this.withinBounds(p))
+		{
+			this.backgrounds[p.getXCoord()][p.getYCoord()].setImage(i);
 		}
 	}
 	
