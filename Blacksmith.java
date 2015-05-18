@@ -4,14 +4,12 @@ public class Blacksmith extends Entity
 {
 	private int resourceLimit;
 	private int resourceCount;
-	private int resourceDistance;
 	
-	public Blacksmith(Point pos, PImage img, int rLim, int rCount, int rDist)
+	public Blacksmith(Point pos, PImage img, int rLim, int rCount)
 	{
 		super("blacksmith", pos, img);
 		this.resourceLimit = rLim;
 		this.resourceCount = rCount;
-		this.resourceDistance = rDist;
 	}
 	
 	public int getResourceLimit()
@@ -39,14 +37,9 @@ public class Blacksmith extends Entity
 		return this.resourceCount >= this.resourceLimit;
 	}
 	
-	public int getResourceDistance()
-	{
-		return this.resourceDistance;
-	}
-	
 	public String entityString()
 	{
 		String initial = super.entityString();
-		return String.format("%s %d %d %d", initial, this.getResourceLimit(), this.getResourceCount(), this.getResourceDistance());
+		return String.format("%s %d %d", initial, this.getResourceLimit(), this.getResourceCount());
 	}
 }
