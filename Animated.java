@@ -1,6 +1,6 @@
 import processing.core.*;
 
-public abstract class Animated
+public abstract class Animated extends Entity
 {
 	private List<PImage> images;
 	private int animationRate;

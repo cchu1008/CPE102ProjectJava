@@ -45,26 +45,9 @@ public class SaveLoad
 	private static final int VEIN_COL = 2;
 	private static final int VEIN_ROW = 3;
 	private static final int VEIN_REACH = 5;
-
-	/* For later!!!! (SAVE_WORLD)
-	public void saveWorld(WorldModel world, String file)
-	{
-		saveEntities(world, file);
-		saveBackground(world, file);
-	}
-	
-	public void saveEntities(WorldModel world, String file)
-	{
-		for (Entity entity : world.getEntities())
-		{
-			//Figure out how to write to a file.
-			file.write(entity.entityString() + '\n');
-		}
-	}*/
 	
 	public static void loadWorld(WorldModel world, Map<String, List<PImage>> images, String file, boolean run)
 	{
-		//reading a file...
 		Scanner in = new Scanner(new FileInputStream(file));
 		while(in.hasNextLine())
 		{

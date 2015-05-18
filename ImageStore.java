@@ -79,7 +79,7 @@ public class ImageStore
 	
 	public static PImage getDefaultImage(tileWidth, tileHeight)
 	{
-		PImage def = new PImage(tileWidth, tileHeight);
+		PImage def = createImage(tileWidth, tileHeight);
 		def.loadPixels();
 		for (int i = 0; i < def.pixels.length; i++)
 			def.pixels[i] = TEMP.color(127, 0);
