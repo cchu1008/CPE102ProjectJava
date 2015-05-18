@@ -62,8 +62,6 @@ public class WorldView extends PApplet
 		this.viewport = createShiftedViewport(viewDelta, numRows, numCols);
 		this.mouseImg = mouseImg;
 		drawViewport();
-		//Work on translating from pygame
-		***update();
 	}
 	
 	public void updateViewTiles(List<Rectangle> tiles)
@@ -75,7 +73,7 @@ public class WorldView extends PApplet
 			if (viewport.collidepoint(tile.getXCoord(), tile.getYCoord()))
 			{
 				Point vPt = worldToViewport(tile);
-				***img = getTileImage(vPt);
+				PImage img = getTileImage(vPt);
 				rects.add(updateTile(vPt, img));
 				if (mousePt.equals(vPt))
 				{
@@ -83,8 +81,6 @@ public class WorldView extends PApplet
 				}
 			}
 		}
-		//Work on translating from pygame
-		***update(rects);
 	}
 	
 	public Rectangle updateTile(Point viewTilePt, ***surface (image))
@@ -106,7 +102,7 @@ public class WorldView extends PApplet
 		if (occupant)
 		{
 			//Work on translating from pygame
-			Image img = pygame.Surface((this.tileWidth, this.tileHeight));
+			***PImage img = pygame.Surface((this.tileWidth, this.tileHeight));
 			image(bgnd, 0, 0);
 			image(occupant.getImage(), 0, 0);
 			return img;
@@ -147,13 +143,11 @@ public class WorldView extends PApplet
 	
 	public Point viewportToWorld(Point pt)
 	{
-		//Work on changing from pygame! (viewport.left and viewport.top)
 		return new Point(pt.getXCoord() + viewport.getX(), pt.getYCoord() + viewport.getY());
 	}
 	
 	public Point worldToViewport(Point pt)
 	{
-		//Work on changing from pygame! (Same as above)
 		return new Point(pt.getXCoord() - viewport.getX(), pt.getYCoord() - viewport.getY());
 	}
 	
