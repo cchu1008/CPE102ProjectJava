@@ -63,7 +63,7 @@ public class WorldView extends PApplet
 		drawViewport();
 	}
 	
-	public Rectangle updateTile(Point viewTilePt, ***surface (image))
+	public Rectangle updateTile(Point viewTilePt, PImage surface)
 	{
 		int absX = viewTilePt.getXCoord() * tileWidth;
 		int absY = viewTilePt.getYCoord() * tileHeight;
@@ -89,10 +89,10 @@ public class WorldView extends PApplet
 		else return bgnd;
 	}
 	/* Don't need this part yet!
-	public Image createMouseSurface(booean occupied)
+	public PImage createMouseSurface(booean occupied)
 	{
 		//Work on translating from pygame
-		Image surface = pygame.Surface((this.tileWidth, this.tileHeight));
+		PImage surface = pygame.Surface((this.tileWidth, this.tileHeight));
 		surface.setAlpha(MOUSE_HOVER_ALPH);
 		Color color = MOUSE_HOVOR_EMPTY_COLOR;
 		

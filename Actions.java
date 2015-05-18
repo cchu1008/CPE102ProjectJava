@@ -77,7 +77,7 @@ public class Actions
 	
 	public Blob createBlob(WorldModel world, String name, Point pt, int rate, int ticks, Map<String, List<PImage>> iStore)
 	{
-		Entity blob = new OreBlob(name, pt, rate, ImageStore.getImages(iStore, 'blob'), (random.nextInt(BLOB_ANIMATION_MAX - BLOB_ANIMATION_MIN) + BLOB_ANIMATION_MIN) * BLOB_ANIMATION_RATE_SCALE);
+		Entity blob = new OreBlob(name, pt, rate, iStore.get("blob").get(0), (random.nextInt(BLOB_ANIMATION_MAX - BLOB_ANIMATION_MIN) + BLOB_ANIMATION_MIN) * BLOB_ANIMATION_RATE_SCALE);
 		
 		scheduleBlob(world, blob, ticks, iStore);
 		
@@ -98,7 +98,7 @@ public class Actions
 	
 	public Ore createOre(WorldModel world, String name, Point pt, int ticks, Map<String, List<PImage>> iStore)
 	{
-		Entity Ore = new Ore(name, pt, ImageStore.getImages(iStore, 'ore'), (random.nextInt(ORE_CORRUPT_MAX - ORE_CORRUPT_MIN) + ORE_CORRUPT_MIN));
+		Entity Ore = new Ore(name, pt, iStore.get("ore").get(0), (random.nextInt(ORE_CORRUPT_MAX - ORE_CORRUPT_MIN) + ORE_CORRUPT_MIN));
 		scheduleOre(world, ore, ticks, iStore);
 		
 		return ore;
@@ -111,7 +111,7 @@ public class Actions
 	
 	public Quake createQuake(WorldModel world, Point pt, int ticks, Map<String, List<PImage>> iStore)
 	{
-		Entity quake = new Quake('quake', pt, ImageStore.getImages(iStore, 'quake'), QUAKE_ANIMATION_RATE);
+		Entity quake = new Quake('quake', pt, iStore.get("quake").get(0), QUAKE_ANIMATION_RATE);
 		sheduleQuake(world, quake, ticks);
 		
 		return quake;
@@ -125,7 +125,7 @@ public class Actions
 	
 	public Vein createVein(WorldModel world, String name, Point pt, int ticks, Map<String, List<PImage>> iStore)
 	{
-		Entity vein = new Vein('vein' + name, (random.nextInt(VEIN_RATE_MAX - VEIN_RATE_MIN) + VEIN_RATE_MIN), pt, ImageStore.getImages(iStore, 'vein'));
+		Entity vein = new Vein('vein' + name, (random.nextInt(VEIN_RATE_MAX - VEIN_RATE_MIN) + VEIN_RATE_MIN), pt, iStore.get("vein").get(0));
 		
 		return vein;
 	}

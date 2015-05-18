@@ -148,6 +148,11 @@ public class WorldModel
 		}
 	}
 	
+	public static void scheduleAction(List<Point> action, int time)
+	{
+		actionQueue.add(action, time);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public Entity findNearest(Point pos, Class type)
 	{

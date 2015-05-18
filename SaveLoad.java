@@ -129,11 +129,11 @@ public class SaveLoad
 	public static void scheduleEntity(WorldModel world, Entity entity, Map<String, List<PImage>> iStore)
 	{
 		if (entity instanceof Miner) //Change below later!
-			scheduleMiner(world, entity, 0, iStore);
+			Actions.scheduleMiner(world, entity, 0, iStore);
 		else if (entity instanceof Vein)
-			scheduleVein(world, entity, 0, iStore);
+			Actions.scheduleVein(world, entity, 0, iStore);
 		else if (entity instanceof Ore)
-			scheduleOre(world, entity, 0, iStore);
+			Actions.scheduleOre(world, entity, 0, iStore);
 	}			
 	
 }
