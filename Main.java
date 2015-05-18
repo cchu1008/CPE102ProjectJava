@@ -25,7 +25,7 @@ public class Main extends PApplet
 	{
 		this.imageList = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
 		
-		Background defaultBackground = new Background("default", ImageStore.getDefaultImage(TILE_WIDTH, TITLE_HEIGHT));
+		Background defaultBackground = new Background("default", this.imageList.get("grass").get(0));
 		
 		this.world = new WorldModel(SCREEN_ROWS * WORLD_HEIGHT_SCALE, SCREEN_COLS * WORLD_WIDTH_SCALE, defaultBackground);
 		

@@ -62,6 +62,7 @@ public class SaveLoad
 		}
 	}
 	
+	/** loadWorld with a default value for `run` */
 	public static void loadWorld(WorldModel world, Map<String, List<PImage>> images, String file)
 	{
 		loacWorld(world, images, file, false);
@@ -81,7 +82,7 @@ public class SaveLoad
 	{
 		Entity newEntity = createFromProperties(properties, iStore);
 		//following if statement could use work...
-		if (newEntity != null or newEntity != None)
+		if (newEntity != null)
 		{
 			world.addEntity(newEntity);
 			if (run)
