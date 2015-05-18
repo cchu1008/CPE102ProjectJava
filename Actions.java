@@ -138,7 +138,7 @@ public class Actions
 		scheduleAction(world, vein, vein.createVeinAction(world, iStore), ticks + vein.getRate());
 	}
 	
-	public void scheduleAction(WorldModel world, Entity entity, Point[] action, int time)
+	public void scheduleAction(WorldModel world, Entity entity, IntConsumer action, int time)
 	{
 		entity.addPendingAction(action);
 		world.scheduleAction(action, time);
