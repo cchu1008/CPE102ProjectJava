@@ -2,6 +2,7 @@ import java.util.Random;
 import java.util.Map;
 import java.util.List;
 import processing.core.*;
+import processing.core.PApplet;
 
 public class Main extends PApplet
 {
@@ -25,6 +26,8 @@ public class Main extends PApplet
 	
 	public void setup()
 	{
+		size(SCREEN_COLS, SCREEN_ROWS);
+		
 		this.imageList = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TILE_HEIGHT);
 		
 		Background defaultBackground = new Background("default", this.imageList.get("grass").get(0));
