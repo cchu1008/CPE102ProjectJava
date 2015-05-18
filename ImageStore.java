@@ -25,7 +25,7 @@ public class ImageStore
 		
 		if (!images.containsKey(DEFAULT_IMAGE_NAME))
 		{
-			PImage def = getDefault();
+			PImage def = getDefaultImage(tileWidth, tileHeight);
 			images.put(DEFAULT_IMAGE_NAME, new LinkedList<PImage>());
 			images.get(DEFAULT_IMAGE_NAME).add(def);
 		}
@@ -77,7 +77,7 @@ public class ImageStore
 		sprite.updatePixels();
 	}
 	
-	public static PImage getDefaultImage()
+	public static PImage getDefaultImage(tileWidth, tileHeight)
 	{
 		PImage def = new PImage(tileWidth, tileHeight);
 		def.loadPixels();
