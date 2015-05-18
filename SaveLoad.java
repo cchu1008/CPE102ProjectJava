@@ -70,25 +70,28 @@ public class SaveLoad
 		return new Point(x, y);
 	}
 	
-	public Entity createMiner(String[] properties, Map<String, List<PImage>> iStore)
+	public Miner createMiner(String[] properties, Map<String, List<PImage>> iStore)
 	{
 		if (properties.length == 7)
 		{
 			Point p = getEntityPoint(properties);
-			Entity miner = new Miner(p, (int)properties[MINER_LIMIT], 0);
-			
-			return miner;
+			int actRate = Integer.parseInt(properties[3]);
+			int animRate = Integer.parseInt(properties[4]);
+			int rLim = Integer.parseInt(properties[5]);
+			int rCount = Integer.parseInt(properties[6]);
+			return new Miner(p, iStore.get(Miner.ID_KEY), actRate, animRate, rLim, rCount);
 		}
-		return None;
+		return null;
 	}
 	
-	public Entity createVein(String[] properties, Map<String, List<PImage>> iStore)
+	public Vein createVein(String[] properties, Map<String, List<PImage>> iStore)
 	{
-		if (properties.length == VEIN_NUM_PROPERTIES)
+		if (properties.length == 5)
 		{
-			Entity vein = new Vein(new Point((int)properties[VEIN_COL], (int)properties[VEIN_ROW]), (int)properties[VEIN_REACH]);
-			
-			return vein;
+			Point p = getEntityPoint(properties);
+			int actRate = Integer.parseInt(properties[3]);
+			int rDist = Integer.parseInt(properties[4]);
+			return new Vein(p, actRate, rDist);
 		}
 		return None;
 	}
@@ -134,6 +137,6 @@ public class SaveLoad
 			Actions.scheduleVein(world, entity, 0, iStore);
 		else if (entity instanceof Ore)
 			Actions.scheduleOre(world, entity, 0, iStore);
-	}			
+	}
 	
 }
