@@ -2,12 +2,14 @@ import processing.core.*;
 
 public class Miner extends Animated
 {
+	public static final String ID_KEY = "miner";
+	
 	private int resourceLimit;
 	private int resourceCount;
 	
-	protected Miner(Point position, List<PImage> images, int rLim, int rCount)
+	protected Miner(Point position, List<PImage> images, int actRate, int animRate, int rLim, int rCount)
 	{
-		super("miner", position, images, 0);
+		super(ID_KEY, position, images, actRate, animRate);
 		this.resourceLimit = rLim;
 		this.resourceCount = rCount;
 	}

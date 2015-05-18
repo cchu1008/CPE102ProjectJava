@@ -2,8 +2,10 @@ import processing.core.*;
 
 public class OreBlob extends Animated
 {
+	public static final String ID_KEY = "";
+	
 	public OreBlob(Point position, List<PImage> images)
 	{
-		super("oreblob", position, images, 0);
+		super(ID_KEY, position, images, 0);
 	}
 }
