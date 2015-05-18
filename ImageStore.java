@@ -59,22 +59,22 @@ public class ImageStore
 	
 	private static void setKey(PImage sprite, String[] line)
 	{
-		sprite.loadPixels();
+		PImage mask = sprite.clone();
+		mask.loadPixels();
 		
 		int red = Integer.parseInt(line[2]);
 		int green = Integer.parseInt(line[3]);
 		int blue = Integer.parseInt(line[4]);
 		int key = TEMP.color(red, green, blue);
 		
-		for (int i = 0; i < sprite.pixels.length; i++)
+		for (int i = 0; i < mask.pixels.length; i++)
 		{
-			if (sprite.pixels[i] == key)
-			{
-				sprite.pixels[i] = color(0, 0, 0, 1);
-			}
+			mask.pixels[i] = color(mask.pixels[i] == key ? 0 : 255);
 		}
 		
-		sprite.updatePixels();
+		mask.updatePixels();
+		
+		sprite.mask(mask);
 	}
 	
 	public static PImage getDefaultImage(tileWidth, tileHeight)
