@@ -32,8 +32,7 @@ public class WorldView extends PApplet
 			for (int x = 0; x < viewport.getWidth(); x++)
 			{
 				Point wPt = viewportToWorld(new Point(x, y));
-				//Work on converting from pygame!
-				Image img = this.world.getBackgroundImage(wPt);
+				PImage img = this.world.getBackgroundImage(wPt);
 				image(img, (x * tileWidth), (y * tileHeight));
 			}
 		}
@@ -67,7 +66,7 @@ public class WorldView extends PApplet
 	public void updateViewTiles(List<Rectangle> tiles)
 	{
 		List<Rectangle> rects = new ArrayList<Point>();
-		//use tileWidth and Height for this
+		
 		for (Point tile : tiles)
 		{
 			if (viewport.collidepoint(tile.getXCoord(), tile.getYCoord()))
@@ -93,16 +92,15 @@ public class WorldView extends PApplet
 		return new Rectangle(absX, absY, tileWidth, tileHeight);
 	}
 	
-	public Image getTileImage(Point viewTilePt)
+	public PImage getTileImage(Point viewTilePt)
 	{
 		Point pt = viewportToWorld(viewTilePt);
-		Image bgnd = world.getBackgroundImage(pt);
+		PImage bgnd = world.getBackgroundImage(pt);
 		boolean occupant = world.getTileOccupant(pt);
 		
 		if (occupant)
 		{
-			//Work on translating from pygame
-			***PImage img = pygame.Surface((this.tileWidth, this.tileHeight));
+			PImage img = createImage(this.tileWidth, this.tileHeight);
 			image(bgnd, 0, 0);
 			image(occupant.getImage(), 0, 0);
 			return img;
