@@ -21,7 +21,7 @@ public class Actions
 	
 	public Point[] createAnimationAction(WorldModel world, Entity entity, int repeatCount)
 	{
-		private Point[] action(int currentTicks)
+		Point[] action = (int currentTicks) ->
 		{
 			entity.removePendingAction(action);
 			entity.nextImage();
@@ -39,7 +39,7 @@ public class Actions
 	
 	public Point[] createEntityDeathAction(WorldModel world, Entity entity)
 	{
-		private Point[] action(int currentTicks)
+		Point[] action = (int currentTicks) ->
 		{
 			entity.removePendingAction(action);
 			Point pt = entity.getPosition();
@@ -53,7 +53,7 @@ public class Actions
 	
 	public Point[] createOreTransformAction(WorldModel world, Entity entity, Map<String, List<PImage>> iStore)
 	{
-		private Point[] action(currentTicks)
+		Point[] action = (currentTicks) ->
 		{
 			entity.removePendingAction(action);
 			Entity blob = createBlob(world, entity.getName() + " -- blob", entity.getPosition(), entity.getRate() / BLOB_RATE_SCALE, currentTicks, iStore);

@@ -25,7 +25,7 @@ public class Controller
 		return diff;
 	}
 	
-	//Don't need this rigt now.
+	//Don't need this right now.
 	public static Point mouseToTile(Point pos, int tileWidth, int tileHeight)
 	{
 		return new Point(pos[0] / tileWidth, pos[1] / tileHeight);
@@ -53,10 +53,6 @@ public class Controller
 	//Needs to be changed to Java!
 	public static void activityLoop(WorldView view, WorldModel world)
 	{
-		//Figure out how to use delay for the pygame.key.set_repeat(KEY_DELAY, KEY_INTERVAL)
-		//KEY_DELAY is the first delay between the two keyDown actions and KEY_INTERVAL is the
-		//continuous delay henceforth between the same keyDown actions.
-		pygame.key.set_repeat(KEY_DELAY, KEY_INTERVAL);
 		//Figure out how to change the below into Java. The event appears in the event queue every
 		//TIMER_FREQUENCY milliseconds.
 		pygame.time.set_timer(pygame.USEREVENT, TIMER_FREQUENCY);
