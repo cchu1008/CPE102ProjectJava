@@ -19,9 +19,9 @@ public class Actions
 	private static final int VEIN_RATE_MIN = 8000;
 	private static final int VEIN_RATE_MAX = 17000;
 	
-	public Point[] createAnimationAction(WorldModel world, Entity entity, int repeatCount)
+	public List<Point> createAnimationAction(WorldModel world, Entity entity, int repeatCount)
 	{
-		Point[] action = (int currentTicks) ->
+		List<Point> action = (int currentTicks) ->
 		{
 			entity.removePendingAction(action);
 			entity.nextImage();
@@ -30,30 +30,30 @@ public class Actions
 			{
 				scheduleAction(world, entity, createAnimationAction(world, entity, Math.max(repeatCount - 1, 0)), currentTicks + entity.getAnimationRate());
 			}
-			Point[] fin = new Point[1];
-			fin[0] = entity.getPosition();
+			List<Point> fin = new ArrayList<Point>();
+			fin.add(entity.getPosition());
 			return fin;
 		}
 		return action;
 	}
 	
-	public Point[] createEntityDeathAction(WorldModel world, Entity entity)
+	public List<Point> createEntityDeathAction(WorldModel world, Entity entity)
 	{
-		Point[] action = (int currentTicks) ->
+		List<Point> action = (int currentTicks) ->
 		{
 			entity.removePendingAction(action);
 			Point pt = entity.getPosition();
 			removeEntity(world, entity);
-			Point[] fin = new Point[1];
-			fin[0] = pt;
+			List<Point> fin = new ArrayList<Point>();
+			fin.add(pt);
 			return fin;
 		}
 		return action;
 	}
 	
-	public Point[] createOreTransformAction(WorldModel world, Entity entity, Map<String, List<PImage>> iStore)
+	public List<Point> createOreTransformAction(WorldModel world, Entity entity, Map<String, List<PImage>> iStore)
 	{
-		Point[] action = (currentTicks) ->
+		List<Point> action = (currentTicks) ->
 		{
 			entity.removePendingAction(action);
 			Entity blob = createBlob(world, entity.getName() + " -- blob", entity.getPosition(), entity.getRate() / BLOB_RATE_SCALE, currentTicks, iStore);
@@ -61,8 +61,8 @@ public class Actions
 			removeEntity(world, entity);
 			world.addEntity(blob);
 			
-			Point[] fin = new Point[1];
-			fin[0] = blob.getPosition();
+			List<Point> fin = new ArrayList<Point>();
+			fin.add(blob.getPosition());
 			
 			return fin;
 		}
@@ -90,7 +90,7 @@ public class Actions
 		scheduleAnimation(world, blob);
 	}
 	
-	public void scheduleMiner(WorldModel world, Entity miner, int ticks, Map<String, List<PImage>> iStore)
+	public static void scheduleMiner(WorldModel world, Entity miner, int ticks, Map<String, List<PImage>> iStore)
 	{
 		scheduleAction(world, miner, miner.createMinerAction(world, iStore), ticks + miner.getRate());
 		scheduleAnimation(world, miner);
@@ -104,7 +104,7 @@ public class Actions
 		return ore;
 	}
 	
-	public void scheduleOre(WorldModel world, Entity ore, int ticks, Map<String, List<PImage>> iStore)
+	public static void scheduleOre(WorldModel world, Entity ore, int ticks, Map<String, List<PImage>> iStore)
 	{
 		scheduleAction(world, ore, createOreTransformAction(world, ore, iStore), ticks + ore.getRate());
 	}
@@ -130,7 +130,7 @@ public class Actions
 		return vein;
 	}
 	
-	public void scheduleVein(WorldModel world, Entity vein, int ticks, Map<String, List<PImage>> iStore)
+	public static void scheduleVein(WorldModel world, Entity vein, int ticks, Map<String, List<PImage>> iStore)
 	{
 		scheduleAction(world, vein, vein.createVeinAction(world, iStore), ticks + vein.getRate());
 	}

@@ -183,11 +183,11 @@ public class SaveLoad
 	public static void scheduleEntity(WorldModel world, Entity entity, Map<String, String> iStore)
 	{
 		if (entity instanceof Miner && entity.getResourceCount() == 0) //Change below later!
-			actions.scheduleMiner(world, entity, 0, iStore);
+			scheduleMiner(world, entity, 0, iStore);
 		else if (entity instanceof Vein)
-			actions.scheduleVein(world, entity, 0, iStore);
+			scheduleVein(world, entity, 0, iStore);
 		else if (entity instanceof Ore)
-			actions.scheduleOre(world, entity, 0, iStore);
+			scheduleOre(world, entity, 0, iStore);
 	}			
 	
 }
