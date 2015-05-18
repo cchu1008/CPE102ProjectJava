@@ -68,7 +68,7 @@ public class ImageStore
 		{
 			if (sprite.pixels[i] == key)
 			{
-				sprite.pixels[i] = color(0, 0, 0, 0);
+				sprite.pixels[i] = color(0, 0, 0, 1);
 			}
 		}
 		

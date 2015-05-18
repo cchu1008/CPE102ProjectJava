@@ -5,13 +5,13 @@ public abstract class Entity
 {
 	private String name;
 	private Point position;
-	private PImage sprite;
+	private PImage image;
 	
 	protected Entity(String name, Point position, PImage img)
 	{
 		this.name = name;
 		this.position = position;
-		this.sprite = img;
+		this.image = img;
 	}
 	
 	public String getName()
@@ -27,6 +27,16 @@ public abstract class Entity
 	public void setPosition(Point position)
 	{
 		this.position = position;
+	}
+	
+	public PImage getImage()
+	{
+		return this.image;
+	}
+	
+	public void setImage(PImage img)
+	{
+		this.image = img;
 	}
 	
 	protected static boolean adjacent(Point p1, Point p2)
