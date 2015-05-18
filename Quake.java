@@ -1,7 +1,9 @@
-public class Quake extends Entity
+import processing.core.*;
+
+public class Quake extends Animated
 {
-	public Quake(Point position)
+	public Quake(Point position, List<PImage> images)
 	{
-		super("quake", position);
+		super("quake", position, img, 0);
 	}
 }

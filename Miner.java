@@ -1,11 +1,13 @@
+import processing.core.*;
+
 public class Miner extends Animated
 {
 	private int resourceLimit;
 	private int resourceCount;
 	
-	protected Miner(Point position, int rLim, int rCount)
+	protected Miner(Point position, List<PImage> images, int rLim, int rCount)
 	{
-		super("miner", position, null, 0);
+		super("miner", position, images, 0);
 		this.resourceLimit = rLim;
 		this.resourceCount = rCount;
 	}

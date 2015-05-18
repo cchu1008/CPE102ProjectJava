@@ -1,12 +1,14 @@
+import processing.core.*;
+
 public class Blacksmith extends Entity
 {
 	private int resourceLimit;
 	private int resourceCount;
 	private int resourceDistance;
 	
-	public Blacksmith(Point pos, int rLim, int rCount, int rDist)
+	public Blacksmith(Point pos, PImage img, int rLim, int rCount, int rDist)
 	{
-		super("blacksmith", pos);
+		super("blacksmith", pos, img);
 		this.resourceLimit = rLim;
 		this.resourceCount = rCount;
 		this.resourceDistance = rDist;

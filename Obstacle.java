@@ -1,7 +1,9 @@
+import processing.core.*;
+
 public class Obstacle extends Entity
 {
-	public Obstacle(Point position)
+	public Obstacle(Point position, PImage img)
 	{
-		super("obstacle", position);
+		super("obstacle", position, img);
 	}
 }

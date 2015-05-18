@@ -1,10 +1,12 @@
+import processing.core.*;
+
 public class Vein extends Entity
 {
 	private int resourceDistance;
 	
-	public Vein(Point position, int rDist)
+	public Vein(Point position, PImage img, int rDist)
 	{
-		super("vein", position);
+		super("vein", position, img);
 		this.resourceDistance = rDist;
 	}
 	

@@ -1,14 +1,17 @@
 import static java.lang.Math.abs;
+import processing.core.*;
 
 public abstract class Entity
 {
 	private String name;
 	private Point position;
+	private PImage sprite;
 	
-	protected Entity(String name, Point position)
+	protected Entity(String name, Point position, PImage img)
 	{
 		this.name = name;
 		this.position = position;
+		this.sprite = img;
 	}
 	
 	public String getName()
