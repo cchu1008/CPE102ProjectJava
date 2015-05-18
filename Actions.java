@@ -19,7 +19,7 @@ public class Actions
 	private static final int VEIN_RATE_MIN = 8000;
 	private static final int VEIN_RATE_MAX = 17000;
 	
-	public List<Point> createAnimationAction(WorldModel world, Entity entity, int repeatCount)
+	public IntConsumer createAnimationAction(WorldModel world, Entity entity, int repeatCount)
 	{
 		List<Point> action = (int currentTicks) ->
 		{
@@ -37,7 +37,7 @@ public class Actions
 		return action;
 	}
 	
-	public List<Point> createEntityDeathAction(WorldModel world, Entity entity)
+	public IntConsumer createEntityDeathAction(WorldModel world, Entity entity)
 	{
 		List<Point> action = (int currentTicks) ->
 		{
@@ -51,7 +51,7 @@ public class Actions
 		return action;
 	}
 	
-	public List<Point> createOreTransformAction(WorldModel world, Entity entity, Map<String, List<PImage>> iStore)
+	public IntConsumer createOreTransformAction(WorldModel world, Entity entity, Map<String, List<PImage>> iStore)
 	{
 		List<Point> action = (currentTicks) ->
 		{
