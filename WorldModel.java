@@ -39,7 +39,7 @@ public class WorldModel
 		return this.height;
 	}
 	
-	public List getEntities()
+	public List<Entity> getEntities()
 	{
 		return this.entities;
 	}
@@ -186,7 +186,7 @@ public class WorldModel
 		//Assuming we make an actions class.
 		List<Point> next = actionQueue.head();
 		//What is next.ord???
-		while (next != null || next != None && next.ord < ticks)
+		while (next != null && next.ord < ticks)
 		{
 			actionQueue.pop();
 			tiles.add(next.item(ticks));

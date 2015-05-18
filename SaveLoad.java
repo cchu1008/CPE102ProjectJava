@@ -1,3 +1,7 @@
+import java.util.Map;
+import java.util.List;
+import processing.core.*;
+
 public class SaveLoad
 {
 	public static void loadWorld(WorldModel world, Map<String, List<PImage>> images, String file, boolean run)

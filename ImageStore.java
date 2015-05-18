@@ -77,7 +77,7 @@ public class ImageStore
 		sprite.mask(mask);
 	}
 	
-	public static PImage getDefaultImage(tileWidth, tileHeight)
+	public static PImage getDefaultImage(int tileWidth, int tileHeight)
 	{
 		PImage def = createImage(tileWidth, tileHeight);
 		def.loadPixels();

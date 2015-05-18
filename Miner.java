@@ -1,3 +1,4 @@
+import java.util.List;
 import processing.core.*;
 
 public class Miner extends Animated

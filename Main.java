@@ -1,11 +1,13 @@
 import java.util.Random;
+import java.util.Map;
+import java.util.List;
 import processing.core.*;
 
 public class Main extends PApplet
 {
 	public static final Random RANDOMIZER = new Random();
 	
-	private WorldModel theWorld;
+	private WorldModel world;
 	private WorldView view;
 	private Map<String, List<PImage>> imageList; //initialize later!
 	
@@ -23,7 +25,7 @@ public class Main extends PApplet
 	
 	public void setup()
 	{
-		this.imageList = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TITLE_HEIGHT);
+		this.imageList = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TILE_HEIGHT);
 		
 		Background defaultBackground = new Background("default", this.imageList.get("grass").get(0));
 		

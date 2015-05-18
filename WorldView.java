@@ -40,9 +40,10 @@ public class WorldView extends PApplet
 	
 	public void drawEntities()
 	{
-		for (Entity entity: world.entities)
+		for (Entity entity: world.getEntities())
 		{
-			if (viewport.collidepoint(entity.getXCoord(), entity.getYCoord()))
+			Point position = entity.getPosition()
+			if (viewport.collidepoint(position.getXCoord(), position.getYCoord()))
 			{
 				Point vPt = worldToViewport(new Point(entity.getXCoord(), entity.getYCoord()));
 				image(entity.getImage(), vPt.getXCoord(), vPt.getYCoord());
@@ -56,11 +57,17 @@ public class WorldView extends PApplet
 		drawEntities();
 	}
 	
-	public void updateView(int[] viewDelta=[0, 0])
+	public void updateView(int[] viewDelta)
 	{
 		this.viewport = createShiftedViewport(viewDelta, numRows, numCols);
 		this.mouseImg = mouseImg;
 		drawViewport();
+	}
+	
+	/** updateView with a default value for `viewDelta` */
+	public void updateView()
+	{
+		this.updateView(new int[]{0, 0});
 	}
 	
 	public Rectangle updateTile(Point viewTilePt, PImage surface)
