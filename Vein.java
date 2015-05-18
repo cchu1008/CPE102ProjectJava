@@ -1,12 +1,14 @@
 import processing.core.*;
 
-public class Vein extends Entity
+public class Vein extends Actor
 {
+	public static final String ID_KEY = "vein";
+	
 	private int resourceDistance;
 	
-	public Vein(Point position, PImage img, int rDist)
+	public Vein(Point position, PImage img, int actRate, int rDist)
 	{
-		super("vein", position, img);
+		super(ID_KEY, position, img, actRate);
 		this.resourceDistance = rDist;
 	}
 	

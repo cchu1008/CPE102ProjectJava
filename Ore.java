@@ -1,9 +1,11 @@
 import processing.core.*;
 
-public class Ore extends Entity
+public class Ore extends Actor
 {
-	public Ore(Point position, PImage img)
+	public static final String ID_KEY = "ore";
+	
+	public Ore(Point position, PImage img, int actRate)
 	{
-		super("ore", position, img);
+		super(ID_KEY, position, img, actRate);
 	}
 }

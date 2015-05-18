@@ -2,6 +2,7 @@ import processing.core.*;
 
 public class Background
 {
+	public static final String ID_KEY = "background";
 	private PImage image;
 	private String name;
 	
