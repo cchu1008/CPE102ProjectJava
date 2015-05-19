@@ -13,8 +13,8 @@ public class WorldView extends PApplet
 	private int tileWidth = 32;
 	private int tileHeight = 32;
 	
-	private int numRows = 40;
-	private int numCols = 30;
+	private int numCols = 40;
+	private int numRows = 30;
 	
 	private Map<String, List<PImage>> imageList;
 	
@@ -33,6 +33,25 @@ public class WorldView extends PApplet
 		this.size(this.viewCols * this.tileWidth, this.viewRows * this.tileHeight);
 		
 		this.updateView();
+	}
+	
+	public void keyPressed()
+	{
+		switch (this.keyCode)
+		{
+			case UP:
+				this.updateView(0, -1);
+				break;
+			case DOWN:
+				this.updateView(0, 1);
+				break;
+			case LEFT:
+				this.updateView(-1, 0);
+				break;
+			case RIGHT:
+				this.updateView(1, 0);
+				break;
+		}
 	}
 	
 	public void draw()
@@ -107,6 +126,7 @@ public class WorldView extends PApplet
 	{
 		return Math.min(high, Math.max(v, low));
 	}
+	
 	
 	public static void main(String[] arg)
 	{
