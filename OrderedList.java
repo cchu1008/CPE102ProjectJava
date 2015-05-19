@@ -29,7 +29,7 @@ public class OrderedList
 		while (idx <size && list.get(idx).getAction() != action)
 			idx++;
 		if (idx < size)
-			list.remove(action);
+			list.remove(idx);
 	}
 	
 	public ListItem head()
