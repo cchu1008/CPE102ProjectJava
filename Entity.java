@@ -39,12 +39,6 @@ public abstract class Entity
 		this.image = img;
 	}
 	
-	protected static boolean adjacent(Point p1, Point p2)
-	{
-		return ((p1.getXCoord() == p2.getXCoord() && abs(p1.getYCoord() - p2.getYCoord()) == 1)
-				|| (p1.getYCoord() == p2.getYCoord() && abs(p1.getXCoord() - p2.getXCoord()) == 1));
-	}
-	
 	protected int sign(int x)
 	{
 		if (x == 0) return 0;

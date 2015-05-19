@@ -5,9 +5,9 @@ public class OreBlob extends Animated
 {
 	public static final String ID_KEY = "";
 	
-	public OreBlob(Point position, List<PImage> images)
+	public OreBlob(Point position, List<PImage> images, int actRate, int animRate)
 	{
-		super(ID_KEY, position, images, 0, 0);
+		super(ID_KEY, position, images, actRate, animRate);
 	}
 	
 	public Point blobNextPosition(WorldModel world, Point destPt)

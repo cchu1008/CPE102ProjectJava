@@ -1,12 +1,9 @@
-import java.util.Random;
 import java.util.Map;
 import java.util.List;
 import processing.core.*;
 
 public class WorldView extends PApplet
 {
-	public static final Random RANDOMIZER = new Random();
-	
 	private int viewCols = 20;
 	private int viewRows = 15;
 	

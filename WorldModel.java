@@ -157,6 +157,11 @@ public class WorldModel
 		actionQueue.insert(action, time);
 	}
 	
+	public void unscheduleAction(LongConsumer action)
+	{
+		actionQueue.remove(action);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public Entity findNearest(Point pos, Class type)
 	{
