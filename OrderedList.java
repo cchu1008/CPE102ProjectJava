@@ -4,11 +4,11 @@ import java.util.function.*;
 
 public class OrderedList
 {
-	private List<LongConsumer> list;
+	private List<ListItem> list;
 	
 	public OrderedList()
 	{
-		this.list = new LinkedList<LongConsumer>();
+		this.list = new LinkedList<ListItem>();
 	}
 	
 	public void insert(LongConsumer item, int ord)
@@ -68,6 +68,7 @@ public class OrderedList
 				ListItem c = (ListItem)b;
 				return this.item == c.item && this.ord == c.ord;
 			}
+			return false;
 		}
 	}
 }
