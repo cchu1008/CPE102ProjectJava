@@ -1,5 +1,6 @@
 import java.util.Map;
 import java.util.List;
+import java.util.ArrayList;
 import java.lang.Math;
 import java.util.Random;
 import java.util.function.LongConsumer;
@@ -41,104 +42,150 @@ public class Actions
 			}
 		};
 		return action[0];
-	}/*
-	
-	public static LongConsumer createEntityDeathAction(WorldModel world, Entity entity)
-	{
-		List<Point> action = (int currentTicks) ->
-		{
-			entity.removePendingAction(action);
-			Point pt = entity.getPosition();
-			removeEntity(world, entity);
-			List<Point> fin = new ArrayList<Point>();
-			fin.add(pt);
-			return fin;
-		}
-		return action;
 	}
 	
-	public static LongConsumer createOreTransformAction(WorldModel world, Entity entity, Map<String, List<PImage>> iStore)
+	public static LongConsumer createEntityDeathAction(WorldModel world, Actor entity)
 	{
-		List<Point> action = (currentTicks) ->
+		LongConsumer[] action = { null };
+		action[0] = (long currentTicks) ->
 		{
-			entity.removePendingAction(action);
-			Entity blob = createBlob(world, entity.getName() + " -- blob", entity.getPosition(), entity.getRate() / BLOB_RATE_SCALE, currentTicks, iStore);
+			entity.removePendingAction(action[0]);
+			Point pt = entity.getPosition();
+			removeEntity(world, entity);
+		};
+		return action[0];
+	}
+	
+	public static LongConsumer createOreTransformAction(WorldModel world, Actor entity, Map<String, List<PImage>> iStore)
+	{
+		LongConsumer[] action = { null };
+		action[0] = (long currentTicks) ->
+		{
+			entity.removePendingAction(action[0]);
+			Entity blob = createBlob(world, entity.getName() + " -- blob", entity.getPosition(), entity.getActionRate() / BLOB_RATE_SCALE, currentTicks, iStore);
 			
 			removeEntity(world, entity);
 			world.addEntity(blob);
-			
-			List<Point> fin = new ArrayList<Point>();
-			fin.add(blob.getPosition());
-			
-			return fin;
-		}
-		return action;
+		};
+		return action[0];
 	}
 	
-	public static void removeEntity(WorldModel world, Entity entity)
+	public static void removeEntity(WorldModel world, Actor entity)
 	{
-		entity.clearPendingActions(world);
-		world.removeEntity(entity);
+		entity.clearPendingActions();
+		world.removeEntity((Entity)entity);
 	}
 	
-	public static Blob createBlob(WorldModel world, String name, Point pt, int rate, int ticks, Map<String, List<PImage>> iStore)
+	public static OreBlob createBlob(WorldModel world, String name, Point pt, int rate, long ticks, Map<String, List<PImage>> iStore)
 	{
-		Entity blob = new OreBlob(name, pt, rate, iStore.get("blob").get(0), (random.nextInt(BLOB_ANIMATION_MAX - BLOB_ANIMATION_MIN) + BLOB_ANIMATION_MIN) * BLOB_ANIMATION_RATE_SCALE);
+		Entity blob = new OreBlob(name, pt, rate, iStore.get("blob").get(0), (RANDOMIZER.nextInt(BLOB_ANIMATION_MAX - BLOB_ANIMATION_MIN) + BLOB_ANIMATION_MIN) * BLOB_ANIMATION_RATE_SCALE);
 		
-		scheduleBlob(world, blob, ticks, iStore);
+		scheduleBlob(world, (OreBlob)blob, ticks, iStore);
 		
-		return blob;
-	}*/
+		return (OreBlob)blob;
+	}
 	
-	public static void scheduleBlob(WorldModel world, OreBlob blob, int ticks, Map<String, List<PImage>> iStore)
+	public static void scheduleBlob(WorldModel world, OreBlob blob, long ticks, Map<String, List<PImage>> iStore)
 	{
-		//scheduleAction(world, blob, blob.createOreBlobAction(world, iStore), ticks + blob.getRate());
+		scheduleAction(world, blob, createOreBlobAction(world, iStore, blob), ticks + (long)blob.getActionRate());
 		scheduleAnimation(world, blob);
 	}
 	
-	public static void scheduleMiner(WorldModel world, Miner miner, int ticks, Map<String, List<PImage>> iStore)
+	public static LongConsumer createOreBlobAction(WorldModel world, Map<String, List<PImage>> iStore, Actor blob)
 	{
-		//scheduleAction(world, miner, miner.createMinerAction(world, iStore), ticks + miner.getRate());
+		LongConsumer[] action = { null };
+		action[0] = (long currentTicks) ->
+		{
+			blob.removePendingAction(action[0]);
+			
+			Point entityPt = blob.getPosition();
+			Entity vein = world.findNearest(entityPt, Vein.class);
+			List<Point> tiles = new ArrayList<Point>();
+			boolean found = blobToVein(world, (Actor)vein, (OreBlob)blob, tiles);
+			
+			long nextTime = currentTicks + (long)blob.getActionRate();
+			if (found)
+			{
+				Entity quake = createQuake(world, tiles.get(0), currentTicks, iStore);
+				world.addEntity(quake);
+				nextTime = currentTicks + (long)blob.getActionRate() * 2;
+			}
+			scheduleAction(world, blob, createOreBlobAction(world, iStore, blob), nextTime);
+		};
+		return action[0];			
+	}
+	
+	public static boolean blobToVein(WorldModel world, Actor vein, OreBlob blob, List<Point> tiles)
+	{
+		Point entityPt = blob.getPosition();
+		if (!(vein instanceof Vein))
+		{
+			tiles.add(entityPt);
+			return false;
+		}
+		Point veinPt = vein.getPosition();
+		if (Entity.adjacent(entityPt, veinPt))
+		{
+			removeEntity(world, vein);
+			return true;
+		}
+		else
+		{
+			Point newPt = blob.blobNextPosition(world, veinPt);
+			Entity oldEntity = world.getTileOccupant(newPt);
+			if (oldEntity instanceof Ore)
+				removeEntity(world, (Actor)oldEntity);
+			world.moveEntity((Actor)blob, newPt);
+			return false;
+		}
+	}
+	
+	public static void scheduleMiner(WorldModel world, Miner miner, long ticks, Map<String, List<PImage>> iStore)
+	{
+		scheduleAction(world, miner, createMinerAction(world, iStore), ticks + (long)miner.getActionRate());
 		scheduleAnimation(world, miner);
 	}
-	/*
-	public static Ore createOre(WorldModel world, String name, Point pt, int ticks, Map<String, List<PImage>> iStore)
+	
+	public static 
+	
+	public static Ore createOre(WorldModel world, String name, Point pt, long ticks, Map<String, List<PImage>> iStore)
 	{
-		Entity Ore = new Ore(name, pt, iStore.get("ore").get(0), (random.nextInt(ORE_CORRUPT_MAX - ORE_CORRUPT_MIN) + ORE_CORRUPT_MIN));
-		scheduleOre(world, ore, ticks, iStore);
+		Entity ore = new Ore(name, pt, iStore.get("ore").get(0), (RANDOMIZER.nextInt(ORE_CORRUPT_MAX - ORE_CORRUPT_MIN) + ORE_CORRUPT_MIN));
+		scheduleOre(world, (Ore)ore, ticks, iStore);
 		
-		return ore;
+		return(Ore) ore;
 	}
-	*/
-	public static void scheduleOre(WorldModel world, Ore ore, int ticks, Map<String, List<PImage>> iStore)
+	
+	public static void scheduleOre(WorldModel world, Ore ore, long ticks, Map<String, List<PImage>> iStore)
 	{
-		//scheduleAction(world, ore, createOreTransformAction(world, ore, iStore), ticks + ore.getRate());
+		scheduleAction(world, ore, createOreTransformAction(world, ore, iStore), ticks + (long)ore.getActionRate());
 	}
-	/*
-	public static Quake createQuake(WorldModel world, Point pt, int ticks, Map<String, List<PImage>> iStore)
+	
+	public static Quake createQuake(WorldModel world, Point pt, long ticks, Map<String, List<PImage>> iStore)
 	{
 		Entity quake = new Quake("quake", pt, iStore.get("quake").get(0), QUAKE_ANIMATION_RATE);
-		sheduleQuake(world, quake, ticks);
+		scheduleQuake(world, (Quake)quake, ticks);
 		
-		return quake;
-	}*/
+		return (Quake)quake;
+	}
 	
 	public static void scheduleQuake(WorldModel world, Quake quake, long ticks)
 	{
-		//scheduleAnimation(world, quake, QUAKE_STEPS);
-		//scheduleAction(world, quake, createEntityDeathAction(world, quake), ticks + QUAKE_DURATION);
+		scheduleAnimation(world, quake, QUAKE_STEPS);
+		scheduleAction(world, quake, createEntityDeathAction(world, quake), ticks + (long)QUAKE_DURATION);
 	}
-	/*
+	
 	public static Vein createVein(WorldModel world, String name, Point pt, long ticks, Map<String, List<PImage>> iStore)
 	{
-		Entity vein = new Vein("vein" + name, (random.nextInt(VEIN_RATE_MAX - VEIN_RATE_MIN) + VEIN_RATE_MIN), pt, iStore.get("vein").get(0));
+		Entity vein = new Vein("vein" + name, (RANDOMIZER.nextInt(VEIN_RATE_MAX - VEIN_RATE_MIN) + VEIN_RATE_MIN), pt, iStore.get("vein").get(0));
+		scheduleVein(world, (Vein)vein, ticks);
 		
-		return vein;
+		return (Vein)vein;
 	}
-	*/
+	
 	public static void scheduleVein(WorldModel world, Vein vein, long ticks, Map<String, List<PImage>> iStore)
 	{
-		//scheduleAction(world, vein, vein.createVeinAction(world, iStore), ticks + vein.getRate());
+		scheduleAction(world, vein, vein.createVeinAction(world, iStore), ticks + (long)vein.getActionRate());
 	}
 	
 	public static void scheduleAction(WorldModel world, Actor entity, LongConsumer action, long time)
