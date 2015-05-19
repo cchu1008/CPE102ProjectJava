@@ -15,7 +15,7 @@ public class SaveLoad
 				String[] properties = in.nextLine().split("\\s");
 				if (properties.length > 0)
 				{
-					if (properties[0] == "background")
+					if (properties[0].equals(Background.ID_KEY))
 						addBackground(world, properties, images);
 					else
 						addEntity(world, properties, images, run);
@@ -36,7 +36,7 @@ public class SaveLoad
 	
 	public static void addBackground(WorldModel world, String[] properties, Map<String, List<PImage>> iStore)
 	{
-		if (properties.length >= 4)
+		if (properties.length == 4)
 		{
 			int x = Integer.parseInt(properties[2]);
 			int y = Integer.parseInt(properties[3]);
