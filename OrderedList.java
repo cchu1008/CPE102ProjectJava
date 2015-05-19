@@ -13,7 +13,7 @@ public class OrderedList
 	
 	public void insert(LongConsumer item, int ord)
 	{
-		int size = list.length;
+		int size = list.size();
 		int idx = 0;
 		while (idx < size && list.get(idx).ord < ord)
 			idx++;
@@ -23,7 +23,7 @@ public class OrderedList
 	
 	public void remove(LongConsumer item)
 	{
-		int size = list.length;
+		int size = list.size();
 		int idx = 0;
 		
 		while (idx <size && list.get(idx).item != item)
@@ -34,18 +34,40 @@ public class OrderedList
 	
 	public ListItem head()
 	{
-		if (list.length > 0)
+		if (list.size() > 0)
 			return list.get(0);
-		return None;
+		return null;
 	}
 	
 	public ListItem pop()
 	{
-		if (list.length > 0)
+		if (list.size() > 0)
 		{
 			ListItem fin = list.get(0);
 			list.remove(list.get(0));
 			return fin;
+		}
+		return null;
+	}
+	
+	private class ListItem
+	{
+		private LongConsumer item;
+		private int ord;
+		
+		public ListItem(LongConsumer item, int ord)
+		{
+			this.item = item;
+			this.ord = ord;
+		}
+		
+		public boolean equals(Object b)
+		{
+			if (b instanceof ListItem)
+			{
+				ListItem c = (ListItem)b;
+				return this.item == c.item && this.ord == c.ord;
+			}
 		}
 	}
 }
