@@ -30,8 +30,6 @@ public class WorldView extends PApplet
 		this.size(640, 480);
 		
 		(new Main()).setup(this);
-		
-		this.updateView();
 	}
 	
 	public void draw()
@@ -71,7 +69,7 @@ public class WorldView extends PApplet
 		drawEntities();
 	}
 	
-	public void updateView(int[] viewDelta)
+	public void updateView(int dX, int dY)
 	{
 		this.viewport = createShiftedViewport(viewDelta, numRows, numCols);
 		//this.mouseImg = mouseImg;
@@ -81,7 +79,7 @@ public class WorldView extends PApplet
 	/** updateView with a default value for `viewDelta` */
 	public void updateView()
 	{
-		this.updateView(new int[]{0, 0});
+		this.updateView(0, 0);
 	}
 	
 	public Rectangle updateTile(Point viewTilePt, PImage surface)
