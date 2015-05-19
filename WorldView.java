@@ -20,8 +20,8 @@ public class WorldView extends PApplet
 		this.tileWidth = tileWidth;
 		this.tileHeight = tileHeight;
 		this.viewport = new Rectangle(0, 0, viewCols, viewRows);
-		this.numRows = world.getWidth();
-		this.numCols = world.getHeight();
+		this.numRows = world.getHeight();
+		this.numCols = world.getWidth();
 		//this.mousePt = new Point(0, 0);
 	}
 	
@@ -71,7 +71,7 @@ public class WorldView extends PApplet
 	
 	public void updateView(int dX, int dY)
 	{
-		this.viewport = createShiftedViewport(viewDelta, numRows, numCols);
+		this.viewport = createShiftedViewport(dX, dY);
 		//this.mouseImg = mouseImg;
 		drawViewport();
 	}
@@ -80,16 +80,6 @@ public class WorldView extends PApplet
 	public void updateView()
 	{
 		this.updateView(0, 0);
-	}
-	
-	public Rectangle updateTile(Point viewTilePt, PImage surface)
-	{
-		int absX = viewTilePt.getXCoord() * tileWidth;
-		int absY = viewTilePt.getYCoord() * tileHeight;
-		
-		image(surface, absX, absY);
-		
-		return new Rectangle(absX, absY, tileWidth, tileHeight);
 	}
 	
 	public Point viewportToWorld(Point pt)
@@ -102,12 +92,12 @@ public class WorldView extends PApplet
 		return new Point(pt.getXCoord() - viewport.getX(), pt.getYCoord() - viewport.getY());
 	}
 	
-	public Rectangle createShiftedViewport(int[] delta, int numRows, int numCols)
+	public Rectangle createShiftedViewport(int dX, int dY)
 	{
-		int newX = clamp(viewport.getX() + delta[0], 0, numCols - viewport.getWidth());
-		int newY = clamp(viewport.getY() + delta[1], 0, numRows - viewport.getHeight());
+		int newX = clamp(this.viewport.getX() + dX, 0, this.numCols - this.viewport.getWidth());
+		int newY = clamp(this.viewport.getY() + dY, 0, this.numRows - this.viewport.getHeight());
 		
-		return new Rectangle(newX, newY, viewport.getWidth(), viewport.getHeight());
+		return new Rectangle(newX, newY, this.viewport.getWidth(), this.viewport.getHeight());
 	}
 	
 	public static int clamp(int v, int low, int high)
@@ -116,6 +106,16 @@ public class WorldView extends PApplet
 	}
 	
 	/* Don't need this part yet!
+	
+	public Rectangle updateTile(Point viewTilePt, PImage surface)
+	{
+		int absX = viewTilePt.getXCoord() * tileWidth;
+		int absY = viewTilePt.getYCoord() * tileHeight;
+		
+		image(surface, absX, absY);
+		
+		return new Rectangle(absX, absY, tileWidth, tileHeight);
+	}
 	
 	public PImage getTileImage(Point viewTilePt)
 	{

@@ -15,8 +15,8 @@ public class Main
 	private static final String IMAGE_LIST_FILE_NAME = "imagelist";
 	private static final String WORLD_FILE = "gaia.sav";
 	
-	private static final int WORLD_WIDTH_SCALE = 2;
-	private static final int WORLD_HEIGHT_SCALE = 2;
+	private static final int WORLD_WIDTH = 40;
+	private static final int WORLD_HEIGHT = 30;
 	
 	private static final int SCREEN_COLS = 20;
 	private static final int SCREEN_ROWS = 15;
@@ -31,7 +31,7 @@ public class Main
 		
 		Background defaultBackground = new Background("default", this.imageList.get("grass").get(0));
 		
-		this.world = new WorldModel(SCREEN_ROWS * WORLD_HEIGHT_SCALE, SCREEN_COLS * WORLD_WIDTH_SCALE, defaultBackground);
+		this.world = new WorldModel(WORLD_WIDTH, WORLD_HEIGHT, defaultBackground);
 		
 		this.view.initialize(SCREEN_COLS, SCREEN_ROWS, world, TILE_WIDTH, TILE_HEIGHT);
 		
