@@ -14,8 +14,7 @@ public class WorldModel
 	private Entity[][] occupancies;
 	private List<Entity> entities;
 	private Background[][] backgrounds;
-	
-	//private static Set<E> actionQueue;
+	private static OrderedList actionQueue;
 	
 	public WorldModel(int width, int height, Background back)
 	{
@@ -24,7 +23,7 @@ public class WorldModel
 		this.occupancies = new Entity[width][height];
 		this.entities = new ArrayList<Entity>();
 		this.backgrounds = new Background[width][height];
-		//this.actionQueue = new TreeSet<E>();
+		this.actionQueue = new OrderedList();
 		
 		for (int x = 0; x < width; x++)
 		{
@@ -154,9 +153,9 @@ public class WorldModel
 		}
 	}
 	
-	public static void scheduleAction(List<Point> action, int time)
+	public static void scheduleAction(Action action, int time)
 	{
-		//actionQueue.add(action, time);
+		actionQueue.insert(action, time);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -189,7 +188,7 @@ public class WorldModel
 	{
 		List<Rectangle> tiles = new ArrayList<Rectangle>();
 		
-		IntConsumer next = actionQueue.first();
+		ListItem next = actionQueue.head();
 		//What is next.ord???
 		while (next != null && next.ord < ticks)
 		{

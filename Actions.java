@@ -22,22 +22,20 @@ public class Actions
 	private static final int VEIN_RATE_MIN = 8000;
 	private static final int VEIN_RATE_MAX = 17000;
 	
-	public IntConsumer createAnimationAction(WorldModel world, Entity entity, int repeatCount)
+	public static LongConsumer createAnimationAction(WorldModel world, Entity entity, int repeatCount)
 	{
-		List<Point> action = (int currentTicks) ->
+		LongConsumer[] action = { null };
+		action[0] = (long currentTicks) ->
 		{
-			entity.removePendingAction(action);
+			entity.removePendingAction(action[0]);
 			entity.nextImage();
 			
 			if (repeatCount != 1)
 			{
 				scheduleAction(world, entity, createAnimationAction(world, entity, Math.max(repeatCount - 1, 0)), currentTicks + entity.getAnimationRate());
 			}
-			List<Point> fin = new ArrayList<Point>();
-			fin.add(entity.getPosition());
-			return fin;
 		}
-		return action;
+		return action[0];
 	}
 	
 	public IntConsumer createEntityDeathAction(WorldModel world, Entity entity)
