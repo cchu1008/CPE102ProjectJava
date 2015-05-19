@@ -61,18 +61,20 @@ public class ImageStore
 	{
 		PImage mask = TEMP.createImage(sprite.width, sprite.height, TEMP.RGB);
 		mask.loadPixels();
+		sprite.loadPixels();
 		
 		int red = Integer.parseInt(line[2]);
 		int green = Integer.parseInt(line[3]);
 		int blue = Integer.parseInt(line[4]);
 		int key = TEMP.color(red, green, blue);
 		
-		for (int i = 0; i < mask.pixels.length; i++)
+		for (int i = 0; i < sprite.pixels.length; i++)
 		{
-			mask.pixels[i] = TEMP.color(mask.pixels[i] == key ? 0 : 255);
+			mask.pixels[i] = TEMP.color(sprite.pixels[i] == key ? 0 : 255);
 		}
 		
 		mask.updatePixels();
+		sprite.updatePixels();
 		
 		sprite.mask(mask);
 	}
