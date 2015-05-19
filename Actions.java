@@ -129,10 +129,12 @@ public class Actions
 		else
 		{
 			Point newPt = blob.blobNextPosition(world, finish);
-			Actor oldEntity = (Actor)world.getTileOccupant(newPt);
+			Entity oldEntity = world.getTileOccupant(newPt);
 			if (oldEntity instanceof Ore)
-				removeEntity(world, oldEntity);
-			world.moveEntity(blob, newPt);
+			{
+				removeEntity(world, (Actor)oldEntity);
+				world.moveEntity(blob, newPt);
+			}
 			return null;
 		}
 	}
