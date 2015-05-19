@@ -3,14 +3,14 @@ import java.util.LinkedList;
 
 public class OrderedList
 {
-	private List<Action> list;
+	private List<LongConsumer> list;
 	
 	public OrderedList()
 	{
-		this.list = new LinkedList<Action>();
+		this.list = new LinkedList<LongConsumer>();
 	}
 	
-	public void insert(Action item, int ord)
+	public void insert(LongConsumer item, int ord)
 	{
 		int size = list.length;
 		int idx = 0;
@@ -20,7 +20,7 @@ public class OrderedList
 		list.add(idx, new ListItem(item, ord));
 	}
 	
-	public void remove(Action item)
+	public void remove(LongConsumer item)
 	{
 		int size = list.length;
 		int idx = 0;

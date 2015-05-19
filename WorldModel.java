@@ -153,7 +153,7 @@ public class WorldModel
 		}
 	}
 	
-	public static void scheduleAction(Action action, int time)
+	public static void scheduleAction(LongConsumer action, int time)
 	{
 		actionQueue.insert(action, time);
 	}

@@ -1,9 +1,9 @@
 public class ListItem
 {
-	private Action item;
+	private LongConsumer item;
 	private int ord;
 	
-	public ListItem(Action item, int ord)
+	public ListItem(LongConsumer item, int ord)
 	{
 		this.item = item;
 		this.ord = ord;
