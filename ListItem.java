@@ -1,3 +1,5 @@
+import java.util.function.*;
+
 public class ListItem
 {
 	private LongConsumer item;

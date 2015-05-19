@@ -3,8 +3,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Comparator;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.function.*;
 import processing.core.*;
 
 public class WorldModel
@@ -14,7 +13,7 @@ public class WorldModel
 	private Entity[][] occupancies;
 	private List<Entity> entities;
 	private Background[][] backgrounds;
-	private static OrderedList actionQueue;
+	private OrderedList actionQueue;
 	
 	public WorldModel(int width, int height, Background back)
 	{
@@ -153,7 +152,7 @@ public class WorldModel
 		}
 	}
 	
-	public static void scheduleAction(LongConsumer action, int time)
+	public void scheduleAction(LongConsumer action, int time)
 	{
 		actionQueue.insert(action, time);
 	}
