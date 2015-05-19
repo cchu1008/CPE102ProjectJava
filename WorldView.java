@@ -12,7 +12,7 @@ public class WorldView extends PApplet
 	private int numCols;
 	//private Point mousePt;
 	
-	public WorldView(int viewCols, int viewRows, WorldModel world, int tileWidth, int tileHeight)
+	public void initialize(int viewCols, int viewRows, WorldModel world, int tileWidth, int tileHeight)
 	{
 		this.viewCols = viewCols;
 		this.viewRows = viewRows;
@@ -23,6 +23,20 @@ public class WorldView extends PApplet
 		this.numRows = world.getWidth();
 		this.numCols = world.getHeight();
 		//this.mousePt = new Point(0, 0);
+	}
+	
+	public void setup()
+	{
+		this.size(640, 480);
+		
+		(new Main()).setup(this);
+		
+		this.updateView();
+	}
+	
+	public void draw()
+	{
+		;
 	}
 	
 	public void drawBackground()
@@ -46,7 +60,7 @@ public class WorldView extends PApplet
 			if (viewport.collidepoint(position.getXCoord(), position.getYCoord()))
 			{
 				Point vPt = worldToViewport(position);
-				image(entity.getImage(), vPt.getXCoord(), vPt.getYCoord());
+				image(entity.getImage(), vPt.getXCoord() * this.tileWidth, vPt.getYCoord() * this.tileHeight);
 			}
 		}
 	}
@@ -80,6 +94,31 @@ public class WorldView extends PApplet
 		return new Rectangle(absX, absY, tileWidth, tileHeight);
 	}
 	
+	public Point viewportToWorld(Point pt)
+	{
+		return new Point(pt.getXCoord() + viewport.getX(), pt.getYCoord() + viewport.getY());
+	}
+	
+	public Point worldToViewport(Point pt)
+	{
+		return new Point(pt.getXCoord() - viewport.getX(), pt.getYCoord() - viewport.getY());
+	}
+	
+	public Rectangle createShiftedViewport(int[] delta, int numRows, int numCols)
+	{
+		int newX = clamp(viewport.getX() + delta[0], 0, numCols - viewport.getWidth());
+		int newY = clamp(viewport.getY() + delta[1], 0, numRows - viewport.getHeight());
+		
+		return new Rectangle(newX, newY, viewport.getWidth(), viewport.getHeight());
+	}
+	
+	public static int clamp(int v, int low, int high)
+	{
+		return Math.min(high, Math.max(v, low));
+	}
+	
+	/* Don't need this part yet!
+	
 	public PImage getTileImage(Point viewTilePt)
 	{
 		Point pt = viewportToWorld(viewTilePt);
@@ -87,15 +126,14 @@ public class WorldView extends PApplet
 		Entity occupant = world.getTileOccupant(pt);
 		
 		if (occupant != null)
-		{/*
+		{
 			PImage img = createImage(this.tileWidth, this.tileHeight);
 			image(bgnd, 0, 0);
 			image(occupant.getImage(), 0, 0);
-			return img;*/
+			return img;
 		}
-		else {} return bgnd;
+		return bgnd;
 	}
-	/* Don't need this part yet!
 	public PImage createMouseSurface(booean occupied)
 	{
 		//Work on translating from pygame
@@ -126,28 +164,4 @@ public class WorldView extends PApplet
 		pygame.display.update(rects);
 	}
 	*/
-	
-	public Point viewportToWorld(Point pt)
-	{
-		return new Point(pt.getXCoord() + viewport.getX(), pt.getYCoord() + viewport.getY());
-	}
-	
-	public Point worldToViewport(Point pt)
-	{
-		return new Point(pt.getXCoord() - viewport.getX(), pt.getYCoord() - viewport.getY());
-	}
-	
-	public Rectangle createShiftedViewport(int[] delta, int numRows, int numCols)
-	{
-		int newX = clamp(viewport.getX() + delta[0], 0, numCols - viewport.getWidth());
-		int newY = clamp(viewport.getY() + delta[1], 0, numRows - viewport.getHeight());
-		
-		return new Rectangle(newX, newY, viewport.getWidth(), viewport.getHeight());
-	}
-	
-	public static int clamp(int v, int low, int high)
-	{
-		return Math.min(high, Math.max(v, low));
-	}
-
 }

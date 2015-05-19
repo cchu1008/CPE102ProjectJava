@@ -1,4 +1,5 @@
-
+import java.util.List;
+import java.util.LinkedList;
 
 public class OrderedList
 {
@@ -6,14 +7,14 @@ public class OrderedList
 	
 	public OrderedList()
 	{
-		this.list = new ArrayList<Action>();
+		this.list = new LinkedList<Action>();
 	}
 	
 	public void insert(Action item, int ord)
 	{
 		int size = list.length;
 		int idx = 0;
-		while (*idx < size && list.get(idx).ord < ord)
+		while (idx < size && list.get(idx).ord < ord)
 			idx++;
 		
 		list.add(idx, new ListItem(item, ord));

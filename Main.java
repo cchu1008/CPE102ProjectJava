@@ -2,9 +2,8 @@ import java.util.Random;
 import java.util.Map;
 import java.util.List;
 import processing.core.*;
-import processing.core.PApplet;
 
-public class Main extends PApplet
+public class Main
 {
 	public static final Random RANDOMIZER = new Random();
 	
@@ -24,9 +23,9 @@ public class Main extends PApplet
 	private static final int TILE_WIDTH = 32;
 	private static final int TILE_HEIGHT = 32;
 	
-	public void setup()
+	public void setup(WorldView view)
 	{
-		//size(SCREEN_COLS, SCREEN_ROWS);
+		this.view = view;
 		
 		this.imageList = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TILE_HEIGHT);
 		
@@ -34,7 +33,7 @@ public class Main extends PApplet
 		
 		this.world = new WorldModel(SCREEN_ROWS * WORLD_HEIGHT_SCALE, SCREEN_COLS * WORLD_WIDTH_SCALE, defaultBackground);
 		
-		this.view = new WorldView(SCREEN_COLS, SCREEN_ROWS, world, TILE_WIDTH, TILE_HEIGHT);
+		this.view.initialize(SCREEN_COLS, SCREEN_ROWS, world, TILE_WIDTH, TILE_HEIGHT);
 		
 		SaveLoad.loadWorld(world, imageList, WORLD_FILE, true);
 		
@@ -58,13 +57,8 @@ public class Main extends PApplet
 		view.updateView(diff);*/
 	}
 	
-	public void draw()
-	{
-		
-	}
-	
 	public static void main(String args[])
 	{
-		PApplet.main("Main");
+		PApplet.main("WorldView");
 	}
 }

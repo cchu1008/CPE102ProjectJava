@@ -1,4 +1,3 @@
-
 public class ListItem
 {
 	private Action item;
