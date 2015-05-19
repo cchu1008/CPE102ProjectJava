@@ -4,8 +4,8 @@ import processing.core.*;
 
 public class WorldView extends PApplet
 {
-	private int viewCols = 20;
-	private int viewRows = 15;
+	private int viewCols = 30;
+	private int viewRows = 20;
 	
 	private int tileWidth = 32;
 	private int tileHeight = 32;
