@@ -23,7 +23,7 @@ public class TestCases
 	
 	private static final WorldModel theWorld = new WorldModel(16, 16, back);
 	
-	private static final Blacksmith smithy = new Blacksmith(new Point(3, 8), 10, 3, 1);
+	private static final Blacksmith smithy = new Blacksmith(new Point(3, 8));
 	
 	private static final Obstacle obby = new Obstacle(new Point(4, 4));
 	
@@ -82,23 +82,7 @@ public class TestCases
 		assertEquals(3, smithy.getPosition().getXCoord());
 		assertEquals(8, smithy.getPosition().getYCoord());
 		
-		assertEquals(10, smithy.getResourceLimit());
-		assertEquals(3, smithy.getResourceCount());
-		assertEquals(1, smithy.getResourceDistance());
-		
-		smithy.incrementResourceCount();
-		assertEquals(4, smithy.getResourceCount());
-		while (smithy.getResourceCount() < 10)
-		{
-			smithy.incrementResourceCount();
-		}
-		assertTrue(smithy.isFull());
-		
-		smithy.setResourceCount(7);
-		assertFalse(smithy.isFull());
-		assertEquals(7, smithy.getResourceCount());
-		
-		assertEquals("blacksmith 3 8 10 7 1", smithy.entityString());
+		assertEquals("blacksmith 3 8", smithy.entityString());
 	}
 	
 	@Test
@@ -163,24 +147,24 @@ public class TestCases
 		
 		assertEquals(false, theWorld.isOccupied(new Point(5, 5)));
 		
-		assertEquals(null, theWorld.getCell(new Point(5, 5)));
+		assertEquals(null, theWorld.getTileOccupant(new Point(5, 5)));
 		
 		assertEquals(true, theWorld.withinBounds(new Point(6, 10)));
 		
 		theWorld.addEntity(Harrison);
-		assertEquals(Harrison, theWorld.getCell(new Point(1, 11)));
+		assertEquals(Harrison, theWorld.getTileOccupant(new Point(1, 11)));
 		
 		assertEquals(1, theWorld.getEntities().size());
 		
 		theWorld.moveEntity(Harrison, new Point(14, 7));
-		assertEquals(Harrison, theWorld.getCell(new Point(14, 7)));
+		assertEquals(Harrison, theWorld.getTileOccupant(new Point(14, 7)));
 		
 		theWorld.removeEntity(Harrison);
-		assertEquals(null, theWorld.getCell(new Point(14, 7)));
+		assertEquals(null, theWorld.getTileOccupant(new Point(14, 7)));
 		
 		Harrison.setPosition(new Point(1, 11));
 		theWorld.addEntity(Harrison);
-		assertEquals(Harrison, theWorld.getCell(new Point(1, 11)));
+		assertEquals(Harrison, theWorld.getTileOccupant(new Point(1, 11)));
 		
 		assertEquals(null, theWorld.findNearest(new Point(4, 10), OreBlob.class));
 		

@@ -1,3 +1,4 @@
+import java.util.List;
 import processing.core.*;
 
 public class Quake extends Animated
@@ -6,6 +7,6 @@ public class Quake extends Animated
 	
 	public Quake(Point position, List<PImage> images)
 	{
-		super(ID_KEY, position, img, 0);
+		super(ID_KEY, position, images, 0, 100);
 	}
 }

@@ -19,6 +19,14 @@ public abstract class Animated extends Actor
 		return this.animationRate;
 	}
 	
+	public void nextImage()
+	{
+		this.currentImage++;
+		if (this.currentImage >= this.images.size())
+			this.currentImage = 0;
+		this.setImage(this.images.get(this.currentImage));
+	}
+	
 	public String entityString()
 	{
 		String initial = super.entityString();

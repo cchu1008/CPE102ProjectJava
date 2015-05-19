@@ -138,13 +138,13 @@ public class SaveLoad
 	}
 	
 	public static void scheduleEntity(WorldModel world, Entity entity, Map<String, List<PImage>> iStore)
-	{/*
-		if (entity instanceof Miner) //Change below later!
-			Actions.scheduleMiner(world, entity, 0, iStore);
+	{
+		if (entity instanceof Miner)
+			Actions.scheduleMiner(world, (Miner)entity, 0, iStore);
 		else if (entity instanceof Vein)
-			Actions.scheduleVein(world, entity, 0, iStore);
+			Actions.scheduleVein(world, (Vein)entity, 0, iStore);
 		else if (entity instanceof Ore)
-			Actions.scheduleOre(world, entity, 0, iStore);*/
+			Actions.scheduleOre(world, (Ore)entity, 0, iStore);
 	}
 	
 }

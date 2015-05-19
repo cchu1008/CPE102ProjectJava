@@ -11,25 +11,25 @@ public class OrderedList
 		this.list = new LinkedList<ListItem>();
 	}
 	
-	public void insert(LongConsumer item, int ord)
+	public void insert(LongConsumer action, long time)
 	{
 		int size = list.size();
 		int idx = 0;
-		while (idx < size && list.get(idx).ord < ord)
+		while (idx < size && list.get(idx).getTime() < time)
 			idx++;
 		
-		list.add(idx, new ListItem(item, ord));
+		list.add(idx, new ListItem(action, time));
 	}
 	
-	public void remove(LongConsumer item)
+	public void remove(LongConsumer action)
 	{
 		int size = list.size();
 		int idx = 0;
 		
-		while (idx <size && list.get(idx).item != item)
+		while (idx <size && list.get(idx).getAction() != action)
 			idx++;
 		if (idx < size)
-			list.remove(item);
+			list.remove(action);
 	}
 	
 	public ListItem head()
@@ -48,27 +48,5 @@ public class OrderedList
 			return fin;
 		}
 		return null;
-	}
-	
-	private class ListItem
-	{
-		private LongConsumer item;
-		private int ord;
-		
-		public ListItem(LongConsumer item, int ord)
-		{
-			this.item = item;
-			this.ord = ord;
-		}
-		
-		public boolean equals(Object b)
-		{
-			if (b instanceof ListItem)
-			{
-				ListItem c = (ListItem)b;
-				return this.item == c.item && this.ord == c.ord;
-			}
-			return false;
-		}
 	}
 }

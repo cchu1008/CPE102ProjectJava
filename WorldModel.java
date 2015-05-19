@@ -152,7 +152,7 @@ public class WorldModel
 		}
 	}
 	
-	public void scheduleAction(LongConsumer action, int time)
+	public void scheduleAction(LongConsumer action, long time)
 	{
 		actionQueue.insert(action, time);
 	}
@@ -183,21 +183,16 @@ public class WorldModel
 		return closestEntity;
 	}
 	
-	/*public List<Rectangle> updateOnTime(int ticks)
+	public void updateOnTime(long ticks)
 	{
-		List<Rectangle> tiles = new ArrayList<Rectangle>();
-		
 		ListItem next = actionQueue.head();
-		//What is next.ord???
-		while (next != null && next.ord < ticks)
+		while (next != null && next.getTime() < ticks)
 		{
 			actionQueue.pop();
-			tiles.add(next.item(ticks));
+			next.getAction().accept(ticks);
 			next = actionQueue.head();
 		}
-		
-		return tiles;
-	}*/
+	}
 	
 	public static double distance(Point pos1, Point pos2)
 	{

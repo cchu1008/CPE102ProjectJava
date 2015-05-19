@@ -31,8 +31,6 @@ public class WorldView extends PApplet
 		SaveLoad.loadWorld(world, imageList, "gaia.sav", true);
 		
 		this.size(this.viewCols * this.tileWidth, this.viewRows * this.tileHeight);
-		
-		this.updateView();
 	}
 	
 	public void keyPressed()
@@ -56,7 +54,9 @@ public class WorldView extends PApplet
 	
 	public void draw()
 	{
-		;
+		long time = System.currentTimeMillis();
+		this.world.updateOnTime(time);
+		this.updateView();
 	}
 	
 	public void drawBackground()
