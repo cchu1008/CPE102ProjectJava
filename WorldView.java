@@ -1,35 +1,38 @@
+import java.util.Random;
+import java.util.Map;
+import java.util.List;
 import processing.core.*;
 
 public class WorldView extends PApplet
 {
-	private int viewCols;
-	private int viewRows;
-	private WorldModel world;
-	private int tileWidth;
-	private int tileHeight;
-	private Rectangle viewport;
-	private int numRows;
-	private int numCols;
-	//private Point mousePt;
+	public static final Random RANDOMIZER = new Random();
 	
-	public void initialize(int viewCols, int viewRows, WorldModel world, int tileWidth, int tileHeight)
-	{
-		this.viewCols = viewCols;
-		this.viewRows = viewRows;
-		this.world = world;
-		this.tileWidth = tileWidth;
-		this.tileHeight = tileHeight;
-		this.viewport = new Rectangle(0, 0, viewCols, viewRows);
-		this.numRows = world.getHeight();
-		this.numCols = world.getWidth();
-		//this.mousePt = new Point(0, 0);
-	}
+	private int viewCols = 20;
+	private int viewRows = 15;
+	
+	private int tileWidth = 32;
+	private int tileHeight = 32;
+	
+	private int numRows = 40;
+	private int numCols = 30;
+	
+	private Map<String, List<PImage>> imageList;
+	
+	private Rectangle viewport;
+	
+	private WorldModel world;
 	
 	public void setup()
 	{
-		this.size(640, 480);
+		this.viewport = new Rectangle(0, 0, this.viewCols, this.viewRows);
 		
-		(new Main()).setup(this);
+		this.imageList = ImageStore.loadImages("imagelist", this.tileWidth, this.tileHeight);
+		this.world = new WorldModel(this.numCols, this.numRows, new Background("default", this.imageList.get("grass").get(0)));
+		SaveLoad.loadWorld(world, imageList, "gaia.sav", true);
+		
+		this.size(this.viewCols * this.tileWidth, this.viewRows * this.tileHeight);
+		
+		this.updateView();
 	}
 	
 	public void draw()
@@ -103,6 +106,11 @@ public class WorldView extends PApplet
 	public static int clamp(int v, int low, int high)
 	{
 		return Math.min(high, Math.max(v, low));
+	}
+	
+	public static void main(String[] arg)
+	{
+		PApplet.main("WorldView");
 	}
 	
 	/* Don't need this part yet!

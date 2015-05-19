@@ -1,60 +1,7 @@
-import java.util.Random;
-import java.util.Map;
-import java.util.List;
-import processing.core.*;
-
 public class Main
 {
-	public static final Random RANDOMIZER = new Random();
-	
-	private WorldModel world;
-	private WorldView view;
-	private Map<String, List<PImage>> imageList; //initialize later!
-	
-	private static final boolean RUN_AFTER_LOAD = true;
-	private static final String IMAGE_LIST_FILE_NAME = "imagelist";
-	private static final String WORLD_FILE = "gaia.sav";
-	
-	private static final int WORLD_WIDTH = 40;
-	private static final int WORLD_HEIGHT = 30;
-	
-	private static final int SCREEN_COLS = 20;
-	private static final int SCREEN_ROWS = 15;
-	private static final int TILE_WIDTH = 32;
-	private static final int TILE_HEIGHT = 32;
-	
-	public void setup(WorldView view)
-	{
-		this.view = view;
-		
-		this.imageList = ImageStore.loadImages(IMAGE_LIST_FILE_NAME, TILE_WIDTH, TILE_HEIGHT);
-		
-		Background defaultBackground = new Background("default", this.imageList.get("grass").get(0));
-		
-		this.world = new WorldModel(WORLD_WIDTH, WORLD_HEIGHT, defaultBackground);
-		
-		this.view.initialize(SCREEN_COLS, SCREEN_ROWS, world, TILE_WIDTH, TILE_HEIGHT);
-		
-		SaveLoad.loadWorld(world, imageList, WORLD_FILE, true);
-		
-		//view.updateView();
-	}
-	
-	public void keyPressed()
-	{/*
-		int xDelta = 0;
-		int yDelta = 0;
-		
-		if (key == UP) yDelta -= 1;
-		if (key == DOWN) yDelta += 1;
-		if (key == LEFT) xDelta -= 1;
-		if (key == RIGHT) xDelta += 1;
-		
-		view.updateView(xDelta, yDelta);*/
-	}
-	
 	public static void main(String args[])
 	{
-		PApplet.main("WorldView");
+		WorldView.main(args);
 	}
 }
