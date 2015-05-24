@@ -39,12 +39,6 @@ public abstract class Entity
 		this.image = img;
 	}
 	
-	protected int sign(int x)
-	{
-		if (x == 0) return 0;
-		return (x > 0) ? 1 : -1;
-	}
-	
 	public String entityString()
 	{
 		return String.format("%s %d %d", this.getName(), this.getPosition().getXCoord(), this.getPosition().getYCoord());
