@@ -1,6 +1,7 @@
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.lang.Math;
 import java.util.Random;
 import java.util.function.LongConsumer;
@@ -327,7 +328,7 @@ public class Actions
 		{
 			if (world.withinBounds(pt) && !world.isOccupied(pt))
 			{
-				fin.add(new PathObj(pt, pos, current.getGScore() + 1, calculateH(pt, destination)));
+				fin.add(new PathObj(pt, current, current.getGScore() + 1, calculateH(pt, destination)));
 			}
 		}
 		
@@ -347,7 +348,7 @@ public class Actions
 		Point position = mover.getPosition();
 		int hScore = calculateH(position, destination);
 		
-		openSet.add(new PathObj(position, null, 0, hScore);
+		openSet.add(new PathObj(position, null, 0, hScore));
 		
 		while (openSet.size() != 0)
 		{
@@ -367,7 +368,7 @@ public class Actions
 			{
 				if (closedSet.contains(neighbor))
 					continue;
-				int tentativeGScore = cur.getGScore() + WorldModel.distance(cur.getPos(), neighbor.getPos());
+				int tentativeGScore = cur.getGScore() + (int)WorldModel.distance(cur.getPos(), neighbor.getPos());
 				
 				if (!(openSet.contains(neighbor)) || tentativeGScore < neighbor.getGScore())
 				{
