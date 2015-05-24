@@ -295,23 +295,86 @@ public class Actions
 		return (x > 0) ? 1 : -1;
 	}
 	
+	private static PathObj findLowFScore(List<PathObj> open)
+	{
+		PathObj lowest = open.get(0);
+		for (int i = 0; i < open.size(); i++)
+		{
+			if (open.get(i).getFScore() < lowest.getFScore())
+			{
+				lowest = open.get(i);
+			}
+		}
+		return lowest;
+	}
 	
+	private static List<PathObj> getValidNeighbors(WorldModel world, PathObj current, Point destination)
+	{
+		Point pos = current.getPos();
+		List<PathObj> fin = new LinkedList<PathObj>();
+		
+		List<Point> run = new ArrayList<Point>();
+		run.add(new Point(pos.getXCoord() - 1, pos.getYCoord() - 1));
+		run.add(new Point(pos.getXCoord() - 1, pos.getYCoord()));
+		run.add(new Point(pos.getXCoord() - 1, pos.getYCoord() + 1));
+		run.add(new Point(pos.getXCoord(), pos.getYCoord() - 1));
+		run.add(new Point(pos.getXCoord(), pos.getYCoord() + 1));
+		run.add(new Point(pos.getXCoord() + 1, pos.getYCoord() - 1));
+		run.add(new Point(pos.getXCoord() + 1, pos.getYCoord()));
+		run.add(new Point(pos.getXCoord() + 1, pos.getYCoord() + 1));
+
+		for (Point pt : run)
+		{
+			if (world.withinBounds(pt) && !world.isOccupied(pt))
+			{
+				fin.add(new PathObj(pt, pos, current.getGScore() + 1, calculateH(pt, destination)));
+			}
+		}
+		
+		return fin;
+	}
+	
+	private static int calculateH(Point beginning, Point end)
+	{
+		return (Math.abs(beginning.getXCoord() - end.getXCoord()) + Math.abs(beginning.getYCoord() - end.getYCoord()));
+	}
 	
 	private static Point nextPosition(WorldModel world, Actor mover, Point destination)
 	{
-		int horiz = sign(destination.getXCoord() - mover.getPosition().getXCoord());
-		Point newPt = new Point(mover.getPosition().getXCoord() + horiz, mover.getPosition().getYCoord());
+		List<PathObj> closedSet = new ArrayList<PathObj>();
+		List<PathObj> openSet = new LinkedList<PathObj>();
 		
-		if (horiz == 0 || world.isOccupied(newPt))
+		Point position = mover.getPosition();
+		int hScore = calculateH(position, destination);
+		
+		openSet.add(new PathObj(position, position, 0, hScore);
+		
+		while (openSet.size() != 0)
 		{
-			int vert = sign(destination.getYCoord() - mover.getPosition().getYCoord());
-			newPt = new Point(mover.getPosition().getXCoord(), mover.getPosition().getYCoord() + vert);
-			
-			if (vert == 0 || world.isOccupied(newPt))
+			PathObj cur = findLowFScore(openSet);
+			if (cur.getPos() == destination)
 			{
-				newPt = new Point(mover.getPosition().getXCoord(), mover.getPosition().getYCoord());
+				***return reconstructPath(cameFrom, goal);
+			}
+			openSet.remove(cur);
+			closedSet.add(cur);
+			List<PathObj> neighborNodes = getValidNeighbors(world, cur, destination);
+			for (PathObj neighbor : neighborNodes)
+			{
+				if (closedSet.contains(neighbor))
+					continue;
+				int tentativeGScore = cur.getGScore() + WorldModel.distance(cur.getPos(), neighbor.getPos());
+				
+				if (!(openSet.contains(neighbor)) || tentativeGScore < neighbor.getGScore())
+				{
+					neighbor.setCameFrom(cur.getPos());
+					neighbor.setGScore(tentativeGScore);
+					
+					if (!(openSet.contains(neighbor)))
+						openSet.add(neighbor);
+				}
 			}
 		}
-		return newPt;
+		***return failure;		
 	}
 }
