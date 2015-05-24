@@ -56,7 +56,7 @@ public class PathObj
 		if (other instanceof PathObj)
 		{
 			PathObj o = (PathObj)other;
-			return this.pos == o.pos && this.cameFrom == o.cameFrom && this.gScore == o.gScore && this.hScore == o.hScore;
+			return this.pos.equals(o.pos);
 		}
 		return false;
 	}

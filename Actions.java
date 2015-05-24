@@ -299,36 +299,33 @@ public class Actions
 	private static PathObj findLowFScore(List<PathObj> open)
 	{
 		PathObj lowest = open.get(0);
-		for (int i = 0; i < open.size(); i++)
+		for (PathObj pt : open)
 		{
-			if (open.get(i).getFScore() < lowest.getFScore())
+			if (pt.getFScore() < lowest.getFScore())
 			{
-				lowest = open.get(i);
+				lowest = pt;
 			}
 		}
 		return lowest;
 	}
 	
-	private static List<PathObj> getValidNeighbors(WorldModel world, PathObj current, Point destination)
+	private static List<Point> getValidNeighbors(WorldModel world, PathObj current, Point destination)
 	{
 		Point pos = current.getPos();
-		List<PathObj> fin = new LinkedList<PathObj>();
+		List<Point> fin = new LinkedList<Point>();
 		
-		List<Point> run = new ArrayList<Point>();
-		run.add(new Point(pos.getXCoord() - 1, pos.getYCoord() - 1));
-		run.add(new Point(pos.getXCoord() - 1, pos.getYCoord()));
-		run.add(new Point(pos.getXCoord() - 1, pos.getYCoord() + 1));
-		run.add(new Point(pos.getXCoord(), pos.getYCoord() - 1));
-		run.add(new Point(pos.getXCoord(), pos.getYCoord() + 1));
-		run.add(new Point(pos.getXCoord() + 1, pos.getYCoord() - 1));
-		run.add(new Point(pos.getXCoord() + 1, pos.getYCoord()));
-		run.add(new Point(pos.getXCoord() + 1, pos.getYCoord() + 1));
-
+		Point[] run = new Point[]{
+			new Point(pos.getXCoord() - 1, pos.getYCoord()),
+			new Point(pos.getXCoord(), pos.getYCoord() - 1),
+			new Point(pos.getXCoord(), pos.getYCoord() + 1),
+			new Point(pos.getXCoord() + 1, pos.getYCoord())
+		};
+		
 		for (Point pt : run)
 		{
 			if (world.withinBounds(pt) && !world.isOccupied(pt))
 			{
-				fin.add(new PathObj(pt, current, current.getGScore() + 1, calculateH(pt, destination)));
+				fin.add(pt);
 			}
 		}
 		
@@ -337,11 +334,13 @@ public class Actions
 	
 	private static int calculateH(Point beginning, Point end)
 	{
-		return (Math.abs(beginning.getXCoord() - end.getXCoord()) + Math.abs(beginning.getYCoord() - end.getYCoord()));
+		return (abs(beginning.getXCoord() - end.getXCoord()) + abs(beginning.getYCoord() - end.getYCoord()));
 	}
 	
 	private static Point nextPosition(WorldModel world, Actor mover, Point destination)
 	{
+		int counter = 0;
+		
 		List<PathObj> closedSet = new ArrayList<PathObj>();
 		List<PathObj> openSet = new LinkedList<PathObj>();
 		
@@ -350,9 +349,17 @@ public class Actions
 		
 		openSet.add(new PathObj(position, null, 0, hScore));
 		
+		System.out.print(position);
+		System.out.print(" -> ");
+		System.out.println(destination);
+		
 		while (openSet.size() != 0)
 		{
 			PathObj cur = findLowFScore(openSet);
+			
+			System.out.print("  ");
+			System.out.println(cur.getPos());
+			
 			if (cur.getPos().equals(destination))
 			{
 				while (!(cur.getCameFrom().getPos().equals(position)))
@@ -361,25 +368,22 @@ public class Actions
 				}
 				return cur.getPos();
 			}
+			
 			openSet.remove(cur);
 			closedSet.add(cur);
-			List<PathObj> neighborNodes = getValidNeighbors(world, cur, destination);
-			for (PathObj neighbor : neighborNodes)
+			
+			List<Point> neighborNodes = getValidNeighbors(world, cur, destination);
+			for (Point node : neighborNodes)
 			{
+				PathObj neighbor = new PathObj(node, cur, cur.getGScore() + 1, calculateH(node, destination));
 				if (closedSet.contains(neighbor))
 					continue;
-				int tentativeGScore = cur.getGScore() + (int)WorldModel.distance(cur.getPos(), neighbor.getPos());
 				
-				if (!(openSet.contains(neighbor)) || tentativeGScore < neighbor.getGScore())
-				{
-					neighbor.setCameFrom(cur);
-					neighbor.setGScore(tentativeGScore);
-					
-					if (!(openSet.contains(neighbor)))
-						openSet.add(neighbor);
-				}
+				if (!(openSet.contains(neighbor)))
+					openSet.add(neighbor);
 			}
+			break;
 		}
-		return position;		
+		return position;
 	}
 }
