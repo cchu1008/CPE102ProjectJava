@@ -347,14 +347,18 @@ public class Actions
 		Point position = mover.getPosition();
 		int hScore = calculateH(position, destination);
 		
-		openSet.add(new PathObj(position, position, 0, hScore);
+		openSet.add(new PathObj(position, null, 0, hScore);
 		
 		while (openSet.size() != 0)
 		{
 			PathObj cur = findLowFScore(openSet);
-			if (cur.getPos() == destination)
+			if (cur.getPos().equals(destination))
 			{
-				***return reconstructPath(cameFrom, goal);
+				while (!(cur.getCameFrom().getPos().equals(position)))
+				{
+					cur = cur.getCameFrom();
+				}
+				return cur.getPos();
 			}
 			openSet.remove(cur);
 			closedSet.add(cur);
@@ -367,7 +371,7 @@ public class Actions
 				
 				if (!(openSet.contains(neighbor)) || tentativeGScore < neighbor.getGScore())
 				{
-					neighbor.setCameFrom(cur.getPos());
+					neighbor.setCameFrom(cur);
 					neighbor.setGScore(tentativeGScore);
 					
 					if (!(openSet.contains(neighbor)))
@@ -375,6 +379,6 @@ public class Actions
 				}
 			}
 		}
-		***return failure;		
+		return position;		
 	}
 }

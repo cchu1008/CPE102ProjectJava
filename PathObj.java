@@ -2,12 +2,12 @@
 public class PathObj
 {
 	private Point pos;
-	private Point cameFrom;
+	private PathObj cameFrom;
 	private int gScore;
 	private int hScore;
 	private int fScore;
 	
-	public PathObj(Point pos, Point cameFrom, int gScore, int hScore)
+	public PathObj(Point pos, PathObj cameFrom, int gScore, int hScore)
 	{
 		this.pos = pos;
 		this.cameFrom = cameFrom;
@@ -21,14 +21,14 @@ public class PathObj
 		return this.pos;
 	}
 	
-	public Point getCameFrom()
+	public PathObj getCameFrom()
 	{
 		return this.cameFrom;
 	}
 	
-	public void setCameFrom(Point pt)
+	public void setCameFrom(PathObj obj)
 	{
-		this.cameFrom = pt;
+		this.cameFrom = obj;
 	}
 	
 	public int getGScore()
