@@ -323,7 +323,7 @@ public class Actions
 		
 		for (Point pt : run)
 		{
-			if (world.withinBounds(pt) && !world.isOccupied(pt))
+			if (world.withinBounds(pt) && (!world.isOccupied(pt) || pt.equals(destination)))
 			{
 				fin.add(pt);
 			}
@@ -339,8 +339,6 @@ public class Actions
 	
 	private static Point nextPosition(WorldModel world, Actor mover, Point destination)
 	{
-		int counter = 0;
-		
 		List<PathObj> closedSet = new ArrayList<PathObj>();
 		List<PathObj> openSet = new LinkedList<PathObj>();
 		
@@ -349,16 +347,9 @@ public class Actions
 		
 		openSet.add(new PathObj(position, null, 0, hScore));
 		
-		System.out.print(position);
-		System.out.print(" -> ");
-		System.out.println(destination);
-		
 		while (openSet.size() != 0)
 		{
 			PathObj cur = findLowFScore(openSet);
-			
-			System.out.print("  ");
-			System.out.println(cur.getPos());
 			
 			if (cur.getPos().equals(destination))
 			{
@@ -382,7 +373,6 @@ public class Actions
 				if (!(openSet.contains(neighbor)))
 					openSet.add(neighbor);
 			}
-			break;
 		}
 		return position;
 	}

@@ -1,4 +1,4 @@
-a miner 6 3 813 100 2 0
+miner 6 3 813 100 2 0
 miner 5 6 992 100 2 0
 vein 7 11 9377 1
 vein 8 11 13146 1
@@ -40,19 +40,19 @@ obstacle 13 22
 obstacle 14 23
 obstacle 14 24
 obstacle 11 21
-a miner 12 23 954 100 2 0
+miner 12 23 954 100 2 0
 vein 14 22 8248 1
 vein 10 25 8366 1
-a miner 6 25 930 100 2 0
-a miner 17 22 982 100 2 0
-a miner 7 13 913 100 2 0
-a miner 23 6 777 100 2 0
-a miner 37 6 991 100 2 0
-a miner 37 10 600 100 2 0
-a miner 37 18 888 100 2 0
-a miner 31 15 933 100 2 0
-a miner 31 26 734 100 2 0
-a miner 24 26 851 100 2 0
+miner 6 25 930 100 2 0
+miner 17 22 982 100 2 0
+miner 7 13 913 100 2 0
+miner 23 6 777 100 2 0
+miner 37 6 991 100 2 0
+miner 37 10 600 100 2 0
+miner 37 18 888 100 2 0
+miner 31 15 933 100 2 0
+miner 31 26 734 100 2 0
+miner 24 26 851 100 2 0
 background rocks 19 0
 background rocks 20 1
 background rocks 39 1
