@@ -233,11 +233,13 @@ public class Actions
 		if (adjacent(start, finish))
 		{
 			removeEntity(world, vein);
+			blob.buildPath(world, finish);
 			return finish;
 		}
 		else
 		{
-			Point newPt = blob.nextPosition(world, finish);
+			Point newPt = blob.nextPosition();
+			blob.buildPath(world, finish);
 			Entity oldEntity = world.getTileOccupant(newPt);
 			if (oldEntity instanceof Ore)
 				removeEntity(world, (Actor)oldEntity);
@@ -266,9 +268,10 @@ public class Actions
 		}
 		else
 		{
-			Point nextPoint = miner.nextPosition(world, finish);
+			Point nextPoint = miner.nextPosition();
 			world.moveEntity(miner, nextPoint);
 		}
+		miner.buildPath(world, finish);
 	}
 	
 	private static Point findOpenAround(WorldModel world, Point pos, int resDist)

@@ -43,4 +43,9 @@ public abstract class Entity
 	{
 		return String.format("%s %d %d", this.getName(), this.getPosition().getXCoord(), this.getPosition().getYCoord());
 	}
+	
+	public String toString()
+	{
+		return this.entityString();
+	}
 }

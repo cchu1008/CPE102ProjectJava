@@ -105,7 +105,23 @@ public abstract class Actor extends Entity
 		return (abs(beginning.getXCoord() - end.getXCoord()) + abs(beginning.getYCoord() - end.getYCoord()));
 	}
 	
-	public Point nextPosition(WorldModel world, Point destination)
+	public Point nextPosition()
+	{
+		if (this.target != null)
+		{
+			PathObj cur = this.target;
+			PathObj prev = cur.getCameFrom();
+			while (prev != null && !(prev.getPos().equals(this.getPosition())))
+			{
+				cur = prev;
+				prev = cur.getCameFrom();
+			}
+			return cur.getPos();
+		}
+		return this.getPosition();
+	}
+	
+	public void buildPath(WorldModel world, Point destination)
 	{
 		this.closedSet = new LinkedList<PathObj>();
 		List<PathObj> openSet = new LinkedList<PathObj>();
@@ -121,12 +137,8 @@ public abstract class Actor extends Entity
 			
 			if (cur.getPos().equals(destination))
 			{
-				this.target = cur;
-				while (!(cur.getCameFrom().getPos().equals(position)))
-				{
-					cur = cur.getCameFrom();
-				}
-				return cur.getPos();
+				this.target = cur.getCameFrom();
+				return;
 			}
 			
 			openSet.remove(cur);
@@ -141,10 +153,9 @@ public abstract class Actor extends Entity
 				
 				if (!(openSet.contains(neighbor)))
 				{
-					openSet.add(neighbor);
+					openSet.add(0, neighbor);
 				}
 			}
 		}
-		return position;
 	}
 }
