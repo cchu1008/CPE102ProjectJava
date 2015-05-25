@@ -357,7 +357,7 @@ public class Actions
 				{
 					cur = cur.getCameFrom();
 				}
-				WorldView.drawPath(closedSet, cur, position);
+				world.getView().drawPath(closedSet, cur, position);
 				return cur.getPos();
 			}
 			

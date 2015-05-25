@@ -14,8 +14,9 @@ public class WorldModel
 	private List<Entity> entities;
 	private Background[][] backgrounds;
 	private OrderedList actionQueue;
+	private WorldView view;
 	
-	public WorldModel(int width, int height, Background back)
+	public WorldModel(int width, int height, Background back, WorldView view)
 	{
 		this.width = width;
 		this.height = height;
@@ -23,6 +24,7 @@ public class WorldModel
 		this.entities = new ArrayList<Entity>();
 		this.backgrounds = new Background[width][height];
 		this.actionQueue = new OrderedList();
+		this.view = view;
 		
 		for (int x = 0; x < width; x++)
 		{
@@ -41,6 +43,11 @@ public class WorldModel
 	public int getHeight()
 	{
 		return this.height;
+	}
+	
+	public WorldView getWorldView()
+	{
+		return this.view;
 	}
 	
 	public List<Entity> getEntities()

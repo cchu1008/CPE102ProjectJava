@@ -24,7 +24,7 @@ public class WorldView extends PApplet
 		this.viewport = new Rectangle(0, 0, this.viewCols, this.viewRows);
 		
 		this.imageList = ImageStore.loadImages("imagelist", this.tileWidth, this.tileHeight);
-		this.world = new WorldModel(this.numCols, this.numRows, new Background("default", this.imageList.get("grass").get(0)));
+		this.world = new WorldModel(this.numCols, this.numRows, new Background("default", this.imageList.get("grass").get(0)), this);
 		SaveLoad.loadWorld(world, imageList, "gaia.sav", true);
 		
 		this.size(this.viewCols * this.tileWidth, this.viewRows * this.tileHeight);
@@ -82,6 +82,25 @@ public class WorldView extends PApplet
 		}
 	}
 	
+	public void drawPath(List<PathObj> closedSet, PathObj goal, Point pt)
+	{
+		if (mouseOver(pt))
+		{
+			PathObj cur = goal;
+			for (PathObj each : closedSet)
+			{
+				fill(15, 15, 15, 0.35F);
+				rect(cur.getPos().getXCoord() * this.tileWidth, cur.getPos().getYCoord() * this.tileHeight, 25, 25);
+			}
+			while (cur.getCameFrom() != null)
+			{
+				fill(215, 15, 15);
+				rect(cur.getPos().getXCoord() * this.tileWidth, cur.getPos().getYCoord() * this.tileHeight, 16, 16);
+				cur = cur.getCameFrom();
+			}
+		}
+	}
+	
 	public void drawViewport()
 	{
 		drawBackground();
@@ -124,29 +143,10 @@ public class WorldView extends PApplet
 		return Math.min(high, Math.max(v, low));
 	}
 	
-	public void drawPath(List<PathObj> closedSet, PathObj goal, Point pt)
+	private boolean mouseOver(Point pt)
 	{
-		boolean selected = mouseOver(pt);
-		PathObj cur = goal;
-		if (selected)
-		{
-			for (PathObj each : closedSet)
-			{
-				fill(15, 15, 15, (float)0.35);
-				rect(cur.getPos().getXCoord(), cur.getPos().getYCoord(), 25, 25);
-			}
-			while (cur.getCameFrom() != null)
-			{
-				fill(215, 15, 15);
-				rect(cur.getPos().getXCoord(), cur.getPos().getYCoord(), 16, 16);
-				cur = cur.getCameFrom();
-			}
-		}
-	}
-	
-	public boolean mouseOver(Point pt)
-	{
-		return ((mouseX < pt.getXCoord() * 32 && mouseX > pt.getXCoord()) && (mouseY < pt.getYCoord() * 32 && mouseY > pt.getYCoord()));
+		Point mousePt = new Point((int)(this.mouseX / this.tileWidth), (int)(this.mouseY / this.tileHeight));
+		return pt.equals(viewportToWorld(mousePt));
 	}
 	
 	
