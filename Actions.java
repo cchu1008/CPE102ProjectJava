@@ -237,7 +237,7 @@ public class Actions
 		}
 		else
 		{
-			Point newPt = nextPosition(world, blob, finish);
+			Point newPt = blob.nextPosition(world, finish);
 			Entity oldEntity = world.getTileOccupant(newPt);
 			if (oldEntity instanceof Ore)
 				removeEntity(world, (Actor)oldEntity);
@@ -266,7 +266,7 @@ public class Actions
 		}
 		else
 		{
-			Point nextPoint = nextPosition(world, miner, finish);
+			Point nextPoint = miner.nextPosition(world, finish);
 			world.moveEntity(miner, nextPoint);
 		}
 	}
@@ -288,95 +288,5 @@ public class Actions
 	{
 		return ((p1.getXCoord() == p2.getXCoord() && abs(p1.getYCoord() - p2.getYCoord()) == 1)
 				|| (p1.getYCoord() == p2.getYCoord() && abs(p1.getXCoord() - p2.getXCoord()) == 1));
-	}
-	
-	private static int sign(int x)
-	{
-		if (x == 0) return 0;
-		return (x > 0) ? 1 : -1;
-	}
-	
-	private static PathObj findLowFScore(List<PathObj> open)
-	{
-		PathObj lowest = open.get(0);
-		for (PathObj pt : open)
-		{
-			if (pt.getFScore() < lowest.getFScore())
-			{
-				lowest = pt;
-			}
-		}
-		return lowest;
-	}
-	
-	private static List<Point> getValidNeighbors(WorldModel world, PathObj current, Point destination)
-	{
-		Point pos = current.getPos();
-		List<Point> fin = new LinkedList<Point>();
-		
-		Point[] run = new Point[]{
-			new Point(pos.getXCoord() - 1, pos.getYCoord()),
-			new Point(pos.getXCoord(), pos.getYCoord() - 1),
-			new Point(pos.getXCoord(), pos.getYCoord() + 1),
-			new Point(pos.getXCoord() + 1, pos.getYCoord())
-		};
-		
-		for (Point pt : run)
-		{
-			if (world.withinBounds(pt) && (!world.isOccupied(pt) || pt.equals(destination)))
-			{
-				fin.add(pt);
-			}
-		}
-		
-		return fin;
-	}
-	
-	private static int calculateH(Point beginning, Point end)
-	{
-		return (abs(beginning.getXCoord() - end.getXCoord()) + abs(beginning.getYCoord() - end.getYCoord()));
-	}
-	
-	private static Point nextPosition(WorldModel world, Actor mover, Point destination)
-	{
-		List<PathObj> closedSet = new ArrayList<PathObj>();
-		List<PathObj> openSet = new LinkedList<PathObj>();
-		
-		Point position = mover.getPosition();
-		int hScore = calculateH(position, destination);
-		
-		openSet.add(new PathObj(position, null, 0, hScore));
-		
-		while (openSet.size() != 0)
-		{
-			PathObj cur = findLowFScore(openSet);
-			
-			if (cur.getPos().equals(destination))
-			{
-				while (!(cur.getCameFrom().getPos().equals(position)))
-				{
-					cur = cur.getCameFrom();
-				}
-				world.getView().drawPath(closedSet, cur, position);
-				return cur.getPos();
-			}
-			
-			openSet.remove(cur);
-			closedSet.add(cur);
-			
-			List<Point> neighborNodes = getValidNeighbors(world, cur, destination);
-			for (Point node : neighborNodes)
-			{
-				PathObj neighbor = new PathObj(node, cur, cur.getGScore() + 1, calculateH(node, destination));
-				if (closedSet.contains(neighbor))
-					continue;
-				
-				if (!(openSet.contains(neighbor)))
-				{
-					openSet.add(neighbor);
-				}
-			}
-		}
-		return position;
 	}
 }

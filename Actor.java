@@ -1,12 +1,15 @@
 import java.util.function.LongConsumer;
 import java.util.List;
 import java.util.LinkedList;
+import static java.lang.Math.*;
 import processing.core.*;
 
 public abstract class Actor extends Entity
 {
 	private int actionRate;
 	private List<LongConsumer> pendingActions = new LinkedList<LongConsumer>();
+	private List<PathObj> closedSet = new LinkedList<PathObj>();
+	private PathObj target = null;
 	
 	protected Actor(String name, Point position, PImage img, int actRate)
 	{
@@ -43,5 +46,105 @@ public abstract class Actor extends Entity
 	{
 		String initial = super.entityString();
 		return String.format("%s %d", initial, this.getActionRate());
+	}
+	
+	public List<PathObj> getClosedSet()
+	{
+		return this.closedSet;
+	}
+	
+	public PathObj getTarget()
+	{
+		return this.target;
+	}
+	
+	private static int sign(int x)
+	{
+		if (x == 0) return 0;
+		return (x > 0) ? 1 : -1;
+	}
+	
+	private static PathObj findLowFScore(List<PathObj> open)
+	{
+		PathObj lowest = open.get(0);
+		for (PathObj pt : open)
+		{
+			if (pt.getFScore() < lowest.getFScore())
+			{
+				lowest = pt;
+			}
+		}
+		return lowest;
+	}
+	
+	private static List<Point> getValidNeighbors(WorldModel world, PathObj current, Point destination)
+	{
+		Point pos = current.getPos();
+		List<Point> fin = new LinkedList<Point>();
+		
+		Point[] run = new Point[]{
+			new Point(pos.getXCoord() - 1, pos.getYCoord()),
+			new Point(pos.getXCoord(), pos.getYCoord() - 1),
+			new Point(pos.getXCoord(), pos.getYCoord() + 1),
+			new Point(pos.getXCoord() + 1, pos.getYCoord())
+		};
+		
+		for (Point pt : run)
+		{
+			if (world.withinBounds(pt) && (!world.isOccupied(pt) || pt.equals(destination)))
+			{
+				fin.add(pt);
+			}
+		}
+		
+		return fin;
+	}
+	
+	private static int calculateH(Point beginning, Point end)
+	{
+		return (abs(beginning.getXCoord() - end.getXCoord()) + abs(beginning.getYCoord() - end.getYCoord()));
+	}
+	
+	public Point nextPosition(WorldModel world, Point destination)
+	{
+		this.closedSet = new LinkedList<PathObj>();
+		List<PathObj> openSet = new LinkedList<PathObj>();
+		
+		Point position = this.getPosition();
+		int hScore = calculateH(position, destination);
+		
+		openSet.add(new PathObj(position, null, 0, hScore));
+		
+		while (openSet.size() != 0)
+		{
+			PathObj cur = findLowFScore(openSet);
+			
+			if (cur.getPos().equals(destination))
+			{
+				this.target = cur;
+				while (!(cur.getCameFrom().getPos().equals(position)))
+				{
+					cur = cur.getCameFrom();
+				}
+				return cur.getPos();
+			}
+			
+			openSet.remove(cur);
+			closedSet.add(cur);
+			
+			List<Point> neighborNodes = getValidNeighbors(world, cur, destination);
+			for (Point node : neighborNodes)
+			{
+				PathObj neighbor = new PathObj(node, cur, cur.getGScore() + 1, calculateH(node, destination));
+				if (closedSet.contains(neighbor))
+					continue;
+				
+				if (!(openSet.contains(neighbor)))
+				{
+					openSet.add(neighbor);
+				}
+			}
+		}
+		return position;
 	}
 }

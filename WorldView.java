@@ -82,20 +82,26 @@ public class WorldView extends PApplet
 		}
 	}
 	
-	public void drawPath(List<PathObj> closedSet, PathObj goal, Point pt)
+	public void drawPath()
 	{
-		if (mouseOver(pt))
+		Point mpt = mousePoint();
+		Entity occ = this.world.getTileOccupant(mpt);
+		if (occ != null && (occ instanceof Miner || occ instanceof OreBlob))
 		{
-			PathObj cur = goal;
-			for (PathObj each : closedSet)
+			Actor actr = (Actor)occ;
+			rectMode(CENTER);
+			fill(15, 15, 15, 100);
+			for (PathObj each : actr.getClosedSet())
 			{
-				fill(15, 15, 15, 0.35F);
-				rect(cur.getPos().getXCoord() * this.tileWidth, cur.getPos().getYCoord() * this.tileHeight, 25, 25);
+				Point pos = worldToViewport(each.getPos());
+				rect((pos.getXCoord() * this.tileWidth) + (this.tileWidth / 2), (pos.getYCoord() * this.tileHeight) + (this.tileHeight / 2), 25, 25);
 			}
-			while (cur.getCameFrom() != null)
+			PathObj cur = actr.getTarget();
+			fill(215, 15, 15, 255);
+			while (cur != null)
 			{
-				fill(215, 15, 15);
-				rect(cur.getPos().getXCoord() * this.tileWidth, cur.getPos().getYCoord() * this.tileHeight, 16, 16);
+				Point pos = worldToViewport(cur.getPos());
+				rect((pos.getXCoord() * this.tileWidth) + (this.tileWidth / 2), (pos.getYCoord() * this.tileHeight) + (this.tileHeight / 2), 16, 16);
 				cur = cur.getCameFrom();
 			}
 		}
@@ -103,14 +109,14 @@ public class WorldView extends PApplet
 	
 	public void drawViewport()
 	{
-		drawBackground();
-		drawEntities();
+		this.drawBackground();
+		this.drawEntities();
+		this.drawPath();
 	}
 	
 	public void updateView(int dX, int dY)
 	{
 		this.viewport = createShiftedViewport(dX, dY);
-		//this.mouseImg = mouseImg;
 		drawViewport();
 	}
 	
@@ -143,73 +149,14 @@ public class WorldView extends PApplet
 		return Math.min(high, Math.max(v, low));
 	}
 	
-	private boolean mouseOver(Point pt)
+	private Point mousePoint()
 	{
 		Point mousePt = new Point((int)(this.mouseX / this.tileWidth), (int)(this.mouseY / this.tileHeight));
-		return pt.equals(viewportToWorld(mousePt));
+		return viewportToWorld(mousePt);
 	}
-	
 	
 	public static void main(String[] arg)
 	{
 		PApplet.main("WorldView");
 	}
-	
-	/* Don't need this part yet!
-	
-	public Rectangle updateTile(Point viewTilePt, PImage surface)
-	{
-		int absX = viewTilePt.getXCoord() * tileWidth;
-		int absY = viewTilePt.getYCoord() * tileHeight;
-		
-		image(surface, absX, absY);
-		
-		return new Rectangle(absX, absY, tileWidth, tileHeight);
-	}
-	
-	public PImage getTileImage(Point viewTilePt)
-	{
-		Point pt = viewportToWorld(viewTilePt);
-		PImage bgnd = world.getBackgroundImage(pt);
-		Entity occupant = world.getTileOccupant(pt);
-		
-		if (occupant != null)
-		{
-			PImage img = createImage(this.tileWidth, this.tileHeight);
-			image(bgnd, 0, 0);
-			image(occupant.getImage(), 0, 0);
-			return img;
-		}
-		return bgnd;
-	}
-	public PImage createMouseSurface(booean occupied)
-	{
-		//Work on translating from pygame
-		PImage surface = pygame.Surface((this.tileWidth, this.tileHeight));
-		surface.setAlpha(MOUSE_HOVER_ALPH);
-		Color color = MOUSE_HOVOR_EMPTY_COLOR;
-		
-		if (occupied) color = MOUSE_HOVER_OCC_COLOR;
-		//Work on translating from pygame
-		surface.fill(color);
-		if (mouseImg != None) image(mouseImg, 0, 0);
-		return surface;
-	}
-	
-	public Point updateMouseCursor()
-	{
-		return updateTile(mousePt, createMouseSurface(world.isOccupied(viewportToWorld(mousePt))));
-	}
-	
-	public void mouseMove(Point newMousePt)
-	{
-		List<Rectangle> rects = new ArrayList<Point>();
-		rects.add(updateTile(mousePt, getTileImage(mousePt)));
-		//Work on changing from pygame
-		if (viewport.collidepoint(newMousePt.getXCoord() + viewport.getX(), newMousePt.getYCoord() + viewport.getY())) mousePt = newMousePt;
-		rects.add(updateMouseCursor());
-		
-		pygame.display.update(rects);
-	}
-	*/
 }
