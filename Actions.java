@@ -357,6 +357,7 @@ public class Actions
 				{
 					cur = cur.getCameFrom();
 				}
+				WorldView.drawPath(closedSet, cur, position);
 				return cur.getPos();
 			}
 			
@@ -371,7 +372,9 @@ public class Actions
 					continue;
 				
 				if (!(openSet.contains(neighbor)))
+				{
 					openSet.add(neighbor);
+				}
 			}
 		}
 		return position;

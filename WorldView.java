@@ -124,6 +124,31 @@ public class WorldView extends PApplet
 		return Math.min(high, Math.max(v, low));
 	}
 	
+	public void drawPath(List<PathObj> closedSet, PathObj goal, Point pt)
+	{
+		boolean selected = mouseOver(pt);
+		PathObj cur = goal;
+		if (selected)
+		{
+			for (PathObj each : closedSet)
+			{
+				fill(15, 15, 15, (float)0.35);
+				rect(cur.getPos().getXCoord(), cur.getPos().getYCoord(), 25, 25);
+			}
+			while (cur.getCameFrom() != null)
+			{
+				fill(215, 15, 15);
+				rect(cur.getPos().getXCoord(), cur.getPos().getYCoord(), 16, 16);
+				cur = cur.getCameFrom();
+			}
+		}
+	}
+	
+	public boolean mouseOver(Point pt)
+	{
+		return ((mouseX < pt.getXCoord() * 32 && mouseX > pt.getXCoord()) && (mouseY < pt.getYCoord() * 32 && mouseY > pt.getYCoord()));
+	}
+	
 	
 	public static void main(String[] arg)
 	{
