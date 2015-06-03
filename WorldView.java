@@ -4,6 +4,9 @@ import processing.core.*;
 
 public class WorldView extends PApplet
 {
+	private static final int SPACE = 32;
+	private static final int F = 70;
+	
 	private int viewCols = 20;
 	private int viewRows = 15;
 	
@@ -18,6 +21,10 @@ public class WorldView extends PApplet
 	private Rectangle viewport;
 	
 	private WorldModel world;
+	
+	private boolean paused = false;
+	private int lastTime = 0;
+	private int offset = 0;
 	
 	public void setup()
 	{
@@ -46,13 +53,43 @@ public class WorldView extends PApplet
 			case RIGHT:
 				this.updateView(1, 0);
 				break;
+			case SPACE:
+				this.paused = !this.paused;
+				break;
+			case F:
+				if (!this.paused)
+					this.offset -= 100;
+				break;
+		}
+	}
+	
+	public void mousePressed()
+	{
+		Entity occ = this.world.getTileOccupant(this.mousePoint());
+		if (occ != null)
+		{
+			Class target = (occ instanceof Miner) ? (((Miner)occ).isFull() ? Blacksmith.class : Ore.class) : ((occ instanceof OreBlob) ? Vein.class : null);
+			if (target != null)
+			{
+				Entity nearest = world.findNearest(occ.getPosition(), Vein.class);
+				if (nearest != null)
+					((Actor)occ).buildPath(this.world, nearest.getPosition());
+			}
 		}
 	}
 	
 	public void draw()
 	{
-		long time = System.currentTimeMillis();
-		this.world.updateOnTime(time);
+		int time = millis();
+		if (this.paused)
+		{
+			offset += time - this.lastTime;
+		}
+		else
+		{
+			this.world.updateOnTime(time - this.offset);
+		}
+		this.lastTime = time;
 		this.updateView();
 	}
 	
