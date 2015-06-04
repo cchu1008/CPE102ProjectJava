@@ -73,11 +73,33 @@ public class Actions
 		action[0] = (long currentTicks) ->
 		{
 			entity.removePendingAction(action[0]);
-			Entity blob = createBlob(world, entity.getName() + " -- blob", entity.getPosition(), entity.getActionRate() / BLOB_RATE_SCALE, currentTicks, imageStore);
+			Entity blob = createBlob(world, entity.getPosition(), entity.getActionRate() / BLOB_RATE_SCALE, currentTicks, imageStore);
 			
 			removeEntity(world, entity);
 			world.addEntity(blob);
 		};
+		return action[0];
+	}
+	
+	public static LongConsumer createBirdieAction(WorldModel world, Map<String, List<PImage>> imageStore, Birdie bird)
+	{
+		LongConsumer[] action = { null };
+		action[0] = (long currentTicks) ->
+		{
+			bird.removePendingAction(action[0]);
+			
+			Point pos = bird.getPosition();
+			OreBlob target = (OreBlob)world.findNearest(pos, OreBlob.class);
+			
+			boolean moved = birdieToBlob(world, bird, target);
+			
+			if (moved && RANDOMIZER.nextInt(5) == 0 && !world.isOccupied(pos))
+			{
+				Ore oreo = createOre(world, pos, currentTicks, imageStore);
+				world.addEntity(oreo);
+			}
+			scheduleAction(world, bird, createBirdieAction(world, imageStore, bird), currentTicks + (long)bird.getActionRate());
+		}
 		return action[0];
 	}
 	
@@ -142,7 +164,15 @@ public class Actions
 	
 	/* Creating the entities */
 	
-	public static OreBlob createBlob(WorldModel world, String name, Point pt, int rate, long ticks, Map<String, List<PImage>> imageStore)
+	public static Birdie createBirdie(WorldModel world, Point pt, long ticks, Map<String, List<PImage>> imageStore)
+	{
+		Birdie bird = new Birdie(pt, imageStore, RANDOMIZER.nextInt(100) + 300, 75);
+		scheduleBirdie(world, bird, ticks, imageStore);
+		
+		return bird;
+	}
+	
+	public static OreBlob createBlob(WorldModel world, Point pt, int rate, long ticks, Map<String, List<PImage>> imageStore)
 	{
 		OreBlob blob = new OreBlob(pt, imageStore.get("blob"), rate, (RANDOMIZER.nextInt(BLOB_ANIMATION_MAX - BLOB_ANIMATION_MIN) + BLOB_ANIMATION_MIN) * BLOB_ANIMATION_RATE_SCALE);
 		
@@ -167,7 +197,7 @@ public class Actions
 		return quake;
 	}
 	
-	public static Vein createVein(WorldModel world, String name, Point pt, long ticks, Map<String, List<PImage>> imageStore)
+	public static Vein createVein(WorldModel world, Point pt, long ticks, Map<String, List<PImage>> imageStore)
 	{
 		Vein vein = new Vein(pt, imageStore.get("vein").get(0), RANDOMIZER.nextInt(VEIN_RATE_MAX - VEIN_RATE_MIN) + VEIN_RATE_MIN, 1);
 		scheduleVein(world, vein, ticks, imageStore);
@@ -177,6 +207,12 @@ public class Actions
 	
 	
 	/* Scheduling the entities */
+	
+	public static void scheduleBirdie(WorldModel world, Birdie bird, long ticks, Map<String, List<PImage>> imageStore)
+	{
+		scheduleAction(world, bird, createBirdieAction(world, imageStore, bird), ticks + (long)bird.getActionRate());
+		scheduleAnimation(world, bird);
+	}
 	
 	public static void scheduleBlob(WorldModel world, OreBlob blob, long ticks, Map<String, List<PImage>> imageStore)
 	{
@@ -248,6 +284,25 @@ public class Actions
 		}
 	}
 	
+	private static boolean birdieToBlob(WorldModel world, Birdie bird, OreBlob blobby)
+	{
+		if (blobby == null) return;
+		Point start = bird.getPosition();
+		Point finish = blobby.getPosition();
+		
+		if (adjacent(start, finish))
+		{
+			removeEntity(world, (Actor)blobby);
+		}
+		else
+		{
+			Point nextPoint = bird.nextPosition();
+			world.moveEntity(bird, nextPoint);
+		}
+		bird.buildPath(world, finish);
+		return !bird.getPosition().equals(start);
+	}
+	
 	private static void minerToTarget(WorldModel world, Miner miner, Entity target)
 	{
 		if (target == null) return;
@@ -273,6 +328,7 @@ public class Actions
 		}
 		miner.buildPath(world, finish);
 	}
+	
 	
 	private static Point findOpenAround(WorldModel world, Point pos, int resDist)
 	{

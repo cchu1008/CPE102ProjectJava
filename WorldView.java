@@ -16,8 +16,6 @@ public class WorldView extends PApplet
 	private int numCols = 40;
 	private int numRows = 30;
 	
-	private Map<String, List<PImage>> imageList;
-	
 	private Rectangle viewport;
 	
 	private WorldModel world;
@@ -30,7 +28,7 @@ public class WorldView extends PApplet
 	{
 		this.viewport = new Rectangle(0, 0, this.viewCols, this.viewRows);
 		
-		this.imageList = ImageStore.loadImages("imagelist", this.tileWidth, this.tileHeight);
+		Map<String, List<PImage>> imageList = ImageStore.loadImages("imagelist", this.tileWidth, this.tileHeight);
 		this.world = new WorldModel(this.numCols, this.numRows, new Background("default", this.imageList.get("grass").get(0)), this);
 		SaveLoad.loadWorld(world, imageList, "gaia.sav", true);
 		

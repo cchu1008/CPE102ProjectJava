@@ -32,11 +32,11 @@ quake images/quake5.bmp 255 255 255 0
 quake images/quake6.bmp 255 255 255 0
 rocks images/rock.bmp
 vein images/vein.bmp
-wyvern images/wyvern1.bmp 255 255 255 0
-wyvern images/wyvern2.bmp 255 255 255 0
-wyvern images/wyvern3.bmp 255 255 255 0
-wyvern images/wyvern4.bmp 255 255 255 0
-wyvern images/wyvern5.bmp 255 255 255 0
-wyvern images/wyvern6.bmp 255 255 255 0
-wyvern images/wyvern7.bmp 255 255 255 0
-wyvern images/wyvern8.bmp 255 255 255 0
+birdie images/wyvern1.bmp 255 255 255 0
+birdie images/wyvern2.bmp 255 255 255 0
+birdie images/wyvern3.bmp 255 255 255 0
+birdie images/wyvern4.bmp 255 255 255 0
+birdie images/wyvern5.bmp 255 255 255 0
+birdie images/wyvern6.bmp 255 255 255 0
+birdie images/wyvern7.bmp 255 255 255 0
+birdie images/wyvern8.bmp 255 255 255 0

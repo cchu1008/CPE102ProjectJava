@@ -1,9 +1,12 @@
 import processing.core.*;
+import java.util.List;
 
 public class Birdie extends Animated
 {
-	public Birdie(String name, Point position, List<PImage> imageList, int actRate, int animRate)
+	public static final String ID_KEY = "birdie";
+	
+	public Birdie(Point position, List<PImage> imageList, int actRate, int animRate)
 	{
-		super(name, position, imageList, actRate, animRate);
+		super(ID_KEY, position, imageList, actRate, animRate);
 	}
 }
