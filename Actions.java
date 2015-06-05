@@ -108,8 +108,29 @@ public class Actions
 		LongConsumer[] action = { null };
 		action[0] = (long currentTicks) ->
 		{
-			System.out.println("Running");
 			bird.removePendingAction(action[0]);
+			
+			for (int dx = -1; dx <= 1; dx++)
+			{
+				for (int dy = -1; dy <= 1; dy++)
+				{
+					Point p = bird.getPosition().translate(dx, dy);
+					if (world.withinBounds(p))
+					{
+						Background b = world.getBackground(p);
+						switch (b.getName())
+						{
+							case "grass":
+							case "default":
+								world.setBackground(p, new Background("deadgrass", imageStore.get("deadgrass").get(0)));
+								break;
+							case "inverted_grass":
+								world.setBackground(p, new Background("inverted_deadgrass", WorldView.invertImage(imageStore.get("deadgrass").get(0))));
+								break;
+						}
+					}
+				}
+			}
 			
 			Point pos = bird.getPosition();
 			Miner target = (Miner)world.findNearest(pos, Miner.class);
@@ -142,6 +163,7 @@ public class Actions
 					world.addEntity(oreo);
 				}
 			}
+			
 			scheduleAction(world, bird, createBirdieAction(world, imageStore, bird), currentTicks + (long)bird.getActionRate());
 		};
 		return action[0];
