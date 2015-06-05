@@ -81,6 +81,25 @@ public class Actions
 		return action[0];
 	}
 	
+	public static LongConsumer createZombieAction(WorldModel world, Map<String, List<PImage>> imageStore, Zombie zom)
+	{
+		LongConsumer[] action = { null };
+		action[0] = (long currentTicks) ->
+		{
+			zom.removePendingAction(action[0]);
+			
+			Point pos = zom.getPosition();
+			OreBlob target = (OreBlob)world.findNearest(pos, OreBlob.class);
+			
+			Point found = zombieToBlob(world, zom, target);
+			
+			if (found != null)
+			{
+				
+			}
+		};
+	}
+	
 	public static LongConsumer createBirdieAction(WorldModel world, Map<String, List<PImage>> imageStore, Birdie bird)
 	{
 		LongConsumer[] action = { null };
@@ -89,14 +108,14 @@ public class Actions
 			bird.removePendingAction(action[0]);
 			
 			Point pos = bird.getPosition();
-			OreBlob target = (OreBlob)world.findNearest(pos, OreBlob.class);
+			Miner target = (Miner)world.findNearest(pos, Miner.class);
 			
-			Point found = birdieToBlob(world, bird, target);
+			Point found = birdieToMiner(world, bird, target);
 			
 			if (found != null)
 			{
-				Vein veiny = createVein(world, found, currentTicks, imageStore);
-				world.addEntity(veiny);
+				Zombie zom = createZombie(world, found, currentTicks, imageStore);
+				world.addEntity(zom);
 			}
 			
 			if (!bird.getPosition().equals(pos) && RANDOMIZER.nextInt(100) == 0 && !world.isOccupied(pos))
@@ -170,6 +189,14 @@ public class Actions
 	
 	/* Creating the entities */
 	
+	public static Zombie createZombie(WorldModel world, Point pt, int rate, int animRate, long ticks, Map<String, List<PImage>> imageStore)
+	{
+		Zombie zom = new Zombie(pt, imageStore.get(Zombie.ID_KEY), rate, animRate);
+		scheduleZombie(world, zom, ticks, imageStore);
+		
+		return zom;
+	}
+	
 	public static Birdie createBirdie(WorldModel world, Point pt, long ticks, Map<String, List<PImage>> imageStore)
 	{
 		Birdie bird = new Birdie(pt, imageStore.get(Birdie.ID_KEY), RANDOMIZER.nextInt(100) + 300, RANDOMIZER.nextInt(45) + 65);
@@ -213,6 +240,12 @@ public class Actions
 	
 	
 	/* Scheduling the entities */
+	
+	public static void scheduleZombie(WorldModel world, Zombie zom, long ticks, Map<String, List<PImage>> imageStore)
+	{
+		scheduleAction(world, zom, createZombieAction(world, imageStore, zom), ticks + (long)zom.getActionRate());
+		scheduleAnimation(world, zom);
+	}
 	
 	public static void scheduleBirdie(WorldModel world, Birdie bird, long ticks, Map<String, List<PImage>> imageStore)
 	{
@@ -289,16 +322,16 @@ public class Actions
 		}
 	}
 	
-	private static Point birdieToBlob(WorldModel world, Birdie bird, OreBlob blobby)
+	private static Point birdieToMiner(WorldModel world, Birdie bird, Miner mack)
 	{
-		if (blobby == null) return null;
+		if (mack == null) return null;
 		Point start = bird.getPosition();
-		Point finish = blobby.getPosition();
+		Point finish = mack.getPosition();
 		
 		bird.buildPath(world, finish);
 		if (start.equals(finish))
 		{
-			removeEntity(world, (Actor)blobby);
+			removeEntity(world, (Actor)mack);
 			return finish;
 		}
 		else
