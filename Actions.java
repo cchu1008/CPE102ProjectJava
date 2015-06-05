@@ -91,13 +91,11 @@ public class Actions
 			Point pos = zom.getPosition();
 			OreBlob target = (OreBlob)world.findNearest(pos, OreBlob.class);
 			
-			Point found = zombieToBlob(world, zom, target);
+			zombieToBlob(world, zom, target);
 			
-			if (found != null)
-			{
-				
-			}
+			scheduleAction(world, zom, createZombieAction(world, imageStore, zom), currentTicks + (long)zom.getActionRate());
 		};
+		return action[0];
 	}
 	
 	public static LongConsumer createBirdieAction(WorldModel world, Map<String, List<PImage>> imageStore, Birdie bird)
@@ -114,7 +112,7 @@ public class Actions
 			
 			if (found != null)
 			{
-				Zombie zom = createZombie(world, found, currentTicks, imageStore);
+				Zombie zom = createZombie(world, found, target.getActionRate() / 2, target.getAnimationRate(), currentTicks, imageStore);
 				world.addEntity(zom);
 			}
 			
@@ -123,6 +121,11 @@ public class Actions
 				Ore oreo = createOre(world, pos, currentTicks, imageStore);
 				world.addEntity(oreo);
 			}
+			else if (bird.getPosition().equals(pos))
+			{
+				bird.buildPath(world, new Point(RANDOMIZER.nextInt(50) + 200, RANDOMIZER.nextInt(50) - 200));
+			}
+			
 			scheduleAction(world, bird, createBirdieAction(world, imageStore, bird), currentTicks + (long)bird.getActionRate());
 		};
 		return action[0];
@@ -341,6 +344,29 @@ public class Actions
 				world.moveEntity(bird, nextPoint);
 		}
 		return null;
+	}
+	
+	private static void zombieToBlob(WorldModel world, Zombie zom, OreBlob blobby)
+	{
+		if (blobby == null)
+			return;
+		else
+		{
+			Point start = zom.getPosition();
+			Point finish = blobby.getPosition();
+			
+			zom.buildPath(world, finish);
+			if (start.equals(finish))
+			{
+				removeEntity(world, (Actor)blobby);
+			}
+			else
+			{
+				Point nextPoint = zom.nextPosition();
+				if (!world.isOccupied(nextPoint))
+					world.moveEntity(zom, nextPoint);
+			}
+		}
 	}
 	
 	private static void minerToTarget(WorldModel world, Miner miner, Entity target)
