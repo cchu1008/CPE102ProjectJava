@@ -29,6 +29,11 @@ public class Point
 		return false;
 	}
 	
+	public Point translate(int dx, int dy)
+	{
+		return new Point(this.xCoord + dx, this.yCoord + dy);
+	}
+	
 	public String toString()
 	{
 		return "" + this.xCoord + ", " + this.yCoord;

@@ -113,25 +113,33 @@ public class Actions
 			Point pos = bird.getPosition();
 			Miner target = (Miner)world.findNearest(pos, Miner.class);
 			
-			Point found = birdieToMiner(world, bird, target);
+			Point found;
 			
-			if (found != null)
+			if (target == null)
 			{
-				Zombie zom = createZombie(world, found, target.getActionRate() / 2, target.getAnimationRate(), currentTicks, imageStore);
-				world.addEntity(zom);
+				found = birdieToSpawn(world, bird);
+				if (found != null)
+				{
+					Quake quakie = createQuake(world, found, currentTicks, imageStore);
+					world.addEntity(quakie);
+				}
 			}
-			
-			if (!bird.getPosition().equals(pos) && RANDOMIZER.nextInt(100) == 0 && !world.isOccupied(pos))
+			else
 			{
-				Ore oreo = createOre(world, pos, currentTicks, imageStore);
-				world.addEntity(oreo);
+				found = birdieToMiner(world, bird, target);
+				
+				if (found != null)
+				{
+					Zombie zom = createZombie(world, found, target.getActionRate() / 4, target.getAnimationRate(), currentTicks, imageStore);
+					world.addEntity(zom);
+				}
+				
+				if (!bird.getPosition().equals(pos) && RANDOMIZER.nextInt(100) == 0 && !world.isOccupied(pos))
+				{
+					Ore oreo = createOre(world, pos, currentTicks, imageStore);
+					world.addEntity(oreo);
+				}
 			}
-			/*
-			else if (bird.getPosition().equals(pos))
-			{
-				bird.buildPath(world, new Point(RANDOMIZER.nextInt(50) + 200, RANDOMIZER.nextInt(50) - 200));
-			}
-			*/
 			scheduleAction(world, bird, createBirdieAction(world, imageStore, bird), currentTicks + (long)bird.getActionRate());
 		};
 		return action[0];
@@ -341,6 +349,26 @@ public class Actions
 		if (start.equals(finish))
 		{
 			removeEntity(world, (Actor)mack);
+			return finish;
+		}
+		else
+		{
+			Point nextPoint = bird.nextPosition();
+			if (!world.isBirdieAt(nextPoint))
+				world.moveEntity(bird, nextPoint);
+		}
+		return null;
+	}
+	
+	private static Point birdieToSpawn(WorldModel world, Birdie bird)
+	{
+		Point start = bird.getPosition();
+		Point finish = bird.getSpawnPoint();
+		bird.buildPath(world, finish);
+		
+		if (start.equals(finish))
+		{
+			removeEntity(world, (Actor)bird);
 			return finish;
 		}
 		else

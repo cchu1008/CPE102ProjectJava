@@ -108,6 +108,23 @@ public class WorldView extends PApplet
 	
 	public void mousePressed()
 	{
+		Point mpt = this.mousePoint();
+		
+		Point[] spawns = new Point[]{
+			mpt.translate(-1, -1),
+			mpt.translate(1, -1),
+			mpt.translate(1, 1),
+			mpt.translate(-1, 1)
+		};
+		for (Point spawn : spawns)
+		{
+			if (this.world.withinBounds(spawn) && !this.world.isBirdieAt(spawn))
+			{
+				Birdie bird = Actions.createBirdie(this.world, spawn, this.lastTime - this.offset, this.imageList);
+				this.world.addEntity(bird);
+			}
+		}
+		/*
 		for (int dx = 0; dx < 3; dx++)
 		{
 			for (Point p : new Point[]{new Point(dx, 0), new Point(this.numCols - 1 - dx, 0), new Point(dx, this.numRows - 1), new Point(this.numCols - 1 - dx, this.numRows - 1)})
@@ -130,7 +147,6 @@ public class WorldView extends PApplet
 				}
 			}
 		}
-		/*
 		Entity occ = this.world.getTileOccupant(this.mousePoint());
 		if (occ != null)
 		{
