@@ -296,7 +296,7 @@ public class Actions
 		Point finish = blobby.getPosition();
 		
 		bird.buildPath(world, finish);
-		if (adjacent(start, finish))
+		if (start.equals(finish))
 		{
 			removeEntity(world, (Actor)blobby);
 			return finish;
