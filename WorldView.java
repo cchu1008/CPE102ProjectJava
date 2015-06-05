@@ -111,9 +111,9 @@ public class WorldView extends PApplet
 		Point mpt = this.mousePoint();
 		
 		Point[] spawns = new Point[]{
-			mpt.translate(-1, -1),
-			mpt.translate(1, -1),
-			mpt.translate(1, 1),
+			//mpt.translate(-1, -1),
+			//mpt.translate(1, -1),
+			//mpt.translate(1, 1),
 			mpt.translate(-1, 1)
 		};
 		for (Point spawn : spawns)

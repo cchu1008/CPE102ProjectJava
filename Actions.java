@@ -108,6 +108,7 @@ public class Actions
 		LongConsumer[] action = { null };
 		action[0] = (long currentTicks) ->
 		{
+			System.out.println("Running");
 			bird.removePendingAction(action[0]);
 			
 			Point pos = bird.getPosition();
@@ -130,7 +131,7 @@ public class Actions
 				
 				if (found != null)
 				{
-					Zombie zom = createZombie(world, found, target.getActionRate() / 4, target.getAnimationRate(), currentTicks, imageStore);
+					Zombie zom = createZombie(world, found, target.getActionRate() * 2, target.getAnimationRate() * 2, currentTicks, imageStore);
 					world.addEntity(zom);
 				}
 				
