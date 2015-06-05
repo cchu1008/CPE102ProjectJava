@@ -91,15 +91,21 @@ public class Actions
 			Point pos = bird.getPosition();
 			OreBlob target = (OreBlob)world.findNearest(pos, OreBlob.class);
 			
-			boolean moved = birdieToBlob(world, bird, target);
+			Point found = birdieToBlob(world, bird, target);
 			
-			if (moved && RANDOMIZER.nextInt(5) == 0 && !world.isOccupied(pos))
+			if (found != null)
+			{
+				Vein veiny = createVein(world, found, currentTicks, imageStore);
+				world.addEntity(veiny);
+			}
+			
+			if (!bird.getPosition().equals(pos) && RANDOMIZER.nextInt(100) == 0 && !world.isOccupied(pos))
 			{
 				Ore oreo = createOre(world, pos, currentTicks, imageStore);
 				world.addEntity(oreo);
 			}
 			scheduleAction(world, bird, createBirdieAction(world, imageStore, bird), currentTicks + (long)bird.getActionRate());
-		}
+		};
 		return action[0];
 	}
 	
@@ -166,7 +172,7 @@ public class Actions
 	
 	public static Birdie createBirdie(WorldModel world, Point pt, long ticks, Map<String, List<PImage>> imageStore)
 	{
-		Birdie bird = new Birdie(pt, imageStore, RANDOMIZER.nextInt(100) + 300, 75);
+		Birdie bird = new Birdie(pt, imageStore.get(Birdie.ID_KEY), RANDOMIZER.nextInt(100) + 300, RANDOMIZER.nextInt(45) + 65);
 		scheduleBirdie(world, bird, ticks, imageStore);
 		
 		return bird;
@@ -174,7 +180,7 @@ public class Actions
 	
 	public static OreBlob createBlob(WorldModel world, Point pt, int rate, long ticks, Map<String, List<PImage>> imageStore)
 	{
-		OreBlob blob = new OreBlob(pt, imageStore.get("blob"), rate, (RANDOMIZER.nextInt(BLOB_ANIMATION_MAX - BLOB_ANIMATION_MIN) + BLOB_ANIMATION_MIN) * BLOB_ANIMATION_RATE_SCALE);
+		OreBlob blob = new OreBlob(pt, imageStore.get(OreBlob.ID_KEY), rate, (RANDOMIZER.nextInt(BLOB_ANIMATION_MAX - BLOB_ANIMATION_MIN) + BLOB_ANIMATION_MIN) * BLOB_ANIMATION_RATE_SCALE);
 		
 		scheduleBlob(world, blob, ticks, imageStore);
 		
@@ -183,7 +189,7 @@ public class Actions
 	
 	public static Ore createOre(WorldModel world, Point pt, long ticks, Map<String, List<PImage>> imageStore)
 	{
-		Ore ore = new Ore(pt, imageStore.get("ore").get(0), (RANDOMIZER.nextInt(ORE_CORRUPT_MAX - ORE_CORRUPT_MIN) + ORE_CORRUPT_MIN));
+		Ore ore = new Ore(pt, imageStore.get(Ore.ID_KEY).get(0), (RANDOMIZER.nextInt(ORE_CORRUPT_MAX - ORE_CORRUPT_MIN) + ORE_CORRUPT_MIN));
 		scheduleOre(world, ore, ticks, imageStore);
 		
 		return ore;
@@ -191,7 +197,7 @@ public class Actions
 	
 	public static Quake createQuake(WorldModel world, Point pt, long ticks, Map<String, List<PImage>> imageStore)
 	{
-		Quake quake = new Quake(pt, imageStore.get("quake"));
+		Quake quake = new Quake(pt, imageStore.get(Quake.ID_KEY));
 		scheduleQuake(world, quake, ticks);
 		
 		return quake;
@@ -199,7 +205,7 @@ public class Actions
 	
 	public static Vein createVein(WorldModel world, Point pt, long ticks, Map<String, List<PImage>> imageStore)
 	{
-		Vein vein = new Vein(pt, imageStore.get("vein").get(0), RANDOMIZER.nextInt(VEIN_RATE_MAX - VEIN_RATE_MIN) + VEIN_RATE_MIN, 1);
+		Vein vein = new Vein(pt, imageStore.get(Vein.ID_KEY).get(0), RANDOMIZER.nextInt(VEIN_RATE_MAX - VEIN_RATE_MIN) + VEIN_RATE_MIN, 1);
 		scheduleVein(world, vein, ticks, imageStore);
 		
 		return vein;
@@ -266,16 +272,15 @@ public class Actions
 		Point start = blob.getPosition();
 		Point finish = vein.getPosition();
 		
+		blob.buildPath(world, finish);
 		if (adjacent(start, finish))
 		{
 			removeEntity(world, vein);
-			blob.buildPath(world, finish);
 			return finish;
 		}
 		else
 		{
 			Point newPt = blob.nextPosition();
-			blob.buildPath(world, finish);
 			Entity oldEntity = world.getTileOccupant(newPt);
 			if (oldEntity instanceof Ore)
 				removeEntity(world, (Actor)oldEntity);
@@ -284,23 +289,25 @@ public class Actions
 		}
 	}
 	
-	private static boolean birdieToBlob(WorldModel world, Birdie bird, OreBlob blobby)
+	private static Point birdieToBlob(WorldModel world, Birdie bird, OreBlob blobby)
 	{
-		if (blobby == null) return;
+		if (blobby == null) return null;
 		Point start = bird.getPosition();
 		Point finish = blobby.getPosition();
 		
+		bird.buildPath(world, finish);
 		if (adjacent(start, finish))
 		{
 			removeEntity(world, (Actor)blobby);
+			return finish;
 		}
 		else
 		{
 			Point nextPoint = bird.nextPosition();
-			world.moveEntity(bird, nextPoint);
+			if (!world.isBirdieAt(nextPoint))
+				world.moveEntity(bird, nextPoint);
 		}
-		bird.buildPath(world, finish);
-		return !bird.getPosition().equals(start);
+		return null;
 	}
 	
 	private static void minerToTarget(WorldModel world, Miner miner, Entity target)
@@ -309,6 +316,7 @@ public class Actions
 		Point start = miner.getPosition();
 		Point finish = target.getPosition();
 		
+		miner.buildPath(world, finish);
 		if (adjacent(start, finish))
 		{
 			if (target instanceof Blacksmith)
@@ -326,7 +334,6 @@ public class Actions
 			Point nextPoint = miner.nextPosition();
 			world.moveEntity(miner, nextPoint);
 		}
-		miner.buildPath(world, finish);
 	}
 	
 	

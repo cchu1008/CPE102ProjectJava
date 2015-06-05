@@ -1,20 +1,30 @@
 import java.util.Map;
 import java.util.List;
+import java.util.LinkedList;
 import processing.core.*;
 
 public class WorldView extends PApplet
 {
 	private static final int SPACE = 32;
+	private static final int B = 66;
+	private static final int C = 67;
 	private static final int F = 70;
+	private static final int O = 79;
+	private static final int S = 83;
+	private static final int V = 86;
+	private static final int X = 88;
+	private static final int Z = 90;
 	
-	private int viewCols = 20;
-	private int viewRows = 15;
+	private int viewCols = 40;//20;
+	private int viewRows = 20;//15;
 	
 	private int tileWidth = 32;
 	private int tileHeight = 32;
 	
 	private int numCols = 40;
 	private int numRows = 30;
+	
+	private Map<String, List<PImage>> imageList;
 	
 	private Rectangle viewport;
 	
@@ -28,7 +38,7 @@ public class WorldView extends PApplet
 	{
 		this.viewport = new Rectangle(0, 0, this.viewCols, this.viewRows);
 		
-		Map<String, List<PImage>> imageList = ImageStore.loadImages("imagelist", this.tileWidth, this.tileHeight);
+		this.imageList = ImageStore.loadImages("imagelist", this.tileWidth, this.tileHeight);
 		this.world = new WorldModel(this.numCols, this.numRows, new Background("default", this.imageList.get("grass").get(0)), this);
 		SaveLoad.loadWorld(world, imageList, "gaia.sav", true);
 		
@@ -37,6 +47,7 @@ public class WorldView extends PApplet
 	
 	public void keyPressed()
 	{
+		Point mpt = this.mousePoint();
 		switch (this.keyCode)
 		{
 			case UP:
@@ -58,11 +69,68 @@ public class WorldView extends PApplet
 				if (!this.paused)
 					this.offset -= 100;
 				break;
+			case Z:
+				System.out.println(this.world.isOccupied(mpt));
+				break;
+			case S:
+				if (this.paused)
+				{
+					this.offset -= 50;
+					this.world.updateOnTime(millis() - this.offset);
+				}
+				break;
+			case X:
+				System.out.println(this.world.getAllEntitiesAt(mpt).size());
+				break;
+			case B:
+				if (!this.world.isOccupied(mpt))
+				{
+					OreBlob blobby = Actions.createBlob(this.world, mpt, 10000, this.lastTime - this.offset, this.imageList);
+					this.world.addEntity(blobby);
+				}
+				break;
+			case V:
+				if (!this.world.isOccupied(mpt))
+				{
+					Vein veiny = Actions.createVein(this.world, mpt, this.lastTime - this.offset, this.imageList);
+					this.world.addEntity(veiny);
+				}
+				break;
+			case O:
+				if (!this.world.isOccupied(mpt))
+				{
+					Ore oreby = Actions.createOre(this.world, mpt, this.lastTime - this.offset, this.imageList);
+					this.world.addEntity(oreby);
+				}
+				break;
 		}
 	}
 	
 	public void mousePressed()
 	{
+		for (int dx = 0; dx < 3; dx++)
+		{
+			for (Point p : new Point[]{new Point(dx, 0), new Point(this.numCols - 1 - dx, 0), new Point(dx, this.numRows - 1), new Point(this.numCols - 1 - dx, this.numRows - 1)})
+			{
+				if (!this.world.isOccupied(p))
+				{
+					Birdie bird = Actions.createBirdie(this.world, p, this.lastTime - this.offset, this.imageList);
+					this.world.addEntity(bird);
+				}
+			}
+		}
+		for (int dy = 1; dy < 3; dy++)
+		{
+			for (Point p : new Point[]{new Point(0, dy), new Point(this.numCols - 1, dy), new Point(0, this.numRows - 1 - dy), new Point(this.numCols - 1, this.numRows - 1 - dy)})
+			{
+				if (!this.world.isOccupied(p))
+				{
+					Birdie bird = Actions.createBirdie(this.world, p, this.lastTime - this.offset, this.imageList);
+					this.world.addEntity(bird);
+				}
+			}
+		}
+		/*
 		Entity occ = this.world.getTileOccupant(this.mousePoint());
 		if (occ != null)
 		{
@@ -73,7 +141,7 @@ public class WorldView extends PApplet
 				if (nearest != null)
 					((Actor)occ).buildPath(this.world, nearest.getPosition());
 			}
-		}
+		}/* */
 	}
 	
 	public void draw()
@@ -81,7 +149,7 @@ public class WorldView extends PApplet
 		int time = millis();
 		if (this.paused)
 		{
-			offset += time - this.lastTime;
+			this.offset += time - this.lastTime;
 		}
 		else
 		{
@@ -106,7 +174,10 @@ public class WorldView extends PApplet
 	
 	public void drawEntities()
 	{
-		for (Entity entity: world.getEntities())
+		List<Entity> all = new LinkedList<Entity>();
+		all.addAll(this.world.getEntities());
+		all.addAll(this.world.getBirdies());
+		for (Entity entity : all)
 		{
 			Point position = entity.getPosition();
 			if (viewport.collidepoint(position.getXCoord(), position.getYCoord()))
@@ -120,24 +191,27 @@ public class WorldView extends PApplet
 	public void drawPath()
 	{
 		Point mpt = mousePoint();
-		Entity occ = this.world.getTileOccupant(mpt);
-		if (occ != null && (occ instanceof Miner || occ instanceof OreBlob))
+		List<Entity> entList = this.world.getAllEntitiesAt(mpt);
+		for (Entity occ : entList)
 		{
-			Actor actr = (Actor)occ;
-			rectMode(CENTER);
-			fill(15, 15, 15, 100);
-			for (PathObj each : actr.getClosedSet())
+			if (occ != null && (occ instanceof Miner || occ instanceof OreBlob || occ instanceof Birdie))
 			{
-				Point pos = worldToViewport(each.getPos());
-				rect((pos.getXCoord() * this.tileWidth) + (this.tileWidth / 2), (pos.getYCoord() * this.tileHeight) + (this.tileHeight / 2), 25, 25);
-			}
-			PathObj cur = actr.getTarget();
-			fill(215, 15, 15, 255);
-			while (cur != null)
-			{
-				Point pos = worldToViewport(cur.getPos());
-				rect((pos.getXCoord() * this.tileWidth) + (this.tileWidth / 2), (pos.getYCoord() * this.tileHeight) + (this.tileHeight / 2), 16, 16);
-				cur = cur.getCameFrom();
+				Actor actr = (Actor)occ;
+				rectMode(CENTER);
+				fill(15, 15, 15, 100);
+				for (PathObj each : actr.getClosedSet())
+				{
+					Point pos = worldToViewport(each.getPos());
+					rect((pos.getXCoord() * this.tileWidth) + (this.tileWidth / 2), (pos.getYCoord() * this.tileHeight) + (this.tileHeight / 2), 25, 25);
+				}
+				PathObj cur = actr.getTarget();
+				fill(215, 15, 15, 255);
+				while (cur != null)
+				{
+					Point pos = worldToViewport(cur.getPos());
+					rect((pos.getXCoord() * this.tileWidth) + (this.tileWidth / 2), (pos.getYCoord() * this.tileHeight) + (this.tileHeight / 2), 16, 16);
+					cur = cur.getCameFrom();
+				}
 			}
 		}
 	}

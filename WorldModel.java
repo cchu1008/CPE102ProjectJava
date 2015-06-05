@@ -12,6 +12,7 @@ public class WorldModel
 	private int height;
 	private Entity[][] occupancies;
 	private List<Entity> entities;
+	private List<Birdie> birdies;
 	private Background[][] backgrounds;
 	private OrderedList actionQueue;
 	private WorldView view;
@@ -20,8 +21,8 @@ public class WorldModel
 	{
 		this.width = width;
 		this.height = height;
-		this.occupancies = new Entity[width][height];
-		this.entities = new ArrayList<Entity>();
+		this.entities = new LinkedList<Entity>();
+		this.birdies = new LinkedList<Birdie>();
 		this.backgrounds = new Background[width][height];
 		this.actionQueue = new OrderedList();
 		this.view = view;
@@ -55,26 +56,68 @@ public class WorldModel
 		return this.entities;
 	}
 	
+	public List<Birdie> getBirdies()
+	{
+		return this.birdies;
+	}
+	
 	public boolean isOccupied(Point position)
 	{
-		return this.withinBounds(position) && (this.getTileOccupant(position) != null);
+		if (this.withinBounds(position))
+		{
+			for (Entity ent : this.entities)
+			{
+				if (!(ent instanceof Birdie) && ent.getPosition().equals(position))
+				{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	public Entity getTileOccupant(Point p)
 	{
-		if (this.withinBounds(p))
+		for (Entity ent : this.entities)
 		{
-			return this.occupancies[p.getXCoord()][p.getYCoord()];
+			if (ent.getPosition().equals(p))
+			{
+				return ent;
+			}
 		}
 		return null;
 	}
 	
-	public void setTileOccupant(Point p, Entity ent)
+	public List<Entity> getAllEntitiesAt(Point p)
 	{
-		if (this.withinBounds(p))
+		List<Entity> entList = new LinkedList<Entity>();
+		for (Entity ent : this.entities)
 		{
-			this.occupancies[p.getXCoord()][p.getYCoord()] = ent;
+			if (ent.getPosition().equals(p))
+			{
+				entList.add(ent);
+			}
 		}
+		for (Birdie bird : this.birdies)
+		{
+			if (bird.getPosition().equals(p))
+			{
+				entList.add(bird);
+			}
+		}
+		return entList;
+	}
+	
+	public boolean isBirdieAt(Point pos)
+	{
+		for (Birdie bird : this.birdies)
+		{
+			if (bird.getPosition().equals(pos))
+			{
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	public Background getBackground(Point p)
@@ -88,9 +131,10 @@ public class WorldModel
 	
 	public PImage getBackgroundImage(Point p)
 	{
-		if (this.withinBounds(p))
+		Background b = this.getBackground(p);
+		if (b != null)
 		{
-			return this.backgrounds[p.getXCoord()][p.getYCoord()].getImage();
+			return b.getImage();
 		}
 		return null;
 	}
@@ -120,43 +164,30 @@ public class WorldModel
 	
 	public void addEntity(Entity ent)
 	{
-		Point pos = ent.getPosition();
-		if (this.withinBounds(pos))
-		{
-			Entity old = this.getTileOccupant(pos);
-			if (old != null)
-			{
-				this.entities.remove(old);
-			}
-			this.setTileOccupant(pos, ent);
+		if (ent instanceof Birdie)
+			this.birdies.add((Birdie)ent);
+		else
 			this.entities.add(ent);
-		}
 	}
 	
 	public void moveEntity(Entity ent, Point newPoint)
 	{
-		Point pos = ent.getPosition();
-		if (this.withinBounds(newPoint) && this.getTileOccupant(pos) == ent)
-		{
-			this.setTileOccupant(pos, null);
-			this.setTileOccupant(newPoint, ent);
-			ent.setPosition(newPoint);
-		}
+		ent.setPosition(newPoint);
 	}
 	
 	public void removeEntity(Entity ent)
 	{
-		this.removeEntityAt(ent.getPosition());
+		if (ent instanceof Birdie)
+			this.birdies.remove((Birdie)ent);
+		else
+			this.entities.remove(ent);
 	}
 	
 	public void removeEntityAt(Point pos)
 	{
 		Entity old = this.getTileOccupant(pos);
-		if (this.withinBounds(pos) && old != null)
-		{
-			this.setTileOccupant(pos, null);
-			this.entities.remove(old);
-		}
+		if (old != null)
+			this.removeEntity(old);
 	}
 	
 	public void scheduleAction(LongConsumer action, long time)

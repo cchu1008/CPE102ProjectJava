@@ -8,8 +8,8 @@ public abstract class Actor extends Entity
 {
 	private int actionRate;
 	private List<LongConsumer> pendingActions = new LinkedList<LongConsumer>();
-	private List<PathObj> closedSet = new LinkedList<PathObj>();
-	private PathObj target = null;
+	protected List<PathObj> closedSet = new LinkedList<PathObj>();
+	protected PathObj target = null;
 	
 	protected Actor(String name, Point position, PImage img, int actRate)
 	{
@@ -58,13 +58,13 @@ public abstract class Actor extends Entity
 		return this.target;
 	}
 	
-	private static int sign(int x)
+	protected static int sign(int x)
 	{
 		if (x == 0) return 0;
 		return (x > 0) ? 1 : -1;
 	}
 	
-	private static PathObj findLowFScore(List<PathObj> open)
+	protected static PathObj findLowFScore(List<PathObj> open)
 	{
 		PathObj lowest = open.get(0);
 		for (PathObj pt : open)
@@ -77,7 +77,7 @@ public abstract class Actor extends Entity
 		return lowest;
 	}
 	
-	private static List<Point> getValidNeighbors(WorldModel world, PathObj current, Point destination)
+	protected static List<Point> getValidNeighbors(WorldModel world, PathObj current, Point destination)
 	{
 		Point pos = current.getPos();
 		List<Point> fin = new LinkedList<Point>();
@@ -100,7 +100,7 @@ public abstract class Actor extends Entity
 		return fin;
 	}
 	
-	private static int calculateH(Point beginning, Point end)
+	protected static int calculateH(Point beginning, Point end)
 	{
 		return (abs(beginning.getXCoord() - end.getXCoord()) + abs(beginning.getYCoord() - end.getYCoord()));
 	}
@@ -144,7 +144,7 @@ public abstract class Actor extends Entity
 			openSet.remove(cur);
 			closedSet.add(cur);
 			
-			List<Point> neighborNodes = getValidNeighbors(world, cur, destination);
+			List<Point> neighborNodes = this.getValidNeighbors(world, cur, destination);
 			for (Point node : neighborNodes)
 			{
 				PathObj neighbor = new PathObj(node, cur, cur.getGScore() + 1, calculateH(node, destination));
