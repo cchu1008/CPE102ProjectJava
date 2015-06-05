@@ -91,8 +91,13 @@ public class Actions
 			Point pos = zom.getPosition();
 			OreBlob target = (OreBlob)world.findNearest(pos, OreBlob.class);
 			
-			zombieToBlob(world, zom, target);
+			Point found = zombieToBlob(world, zom, target);
 			
+			if (found != null)
+			{
+				Quake quakie = createQuake(world, found, currentTicks, imageStore);
+				world.addEntity(quakie);
+			}
 			scheduleAction(world, zom, createZombieAction(world, imageStore, zom), currentTicks + (long)zom.getActionRate());
 		};
 		return action[0];
@@ -121,11 +126,12 @@ public class Actions
 				Ore oreo = createOre(world, pos, currentTicks, imageStore);
 				world.addEntity(oreo);
 			}
+			/*
 			else if (bird.getPosition().equals(pos))
 			{
 				bird.buildPath(world, new Point(RANDOMIZER.nextInt(50) + 200, RANDOMIZER.nextInt(50) - 200));
 			}
-			
+			*/
 			scheduleAction(world, bird, createBirdieAction(world, imageStore, bird), currentTicks + (long)bird.getActionRate());
 		};
 		return action[0];
@@ -346,27 +352,25 @@ public class Actions
 		return null;
 	}
 	
-	private static void zombieToBlob(WorldModel world, Zombie zom, OreBlob blobby)
+	private static Point zombieToBlob(WorldModel world, Zombie zom, OreBlob blobby)
 	{
-		if (blobby == null)
-			return;
+		if (blobby == null) return null;
+		Point start = zom.getPosition();
+		Point finish = blobby.getPosition();
+		
+		zom.buildPath(world, finish);
+		if (adjacent(start, finish))
+		{
+			removeEntity(world, (Actor)blobby);
+			return finish;
+		}
 		else
 		{
-			Point start = zom.getPosition();
-			Point finish = blobby.getPosition();
-			
-			zom.buildPath(world, finish);
-			if (start.equals(finish))
-			{
-				removeEntity(world, (Actor)blobby);
-			}
-			else
-			{
-				Point nextPoint = zom.nextPosition();
-				if (!world.isOccupied(nextPoint))
-					world.moveEntity(zom, nextPoint);
-			}
+			Point nextPoint = zom.nextPosition();
+			if (!world.isOccupied(nextPoint))
+				world.moveEntity(zom, nextPoint);
 		}
+		return null;
 	}
 	
 	private static void minerToTarget(WorldModel world, Miner miner, Entity target)

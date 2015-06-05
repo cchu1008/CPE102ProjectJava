@@ -194,7 +194,7 @@ public class WorldView extends PApplet
 		List<Entity> entList = this.world.getAllEntitiesAt(mpt);
 		for (Entity occ : entList)
 		{
-			if (occ != null && (occ instanceof Miner || occ instanceof OreBlob || occ instanceof Birdie))
+			if (occ != null && occ instanceof Actor)
 			{
 				Actor actr = (Actor)occ;
 				rectMode(CENTER);
