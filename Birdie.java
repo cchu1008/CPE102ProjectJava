@@ -11,7 +11,12 @@ public class Birdie extends Animated
 		super(ID_KEY, position, imageList, actRate, animRate);
 	}
 	
-	protected static List<Point> getValidNeighbors(WorldModel world, PathObj current, Point destination)
+	protected boolean isLegal(WorldModel world, Point pt, Point destination)
+	{
+		return !world.isBirdieAt(pt);
+	}
+	
+	/*protected static List<Point> getValidNeighbors(WorldModel world, PathObj current, Point destination)
 	{
 		Point pos = current.getPos();
 		List<Point> fin = new LinkedList<Point>();
@@ -34,7 +39,7 @@ public class Birdie extends Animated
 		return fin;
 	}
 	
-	public void buildPath(WorldModel world, Point destination)
+	/*public void buildPath(WorldModel world, Point destination)
 	{
 		this.closedSet = new LinkedList<PathObj>();
 		List<PathObj> openSet = new LinkedList<PathObj>();
@@ -70,5 +75,5 @@ public class Birdie extends Animated
 				}
 			}
 		}
-	}
+	}*/
 }

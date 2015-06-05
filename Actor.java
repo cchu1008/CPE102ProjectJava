@@ -77,7 +77,7 @@ public abstract class Actor extends Entity
 		return lowest;
 	}
 	
-	protected static List<Point> getValidNeighbors(WorldModel world, PathObj current, Point destination)
+	protected List<Point> getValidNeighbors(WorldModel world, PathObj current, Point destination)
 	{
 		Point pos = current.getPos();
 		List<Point> fin = new LinkedList<Point>();
@@ -91,13 +91,18 @@ public abstract class Actor extends Entity
 		
 		for (Point pt : run)
 		{
-			if (world.withinBounds(pt) && (!world.isOccupied(pt) || pt.equals(destination)))
+			if (world.withinBounds(pt) && this.isLegal(world, pt, destination))
 			{
 				fin.add(pt);
 			}
 		}
 		
 		return fin;
+	}
+	
+	protected boolean isLegal(WorldModel world, Point pt, Point destination)
+	{
+		return !world.isOccupied(pt) || pt.equals(destination);
 	}
 	
 	protected static int calculateH(Point beginning, Point end)
@@ -137,7 +142,7 @@ public abstract class Actor extends Entity
 			
 			if (cur.getPos().equals(destination))
 			{
-				this.target = cur.getCameFrom();
+				this.target = cur;
 				return;
 			}
 			

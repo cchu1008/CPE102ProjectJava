@@ -112,7 +112,7 @@ public class WorldView extends PApplet
 		{
 			for (Point p : new Point[]{new Point(dx, 0), new Point(this.numCols - 1 - dx, 0), new Point(dx, this.numRows - 1), new Point(this.numCols - 1 - dx, this.numRows - 1)})
 			{
-				if (!this.world.isOccupied(p))
+				if (!this.world.isBirdieAt(p))
 				{
 					Birdie bird = Actions.createBirdie(this.world, p, this.lastTime - this.offset, this.imageList);
 					this.world.addEntity(bird);
@@ -123,7 +123,7 @@ public class WorldView extends PApplet
 		{
 			for (Point p : new Point[]{new Point(0, dy), new Point(this.numCols - 1, dy), new Point(0, this.numRows - 1 - dy), new Point(this.numCols - 1, this.numRows - 1 - dy)})
 			{
-				if (!this.world.isOccupied(p))
+				if (!this.world.isBirdieAt(p))
 				{
 					Birdie bird = Actions.createBirdie(this.world, p, this.lastTime - this.offset, this.imageList);
 					this.world.addEntity(bird);
