@@ -17,8 +17,8 @@ public class WorldView extends PApplet
 	private static final int X = 88;
 	private static final int Z = 90;
 	
-	private int viewCols = 40;//20;
-	private int viewRows = 20;//15;
+	private int viewCols = 20;
+	private int viewRows = 15;
 	
 	private int tileWidth = 32;
 	private int tileHeight = 32;
@@ -204,6 +204,7 @@ public class WorldView extends PApplet
 							case "inverted_deadgrass":
 								break;
 							case "grass":
+							case "default":
 							default:
 								this.world.setBackground(p, this.invertedGrass);
 								break;
