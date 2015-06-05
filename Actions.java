@@ -123,6 +123,7 @@ public class Actions
 				{
 					Quake quakie = createQuake(world, found, currentTicks, imageStore);
 					world.addEntity(quakie);
+					return;
 				}
 			}
 			else

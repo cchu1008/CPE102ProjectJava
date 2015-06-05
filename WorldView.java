@@ -103,6 +103,14 @@ public class WorldView extends PApplet
 					this.world.addEntity(oreby);
 				}
 				break;
+			case C:
+				if (!this.world.isOccupied(mpt))
+				{
+					Miner miney = new Miner(mpt, this.imageList.get("miner"), 800, 100, 2, 0);
+					Actions.scheduleMiner(this.world, miney, this.lastTime - this.offset, this.imageList);
+					this.world.addEntity(miney);
+				}
+				break;
 		}
 	}
 	
